@@ -28,17 +28,17 @@ CREATE TABLE Artist (
 
 CREATE TABLE Distributor(
     Name		VARCHAR(150) PRIMARY KEY,
-    Website	VARCHAR(50));
+    Website     VARCHAR(50));
 
 CREATE TABLE UserPayment(
-    ID			INT,
-    Amount		NUMERIC(10, 2),
-    Date		DATE,
-    CardNum		INT,
-    Username	VARCHAR(50) NOT NULL,
-    StreetNum	SMALLINT,
-    Street		CHAR(50),
-    PostalCode	CHAR(6),
+    ID			    INT,
+    Amount		    NUMERIC(10, 2),
+    Date		    DATE,
+    CardNum		    INT,
+    Username	    VARCHAR(50) NOT NULL,
+    StreetNum	    SMALLINT,
+    Street		    CHAR(50),
+    PostalCode	    CHAR(6),
     PRIMARY KEY(ID),
     FOREIGN KEY (CardNum)
         REFERENCES CardTable(CardNum)
@@ -51,18 +51,18 @@ CREATE TABLE UserPayment(
         ON DELETE CASCADE);
 
 CREATE TABLE CardTable (
-    CardCompany    CHAR(50),
-    CardNum        INT PRIMARY KEY,
-    CardExpiry     DATE);
+    CardCompany     CHAR(50),
+    CardNum         INT PRIMARY KEY,
+    CardExpiry      DATE);
 
 CREATE TABLE CompanyPayment (
-    ID			    INT PRIMARY KEY,
-    Amount		    NUMERIC(10, 2),
+    ID	            INT PRIMARY KEY,
+    Amount	        NUMERIC(10, 2),
     Date		    DATE,
-    StreetNum		SMALLINT,
-    Street		    CHAR(50),
+    StreetNum	    SMALLINT,
+    Street          CHAR(50),
     PostalCode	    CHAR(6),
-    DistributorName	VARCHAR(150) NOT NULL,
+    DistributorName VARCHAR(150) NOT NULL,
     FOREIGN KEY (DistributorName)
         REFERENCES Distributor(Name)
         ON DELETE CASCADE,
@@ -182,25 +182,52 @@ INSERT INTO Releases VALUES (1, 'Whenever You Need Somebody', 'Album', 1987-11-1
 INSERT INTO Releases VALUES (2, 'Astro Lounge', 'Album', 1999-06-08, 'https://cdn.spotube.com/img/shrek.png', 'Interscope Geffen (A&M) Records');
 INSERT INTO Releases VALUES (3, 'Curb Your Enthusiasm (Music From the TV Series)', 'Album', 2006-04-17, 'https://cdn.spotube.com/img/frolic.png', 'Mellowdrama Records');
 INSERT INTO Releases VALUES (4, 'Tritio Jatra', 'Album', 2006-04-17, 'https://cdn.spotube.com/img/nemesis.png', 'Studio Bangi');
-INSERT INTO Releases VALUES(5, 'Superunknown', 'Album', 2006-04-17, 'https://cdn.spotube.com/img/soundgarden.png', 'Sony Music');
+INSERT INTO Releases VALUES (5, 'Superunknown', 'EP', 2006-04-17, 'https://cdn.spotube.com/img/soundgarden.png', 'Sony Music');
+INSERT INTO Releases VALUES (6, 'Take On Me (2017 Acoustic)', 'Single', 1984-09-01, 'https://cdn.spotube.com/img/aha.png', 'Swinglong Ltd.');
 
 INSERT INTO Song VALUES (1, 1, 'Never Gonna Give You Up', 214, 'Pop', 213422997);
-INSERT INTO Song VALUES (1, 2, 'Whenever You Need Somebody', 243, 'Pop', 1842825);
-INSERT INTO Song VALUES (2, 4, 'All Star', 190, 'Alternative', 692894289);
+INSERT INTO Song VALUES (1, 2, 'Whenever You Need Somebody', 244, 'Pop', 1842825);
+INSERT INTO Song VALUES (1, 3, 'Together Forever', 206, 'Pop', 1504161);
+INSERT INTO Song VALUES (1, 4, 'It Would Take a Strong Strong Man', 221, 'Pop', 805086);
+INSERT INTO Song VALUES (1, 5, 'The Love Has Gone', 260, 'Pop', 316040);
+INSERT INTO Song VALUES (1, 6, 'Don''t Say Goodbye', 249, 'Pop', 84133);
+INSERT INTO Song VALUES (1, 7, 'Slipping Away', 242, 'Pop', 544835);
+INSERT INTO Song VALUES (1, 8, 'No More Looking for Love', 243, 'Pop', 415202);
+INSERT INTO Song VALUES (1, 9, 'You Move Me', 243, 'Pop', 949624);
+INSERT INTO Song VALUES (1, 10, 'When I Fall in Love', 183, 'Pop', 595731);
+INSERT INTO Song VALUES (2, 1, 'Who''s There', 214, 'Alternative', 150983);
+INSERT INTO Song VALUES (2, 2, 'Diggin'' Your Scene', 189, 'Alternative', 3448250);
+INSERT INTO Song VALUES (2, 3, 'I Just Wanna See', , 'Alternative', 5094786);
+INSERT INTO Song VALUES (2, 4, 'Waste', 205, 'Alternative', 8007989);
+INSERT INTO Song VALUES (2, 5, 'All Star', 190, 'Alternative', 692894289);
+INSERT INTO Song VALUES (2, 6, 'Satellite', 218, 'Alternative', 5261034);
 INSERT INTO Song VALUES (3, 1, 'Frolic', 210, 'Soundtrack', 5359039);
-INSERT INTO Song VALUES (4, 4, 'Nirbashon', 210, 'Rock', 5359039);
+INSERT INTO Song VALUES (3, 2, 'Bubba Dub Bossa', 108, 'Soundtrack', 92825);
+INSERT INTO Song VALUES (3, 3, 'Beach Parade', 100, 'Soundtrack', 91884);
+INSERT INTO Song VALUES (3, 4, 'For Whom the Bell Tolls', 64, 'Soundtrack', 93682);
+INSERT INTO Song VALUES (3, 5, 'The Stranger', 142, 'Soundtrack', 77515);
+INSERT INTO Song VALUES (4, 1, 'Kobe', 254, 'Rock', 249567);
+INSERT INTO Song VALUES (4, 2, 'Bir', 401, 'Rock', 506029);
+INSERT INTO Song VALUES (4, 3, 'Tritio Jatra', 254, 'Rock', 645791);
+INSERT INTO Song VALUES (4, 4, 'Nirbashon', 234, 'Rock', 5359039);
+INSERT INTO Song VALUES (5, 1, 'Let Me Down', 313, 'Hard Rock', 508989);
+INSERT INTO Song VALUES (5, 2, 'My Wave', 283, 'Hard Rock', 623314);
+INSERT INTO Song VALUES (5, 3, 'Fell On Black Days', 396, 'Hard Rock', 726962);
+INSERT INTO Song VALUES (6, 1, 'Take On Me (2017 Acoustic)', 184, 'Pop', 6666852);
 
 INSERT INTO Artist VALUES (1, 'Rick Astley', 5829256);
 INSERT INTO Artist VALUES (2, 'Smash Mouth', 3950387);
 INSERT INTO Artist VALUES (3, 'Curb Your Enthusiasm', 38358);
 INSERT INTO Artist VALUES (4, 'Luciano Michelini', 35294);
 INSERT INTO Artist VALUES (5, 'Nemesis', 200000);
+INSERT INTO Artist VALUES (6, 'a-ha', 72108658);
 
 INSERT INTO Distributor VALUES ('BMG Rights Management (UK) Limited', 'https://www.bmg.com/');
 INSERT INTO Distributor VALUES ('Interscope Geffen (A&M) Records', 'https://www.interscope.com');
 INSERT INTO Distributor VALUES ('Mellowdrama Records', NULL);
 INSERT INTO Distributor VALUES ('Studio Bangi', ' https://www.studio-bangi.com');
 INSERT INTO Distributor VALUES ('Sony Music', 'https://www.sonymusic.com');
+INSERT INTO Distributor VALUES ('Swinglong Ltd.', NULL);
 
 INSERT INTO UserPayment VALUES (1, 7, 2022-03-01, 2394235323332438, 'bryanh', 3235, 'Joyce st.', 'V6E7F3');
 INSERT INTO UserPayment VALUES (2, 11, 2022-03-01, 5434235323332438, 'sleepy', 1234, 'Joyce st.', 'V6E7F3');
@@ -242,7 +269,7 @@ INSERT INTO PostalCodeCityProvince VALUES ('Vancouver', 'BC', 'V8E7K3');
 INSERT INTO PostalCodeCityProvince VALUES ('Vancouver', 'BC', 'V6E7K3');
 INSERT INTO PostalCodeCityProvince VALUES ('Vancouver', 'BC', 'V6E1K2');
 INSERT INTO PostalCodeCityProvince VALUES ('Calgary', 'AB', 'G5E5C6');
-INSERT INTO PostalCodeCityProvince VALUES ('Winnepeg', 'MB', 'H4R7J8');
+INSERT INTO PostalCodeCityProvince VALUES ('Winnipeg', 'MB', 'H4R7J8');
 INSERT INTO PostalCodeCityProvince VALUES ('Toronto', 'ON', 'K9L0H1');
 
 INSERT INTO Users VALUES ('eenie meenie', 'eenie@gmail.com', 'whatever', 2021-02-09);
@@ -301,6 +328,6 @@ INSERT INTO Follows VALUES ('sleepy',5);
 INSERT INTO Creates VALUES (1,1);
 INSERT INTO Creates VALUES (2,2);
 INSERT INTO Creates VALUES (3,3);
-INSERT INTO Creates VALUES  (4,4);
+INSERT INTO Creates VALUES (4,4);
 INSERT INTO Creates VALUES (5,5);
 
