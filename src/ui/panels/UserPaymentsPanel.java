@@ -1,4 +1,6 @@
-package ui;
+package ui.panels;
+
+import ui.MainUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -6,11 +8,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class userPaymentsPage {
+public class UserPaymentsPanel extends ContentPanel{
+    public UserPaymentsPanel(MainUI mainUI) {
+        super(mainUI);
+    }
 
-    public JPanel createPaymentContent(){
-        JPanel paymentContent = new JPanel();
-        paymentContent.setLayout(new BorderLayout());
+    @Override
+    protected void generate() {
+        setLayout(new BorderLayout());
         JLabel subscriptionLabel = createBoldedTitle("SubscriptionPeriod : ???");
         JPanel paymentHistory = createPaymentHistory();
         JPanel payNowPanel = createPayNowPanel();
@@ -19,12 +24,10 @@ public class userPaymentsPage {
         nestedPanels.setLayout(layout);
         nestedPanels.add(paymentHistory);
         nestedPanels.add(payNowPanel);
-        paymentContent.add(nestedPanels, BorderLayout.WEST);
-        paymentContent.add(subscriptionLabel,BorderLayout.NORTH);
-        paymentContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        return paymentContent;
+        add(nestedPanels, BorderLayout.WEST);
+        add(subscriptionLabel,BorderLayout.NORTH);
+        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     }
-
 
     private JPanel createPaymentPortalPanel() {
         JPanel paymentPortalPanel = new JPanel(new GridLayout(10,2,8,10));
