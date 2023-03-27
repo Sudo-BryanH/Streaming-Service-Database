@@ -52,7 +52,7 @@ public class MainUI extends JFrame {
         return sidebar;
     }
 
-    private void swapPanel(ContentPanel newPanel) {
+    public void swapPanel(ContentPanel newPanel) {
         remove(this.content);
         this.content = newPanel;
         add(this.content, BorderLayout.CENTER);
