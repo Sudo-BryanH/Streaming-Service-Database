@@ -118,7 +118,7 @@ public class userPaymentsPage {
         return paymentHistory;
     }
 
-    private JLabel createBoldedTitle(String value){
+    public static JLabel createBoldedTitle(String value){
         JLabel label = new JLabel(value);
         Font font = label.getFont();
         Font boldFont = new Font(font.getFontName(), Font.BOLD, font.getSize());
