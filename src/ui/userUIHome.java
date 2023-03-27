@@ -72,7 +72,7 @@ public class userUIHome extends JFrame {
         });
     }
 
-    private void addActionListeners(JButton playlistsButton, JButton songsButton, JButton artistsButton, JButton paymentsButton) {
+    private void addActionListeners(JButton playlistsButton, JButton songsButton, JButton artistsButton, JButton paymentsButton, JButton logoutButton) {
         playlistsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,6 +109,15 @@ public class userUIHome extends JFrame {
                 handlePaymentScreen();
             }
         });
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                JFrame loginFrame = new LoginPage();
+                loginFrame.setVisible(true);
+            }
+        });
     }
 
     private void handlePaymentScreen() {
@@ -130,11 +139,13 @@ public class userUIHome extends JFrame {
         JButton songsButton = new JButton("Songs");
         JButton artistsButton = new JButton("Artists");
         JButton paymentsButton = new JButton("Payments");
+        JButton logoutButton = new JButton("Logout");
         sidebar.add(playlistsButton);
         sidebar.add(songsButton);
         sidebar.add(artistsButton);
         sidebar.add(paymentsButton);
-        addActionListeners(playlistsButton, songsButton, artistsButton, paymentsButton);
+        sidebar.add(logoutButton);
+        addActionListeners(playlistsButton, songsButton, artistsButton, paymentsButton,logoutButton);
         return sidebar;
     }
 
