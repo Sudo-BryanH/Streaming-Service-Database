@@ -37,7 +37,7 @@ public class DatabaseManager {
             connection = DriverManager.getConnection(ORACLE_URL, username, password);
             connection.setAutoCommit(false);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("couldnt connect");
         }
 
     }
