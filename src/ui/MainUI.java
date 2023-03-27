@@ -16,7 +16,7 @@ public class MainUI extends JFrame {
         JPanel sidebar = createSideBar();
 
         // Create a JPanel to hold the main content
-        this.content = new QueryPanel(this);
+        this.content = new HomePanel(this);
 
         // Add the sidebar to the left side of the JFrame
         add(sidebar, BorderLayout.WEST);
