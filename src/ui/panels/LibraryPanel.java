@@ -5,6 +5,8 @@ import ui.MainUI;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LibraryPanel extends ContentPanel{
     public LibraryPanel(MainUI mainUI) {
@@ -58,8 +60,42 @@ public class LibraryPanel extends ContentPanel{
         temp.setAlignmentX(1);
         temp.setAlignmentY(1);
         temp.setOpaque(true);
+        temp.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame paymentFrame = new JFrame("Create Playlist");
+                paymentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                paymentFrame.setContentPane(makePlaylistWindow());
+                paymentFrame.setSize(new Dimension(400,160));
+                paymentFrame.setVisible(true);
+            }
+        });
         return temp;
 
+    }
+
+    private JPanel makePlaylistWindow() {
+        JPanel makePlaylist = new JPanel();
+        JTextField name = new JTextField("Playlist Name:");
+        name.setPreferredSize(new Dimension(300, 50));
+        name.setAlignmentX(Component.CENTER_ALIGNMENT);
+        name.setAlignmentY(Component.CENTER_ALIGNMENT);
+        name.setVisible(true);
+
+        JButton doneButton = new JButton("Done");
+        doneButton.setPreferredSize(new Dimension(150, 40));
+        doneButton.setVisible(true);
+        doneButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        doneButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+        doneButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        makePlaylist.add(name);
+        makePlaylist.add(doneButton);
+        return makePlaylist;
     }
 
     private JScrollPane makeScroll() {
