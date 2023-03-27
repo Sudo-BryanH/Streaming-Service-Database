@@ -9,7 +9,7 @@ import java.awt.event.FocusListener;
 import java.util.ArrayList;
 
 
-public class entityUITemplate extends JFrame {
+public class userUIHome extends JFrame {
 
     ArrayList<String> comp;
 
@@ -33,7 +33,7 @@ public class entityUITemplate extends JFrame {
 
 
 
-    public entityUITemplate() {
+    public userUIHome() {
         setLayout(new BorderLayout());
         JPanel sidebar = createSideBar();
 
@@ -106,12 +106,18 @@ public class entityUITemplate extends JFrame {
         paymentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String[] paymentOptions = {"Payment Method 1", "Payment Method 2", "Payment Method 3"};
-                condition.setModel(new DefaultComboBoxModel<>(paymentOptions));
-                String[] paymentComparators = {"Playlist 1", "Playlist 2", "Playlist 3"};
-                comparator.setModel(new DefaultComboBoxModel<>(paymentComparators));
+                handlePaymentScreen();
             }
         });
+    }
+
+    private void handlePaymentScreen() {
+        remove(this.content);
+        this.content = new userPaymentsPage().createPaymentContent();
+        add(this.content, BorderLayout.CENTER);
+        revalidate();
+        repaint();
+
     }
 
     private JPanel createSideBar(){
