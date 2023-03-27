@@ -1,4 +1,7 @@
-package ui;
+package ui.login;
+
+import ui.MainUI;
+import ui.panels.UserPaymentsPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +26,7 @@ public class LoginPage extends JFrame {
         JPanel loginPanel = new JPanel();
         BoxLayout layout = new BoxLayout(loginPanel, BoxLayout.Y_AXIS);
         loginPanel.setLayout(layout);
-        JLabel welcomeLabel = userPaymentsPage.createBoldedTitle("SoundHive");
+        JLabel welcomeLabel = UserPaymentsPanel.createBoldedTitle("SoundHive");
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         JPanel loginForm = new JPanel(new GridLayout(2,4,8,10));
         loginForm.setPreferredSize(new Dimension(200,80));
@@ -58,7 +61,7 @@ public class LoginPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                JFrame homepage = new userUIHome();
+                JFrame homepage = new MainUI();
                 homepage.setVisible(true);
             }
         });

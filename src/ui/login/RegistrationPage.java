@@ -1,4 +1,7 @@
-package ui;
+package ui.login;
+
+import ui.MainUI;
+import ui.panels.UserPaymentsPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +26,7 @@ public class RegistrationPage extends JFrame {
         JPanel registrationPanel = new JPanel();
         BoxLayout layout = new BoxLayout(registrationPanel, BoxLayout.Y_AXIS);
         registrationPanel.setLayout(layout);
-        JLabel welcomeLabel = userPaymentsPage.createBoldedTitle("SoundHive");
+        JLabel welcomeLabel = UserPaymentsPanel.createBoldedTitle("SoundHive");
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         JPanel registrationForm = new JPanel(new GridLayout(3,4,8,10));
         registrationForm.setPreferredSize(new Dimension(200,100));
@@ -72,7 +75,7 @@ public class RegistrationPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                JFrame homePage = new userUIHome();
+                JFrame homePage = new MainUI();
                 homePage.setVisible(true);
             }
         });
