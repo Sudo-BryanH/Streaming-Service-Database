@@ -19,7 +19,7 @@ public abstract class ContentPanel extends JPanel {
         JLabel label = new JLabel(title);
         Font font = label.getFont();
 
-        label.setFont( new Font(font.getFontName(), Font.BOLD, 30));
+        label.setFont( new Font(font.getFontName(), Font.BOLD, 35));
         label.setPreferredSize(new Dimension(5,40));
 
         return label;
@@ -30,7 +30,7 @@ public abstract class ContentPanel extends JPanel {
         Font font = label.getFont();
 
         label.setFont(new Font(font.getFontName(), font.getStyle(), 20));
-        label.setPreferredSize(new Dimension(5,30));
+        label.setPreferredSize(new Dimension(5,25));
 
         return label;
     }

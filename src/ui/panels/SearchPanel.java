@@ -18,17 +18,13 @@ public class SearchPanel extends ContentPanel{
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JPanel innerPanel = new JPanel();
-        innerPanel.setLayout(new BorderLayout());
-        add(innerPanel);
-
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.add(createTitle("Search"), BorderLayout.NORTH);
-        headerPanel.add(getSearchBarPanel(), BorderLayout.CENTER);
-        innerPanel.add(headerPanel, BorderLayout.NORTH);
+        headerPanel.add(getSearchBarPanel(), BorderLayout.WEST);
+        add(headerPanel, BorderLayout.NORTH);
 
         createResultsScrollPane();
-        innerPanel.add(resultsScrollPane, BorderLayout.WEST);
+        add(resultsScrollPane, BorderLayout.WEST);
     }
 
     private void performSearch(String query) {
@@ -58,11 +54,11 @@ public class SearchPanel extends ContentPanel{
         JPanel result = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
 
         JLabel nameLabel = new JLabel(name);
-        nameLabel.setPreferredSize(new Dimension(250,20));
+        nameLabel.setPreferredSize(new Dimension(325,20));
         result.add(nameLabel);
 
         JLabel artistLabel = new JLabel(artist);
-        artistLabel.setPreferredSize(new Dimension(250,20));
+        artistLabel.setPreferredSize(new Dimension(325,20));
         result.add(artistLabel);
 
         JButton viewButton = new JButton("View");
@@ -75,7 +71,7 @@ public class SearchPanel extends ContentPanel{
         JPanel searchBarPanel = new JPanel(new FlowLayout());
 
         JTextField searchField = new JTextField("");
-        searchField.setPreferredSize(new Dimension(700, 25));
+        searchField.setPreferredSize(new Dimension(680, 25));
         searchField.setForeground(Color.BLACK);
         searchBarPanel.add(searchField);
 
