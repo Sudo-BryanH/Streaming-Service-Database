@@ -27,10 +27,8 @@ public class SearchPanel extends ContentPanel{
         headerPanel.add(getSearchBarPanel(), BorderLayout.CENTER);
         innerPanel.add(headerPanel, BorderLayout.NORTH);
 
-        JPanel bodyPanel = new JPanel(new BorderLayout());
-        getResultsScrollPane();
-        bodyPanel.add(resultsScrollPane, BorderLayout.NORTH);
-        innerPanel.add(bodyPanel, BorderLayout.CENTER);
+        createResultsScrollPane();
+        innerPanel.add(resultsScrollPane, BorderLayout.WEST);
     }
 
     private void performSearch(String query) {
@@ -46,6 +44,7 @@ public class SearchPanel extends ContentPanel{
            tempResults = new String[]{"Result 1", "Result 2", "Result 3"};
         }
 
+        resultsPanel.removeAll();
         for (String r : tempResults) {
             resultsPanel.add(getResultPanel(r, "Fake Artist"));
         }
@@ -77,7 +76,7 @@ public class SearchPanel extends ContentPanel{
 
         JTextField searchField = new JTextField("");
         searchField.setPreferredSize(new Dimension(700, 25));
-        searchField.setForeground(Color.GRAY);
+        searchField.setForeground(Color.BLACK);
         searchBarPanel.add(searchField);
 
         JButton enterButton = new JButton("Enter");
@@ -87,7 +86,7 @@ public class SearchPanel extends ContentPanel{
         return searchBarPanel;
     }
 
-    private void getResultsScrollPane() {
+    private void createResultsScrollPane() {
         resultsPanel = new JPanel();
         resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
 
