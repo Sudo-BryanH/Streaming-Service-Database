@@ -66,7 +66,7 @@ public class MainUI extends JFrame {
         buttons.get(0).addActionListener(e -> swapPanel(new HomePanel(thisReference)));
         buttons.get(1).addActionListener(e -> swapPanel(new LibraryPanel(thisReference)));
         buttons.get(2).addActionListener(e -> swapPanel(new SearchPanel(thisReference)));
-        buttons.get(3).addActionListener(e -> swapPanel(new UserPaymentsPanel(thisReference)));
+        buttons.get(3).addActionListener(e -> swapPanel(new AdminPaymentsPanel(thisReference)));
         buttons.get(4).addActionListener(e -> swapPanel(new QueryPanel(thisReference)));
         buttons.get(5).addActionListener(e -> {
             dispose();
