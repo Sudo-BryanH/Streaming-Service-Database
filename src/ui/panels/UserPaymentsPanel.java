@@ -4,6 +4,7 @@ import ui.MainUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,10 @@ public class UserPaymentsPanel extends ContentPanel{
     @Override
     protected void generate() {
         setLayout(new BorderLayout());
-        JLabel subscriptionLabel = createBoldedTitle("SubscriptionPeriod : ???");
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.add(createTitle("Payments"), BorderLayout.NORTH);
+        headerPanel.add(createBoldedTitle("SubscriptionPeriod : ???"), BorderLayout.CENTER);
+        add(headerPanel, BorderLayout.NORTH);
         JPanel paymentHistory = createPaymentHistory();
         JPanel payNowPanel = createPayNowPanel();
         JPanel nestedPanels = new JPanel();
@@ -25,7 +29,6 @@ public class UserPaymentsPanel extends ContentPanel{
         nestedPanels.add(paymentHistory);
         nestedPanels.add(payNowPanel);
         add(nestedPanels, BorderLayout.WEST);
-        add(subscriptionLabel,BorderLayout.NORTH);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     }
 
@@ -85,8 +88,10 @@ public class UserPaymentsPanel extends ContentPanel{
         @Override
         public void actionPerformed(ActionEvent e) {
             JFrame paymentFrame = new JFrame("Payment Gateway");
+            JPanel paymentContent = createPaymentPortalPanel();
+            paymentContent.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+            paymentFrame.add(paymentContent);
             paymentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            paymentFrame.setContentPane(createPaymentPortalPanel());
             paymentFrame.setSize(new Dimension(400,400));
             paymentFrame.setVisible(true);
         }
@@ -98,23 +103,25 @@ public class UserPaymentsPanel extends ContentPanel{
     private JPanel createPaymentHistory() {
         JPanel paymentHistory = new JPanel();
         paymentHistory.setLayout(new BorderLayout());
-        paymentHistory.setMaximumSize(new Dimension(450,300));
-        paymentHistory.setPreferredSize(new Dimension(450,300));
+        paymentHistory.setMaximumSize(new Dimension(450,200));
+        paymentHistory.setPreferredSize(new Dimension(450,200));
         // Create table model
         String[] columnNames = {"Date", "Amount"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        model.addRow(new Object[]{"23-12-2012",4.88});
 //        for (Payment payment : paymentList) {
 //            Object[] rowData = {payment.getDate(), payment.getAmount(), payment.getDescription()};
 //            model.addRow(rowData);
 //        }
         JTable paymentTable = new JTable(model);
+        JTableHeader header = paymentTable.getTableHeader();
+        header.setBackground(Color.GRAY);
+        header.setForeground(Color.WHITE);
         paymentTable.setFillsViewportHeight(true);
         paymentTable.setAlignmentX(Component.LEFT_ALIGNMENT);
         JScrollPane scrollPane = new JScrollPane(paymentTable);
         scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-        scrollPane.setMaximumSize(new Dimension(400,300));
-        scrollPane.setPreferredSize(new Dimension(400,300));
+        scrollPane.setMaximumSize(new Dimension(400,250));
+        scrollPane.setPreferredSize(new Dimension(400,250));
         JLabel paymentHistoryLabel = createBoldedTitle("Payment History");
         paymentHistory.add(paymentHistoryLabel, BorderLayout.NORTH);
         paymentHistory.add(scrollPane, BorderLayout.WEST);
