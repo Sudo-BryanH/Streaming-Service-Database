@@ -1,5 +1,6 @@
 package ui.login;
 
+import backend.LoginRegistrationEndpoints;
 import ui.MainUI;
 import ui.panels.UserPaymentsPanel;
 
@@ -11,8 +12,10 @@ import java.awt.event.ActionListener;
 public class LoginPage extends JFrame {
     private JButton loginButton;
     private JButton registerButton;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
 
-    public LoginPage(){
+    public LoginPage() {
         JPanel loginPanel = createLoginPanel();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(loginPanel);
@@ -28,17 +31,17 @@ public class LoginPage extends JFrame {
         loginPanel.setLayout(layout);
         JLabel welcomeLabel = UserPaymentsPanel.createBoldedTitle("SoundHive");
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JPanel loginForm = new JPanel(new GridLayout(2,4,8,10));
-        loginForm.setPreferredSize(new Dimension(200,80));
-        loginForm.setMaximumSize(new Dimension(200,80));
+        JPanel loginForm = new JPanel(new GridLayout(2, 4, 8, 10));
+        loginForm.setPreferredSize(new Dimension(200, 80));
+        loginForm.setMaximumSize(new Dimension(200, 80));
         JLabel usernameLabel = new JLabel("username:");
-        JTextField usernameField = new JTextField(20);
-        usernameField.setMaximumSize(new Dimension(200,10));
-        usernameField.setPreferredSize(new Dimension(200,10));
+        usernameField = new JTextField(20);
+        usernameField.setMaximumSize(new Dimension(200, 10));
+        usernameField.setPreferredSize(new Dimension(200, 10));
         JLabel passwordLabel = new JLabel("password:");
-        JPasswordField passwordField = new JPasswordField(20);
-        passwordField.setMaximumSize(new Dimension(200,10));
-        passwordField.setPreferredSize(new Dimension(200,10));
+        passwordField = new JPasswordField(20);
+        passwordField.setMaximumSize(new Dimension(200, 10));
+        passwordField.setPreferredSize(new Dimension(200, 10));
         loginForm.add(usernameLabel);
         loginForm.add(usernameField);
         loginForm.add(passwordLabel);
@@ -46,8 +49,8 @@ public class LoginPage extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         this.loginButton = new JButton("Login");
         this.registerButton = new JButton("Register?");
-        buttonPanel.add(loginButton);
         buttonPanel.add(registerButton);
+        buttonPanel.add(loginButton);
         loginPanel.add(Box.createVerticalStrut(30));
         loginPanel.add(welcomeLabel);
         loginPanel.add(Box.createVerticalStrut(10));
@@ -56,13 +59,18 @@ public class LoginPage extends JFrame {
         return loginPanel;
     }
 
-    private void attachActionListeners(){
-        this.loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+    private void attachActionListeners() {
+        this.loginButton.addActionListener(e -> {
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
+            System.out.println(username);
+            System.out.println(password);
+            if (LoginRegistrationEndpoints.login(username, password)) {
                 dispose();
                 JFrame homepage = new MainUI();
                 homepage.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Login Failed");
             }
         });
         this.registerButton.addActionListener(new ActionListener() {

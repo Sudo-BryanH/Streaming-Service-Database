@@ -1,5 +1,6 @@
 package ui.login;
 
+import backend.LoginRegistrationEndpoints;
 import ui.MainUI;
 import ui.panels.UserPaymentsPanel;
 
@@ -11,6 +12,9 @@ import java.awt.event.ActionListener;
 public class RegistrationPage extends JFrame {
     private JButton loginButton;
     private JButton registerButton;
+    private JTextField usernameField;
+    private JTextField emailTextField;
+    private JPasswordField passwordField;
 
     public RegistrationPage(){
         JPanel loginPanel = createRegistrationPanel();
@@ -32,15 +36,15 @@ public class RegistrationPage extends JFrame {
         registrationForm.setPreferredSize(new Dimension(200,100));
         registrationForm.setMaximumSize(new Dimension(200,100));
         JLabel usernameLabel = new JLabel("username:");
-        JTextField usernameField = new JTextField(20);
+        usernameField = new JTextField(20);
         usernameField.setMaximumSize(new Dimension(200,10));
         usernameField.setPreferredSize(new Dimension(200,10));
         JLabel emailLabel = new JLabel("email:");
-        JTextField emailTextField = new JTextField(20);
+        emailTextField = new JTextField(20);
         emailTextField.setMaximumSize(new Dimension(200,10));
         emailTextField.setPreferredSize(new Dimension(200,10));
         JLabel passwordLabel = new JLabel("password:");
-        JPasswordField passwordField = new JPasswordField(20);
+        passwordField = new JPasswordField(20);
         passwordField.setMaximumSize(new Dimension(200,10));
         passwordField.setPreferredSize(new Dimension(200,10));
         registrationForm.add(usernameLabel);
@@ -71,13 +75,18 @@ public class RegistrationPage extends JFrame {
                 loginFrame.setVisible(true);
             }
         });
-        this.registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                JFrame homePage = new MainUI();
-                homePage.setVisible(true);
-            }
+        this.registerButton.addActionListener(e-> {
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+                String email = emailTextField.getText();
+                if(LoginRegistrationEndpoints.register(username,password,email)){
+                    dispose();
+                    JFrame homePage = new MainUI();
+                    homePage.setVisible(true);
+                }
+                else {
+                    JOptionPane.showMessageDialog(this, "Registration Failed");
+                }
         });
     }
 }
