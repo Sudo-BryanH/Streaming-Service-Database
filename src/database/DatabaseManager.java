@@ -17,7 +17,6 @@ public class DatabaseManager {
             if (connection != null) {
                 connection.close();
             }
-           establishConnection();
             System.out.println("\nConnected to Oracle!");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -32,14 +31,10 @@ public class DatabaseManager {
         return connection;
     }
 
-    public static void establishConnection(){
-        try {
-            connection = DriverManager.getConnection(ORACLE_URL, username, password);
-            connection.setAutoCommit(false);
-        } catch (SQLException e) {
-            System.out.println("couldnt connect");
-        }
-
+    public static Connection establishConnection() throws SQLException{
+        connection = DriverManager.getConnection(ORACLE_URL, username, password);
+        connection.setAutoCommit(false);
+        return connection;
     }
 
     public static void close() {
