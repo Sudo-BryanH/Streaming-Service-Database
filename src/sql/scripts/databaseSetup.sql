@@ -8,7 +8,7 @@ CREATE TABLE Users
 (
     Username     VARCHAR(50) PRIMARY KEY,
     Email        VARCHAR(50) UNIQUE,
-    Password     VARCHAR(50),
+    Password     VARCHAR(100),
     CreationDate DATE
 );
 
@@ -235,7 +235,7 @@ VALUES ('notstevejobs', 'jobs@gmail.com', 'googlebest', '2020-01-09');
 INSERT INTO Users
 VALUES ('jfk1975', 'jfk@yahoo.com', 'ishouldbedead', '2019-01-03');
 INSERT INTO Users
-VALUES ('bryanh', 'bryan@gmail.com', 'CS213Sucks', '2022-01-01');
+VALUES ('bryanh', 'bryan@gmail.com', 'bcb3f69829ca414398514d9ec8a4c2214023c77a79e49f6eb1e4869a90741309', '2022-01-01');
 INSERT INTO Users
 VALUES ('harperk', 'harper@gmail.com', 'CS310Sucks', '2022-02-02');
 INSERT INTO Users

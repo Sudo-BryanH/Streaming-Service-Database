@@ -1,15 +1,20 @@
 package ui.panels;
 
+import backend.PaymentEndpoints;
+import model.BillingAddress;
+import model.Card;
+import model.Payment;
 import ui.MainUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class UserPaymentsPanel extends PaymentPanel{
+    private ArrayList<Payment> payments;
+
     public UserPaymentsPanel(MainUI mainUI) {
         super(mainUI);
     }
@@ -17,9 +22,11 @@ public class UserPaymentsPanel extends PaymentPanel{
     @Override
     protected void generate() {
         setLayout(new BorderLayout());
+        fetchPayments(this.mainUI.getUser().getUsername());
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.add(createTitle("Payments"), BorderLayout.NORTH);
-        headerPanel.add(createBoldedTitle("SubscriptionPeriod : ???"), BorderLayout.CENTER);
+        headerPanel.add(createBoldedTitle("SubscriptionPeriod : " + PaymentEndpoints.getSubscriptionPeriod(this.mainUI.getUser())),
+                BorderLayout.CENTER);
         add(headerPanel, BorderLayout.NORTH);
         JPanel paymentHistory = createPaymentHistory();
         JPanel payNowPanel = createPayNowPanel();
@@ -32,9 +39,18 @@ public class UserPaymentsPanel extends PaymentPanel{
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     }
 
+    private void fetchPayments(String username) {
+        ArrayList<Payment> rawPaymentsData = PaymentEndpoints.getPayments(username, AdminPaymentsPanel.PaymentType.USERS);
+        if(rawPaymentsData != null){
+            payments = rawPaymentsData;
+        }
+        else {
+            System.out.println("Couldnt fetch");
+        }
+    }
 
 
-   private JPanel createPayNowPanel(){
+    private JPanel createPayNowPanel(){
         JPanel payNowPanel = new JPanel();
         payNowPanel.setMaximumSize(new Dimension(450,50));
         payNowPanel.setPreferredSize(new Dimension(450,50));
@@ -43,17 +59,32 @@ public class UserPaymentsPanel extends PaymentPanel{
         payButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         payButton.setMaximumSize(new Dimension(100,20));
         payButton.setPreferredSize(new Dimension(100,20));
-        payButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        payButton.addActionListener(e -> {
             JFrame paymentFrame = new JFrame("Payment Gateway");
             JPanel paymentContent = createPaymentPortalPanel();
             paymentContent.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
             paymentFrame.add(paymentContent);
             paymentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            paymentFrame.setSize(new Dimension(400,400));
+            paymentFrame.setSize(new Dimension(500,500));
             paymentFrame.setVisible(true);
-        }
+            paymentSubmitButton.addActionListener(event -> {
+                try{
+                    BillingAddress billingAddress = new BillingAddress(Integer.parseInt(streetNumberTextField.getText()),
+                    streetTextField.getText(),cityTextField.getText(),provinceTextField.getText(),postalCodeTextField.getText());
+                    Card card = new Card(expDateTextField.getText(),Long.parseLong(cardNumberTextField.getText()),"Visa");
+                    PaymentEndpoints.insertBillingAddress(billingAddress);
+                    if(PaymentEndpoints.makePayment(this.mainUI.getUser(),card,billingAddress,Float.parseFloat(this.amountField.getText()))){
+                        paymentFrame.dispose();
+                        JOptionPane.showMessageDialog(this, "Payment Successful, Subscription Renewed");
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(this, "Payment Failed");
+                    }
+                }
+                catch (Exception exception){
+                    JOptionPane.showMessageDialog(this, "Payment Failed");
+                }
+            });
         });
         payNowPanel.add(payButton,BorderLayout.WEST);
         return payNowPanel;
@@ -67,10 +98,10 @@ public class UserPaymentsPanel extends PaymentPanel{
         // Create table model
         String[] columnNames = {"Date", "Amount"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-//        for (Payment payment : paymentList) {
-//            Object[] rowData = {payment.getDate(), payment.getAmount(), payment.getDescription()};
-//            model.addRow(rowData);
-//        }
+        for (Payment payment : payments) {
+            Object[] rowData = {payment.getDate(), payment.getAmount()};
+            model.addRow(rowData);
+        }
         JTable paymentTable = new JTable(model);
         JTableHeader header = paymentTable.getTableHeader();
         header.setBackground(Color.GRAY);

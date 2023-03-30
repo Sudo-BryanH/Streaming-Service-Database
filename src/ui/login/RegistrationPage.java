@@ -1,6 +1,7 @@
 package ui.login;
 
 import backend.LoginRegistrationEndpoints;
+import model.User;
 import ui.MainUI;
 import ui.panels.UserPaymentsPanel;
 
@@ -81,7 +82,8 @@ public class RegistrationPage extends JFrame {
                 String email = emailTextField.getText();
                 if(LoginRegistrationEndpoints.register(username,password,email)){
                     dispose();
-                    JFrame homePage = new MainUI();
+                    MainUI homePage = new MainUI();
+                    homePage.setUser(new User(username));
                     homePage.setVisible(true);
                 }
                 else {
