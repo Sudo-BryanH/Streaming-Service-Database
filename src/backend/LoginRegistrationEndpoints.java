@@ -1,6 +1,7 @@
 package backend;
 
 import database.DatabaseManager;
+import util.PasswordHasher;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ public class LoginRegistrationEndpoints {
         try {
             Connection connection = DatabaseManager.establishConnection();
             Statement statement = connection.createStatement();
+            password = PasswordHasher.hashPassword(password);
             String query = "SELECT * FROM Users WHERE Username='" + username + "' AND Password='" + password + "'";
             ResultSet resultSet = statement.executeQuery(query);
             boolean status = resultSet.next();
@@ -22,7 +24,7 @@ public class LoginRegistrationEndpoints {
             return status;
         }
         catch (SQLException exception){
-            System.out.println("BRO");
+            System.out.println(exception.getMessage());
         }
         DatabaseManager.close();
         return false;
@@ -32,6 +34,7 @@ public class LoginRegistrationEndpoints {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = currentDate.format(formatter);
+        password = PasswordHasher.hashPassword(password);
         try{
             Connection connection = DatabaseManager.establishConnection();
             Statement statement = connection.createStatement();

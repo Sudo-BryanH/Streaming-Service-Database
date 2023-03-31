@@ -1,5 +1,8 @@
 package ui.panels;
 
+import backend.PaymentEndpoints;
+import model.BillingAddress;
+import model.Payment;
 import ui.MainUI;
 
 import javax.swing.*;
@@ -23,20 +26,8 @@ public class AdminPaymentsPanel extends PaymentPanel{
 
     @Override
     protected void generate() {
-        distributors = new ArrayList<>();
-        distributors.add("Sony");
-        distributors.add("Studio Bangi");
-        distributors.add("Studio Bangi");
-        distributors.add("Studio Bangi");
-        distributors.add("Studio Bangi");
-        distributors.add("Studio Bangi");
-        distributors.add("Studio Bangi");
-        users = new ArrayList<>();
-        users.add("Harper");
-        users.add("Bryan");
-        users.add("Dhrubo");
-        users.add("Dhrubo");
-        users.add("Dhrubo");
+        distributors = PaymentEndpoints.getDistributors();
+        users = PaymentEndpoints.getUsers();
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -76,7 +67,7 @@ public class AdminPaymentsPanel extends PaymentPanel{
 
         JButton viewButton = new JButton("View");
         viewButton.addActionListener(e -> {
-            generateViewFrame(user);
+            generateViewFrame(user, PaymentType.USERS);
         });
         userPanel.add(viewButton);
 
@@ -93,16 +84,34 @@ public class AdminPaymentsPanel extends PaymentPanel{
         payButton.addActionListener(e -> {
             JFrame paymentFrame = new JFrame("Pay to: " + distributor);
             paymentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            JPanel paymentContent = createPaymentPortalPanel();
+            JPanel paymentContent = adminPaymentPortalPanel();
             paymentContent.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
             paymentFrame.add(paymentContent);
             paymentFrame.setSize(new Dimension(400,400));
+            paymentSubmitButton.addActionListener(event -> {
+                try{
+                    BillingAddress billingAddress = new BillingAddress(Integer.parseInt(streetNumberTextField.getText()),
+                            streetTextField.getText(),cityTextField.getText(),provinceTextField.getText(),postalCodeTextField.getText());
+                    PaymentEndpoints.insertBillingAddress(billingAddress);
+                    if(PaymentEndpoints.makePaymentToDistributor(distributor,billingAddress,Float.parseFloat(this.amountField.getText()))){
+                        paymentFrame.dispose();
+                        JOptionPane.showMessageDialog(this, "Payment Successful to " + distributor);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(this, "Payment Failed");
+                    }
+                }
+                catch (Exception exception){
+                    System.out.println(exception.getMessage());
+                    JOptionPane.showMessageDialog(this, "Payment Failed");
+                }
+            });
             paymentFrame.setVisible(true);
         });
         distributorPanel.add(payButton);
         JButton viewButton = new JButton("View");
         viewButton.addActionListener(e -> {
-            generateViewFrame(distributor);
+            generateViewFrame(distributor, PaymentType.DISTRIBUTORS);
         });
         distributorPanel.add(viewButton);
 
@@ -133,7 +142,7 @@ public class AdminPaymentsPanel extends PaymentPanel{
         return panelTable;
     }
 
-    private void generateViewFrame(String user){
+    private void generateViewFrame(String user, PaymentType type){
         JFrame viewFrame = new JFrame();
         JTable table = new JTable();
         JTableHeader header = table.getTableHeader();
@@ -144,14 +153,13 @@ public class AdminPaymentsPanel extends PaymentPanel{
         title.setHorizontalAlignment(SwingConstants.CENTER);
         Object[] columns = {"Date", "Amount"};
         DefaultTableModel model = new DefaultTableModel();
+        ArrayList<Payment> payments = PaymentEndpoints.getPayments(user,type);
         model.setColumnIdentifiers(columns);
-        model.addRow(new Object[]{"22-2-23",23});
-        model.addRow(new Object[]{"22-2-23",23});
-        model.addRow(new Object[]{"22-2-23",23});
-        model.addRow(new Object[]{"22-2-23",23});
-        model.addRow(new Object[]{"22-2-23",23});
-        model.addRow(new Object[]{"22-2-23",23});
-        model.addRow(new Object[]{"22-2-23",23});
+        if(payments != null){
+            for(Payment p : payments){
+                model.addRow(new Object[]{p.getDate(),p.getAmount()});
+            }
+        }
         table.setModel(model);
         JScrollPane pane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
@@ -165,5 +173,5 @@ public class AdminPaymentsPanel extends PaymentPanel{
         viewFrame.setVisible(true);
     }
 
-    private enum PaymentType {USERS, DISTRIBUTORS};
+    public enum PaymentType {USERS, DISTRIBUTORS};
 }

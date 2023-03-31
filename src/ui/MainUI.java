@@ -1,5 +1,6 @@
 package ui;
 
+import model.User;
 import ui.login.LoginPage;
 import ui.panels.*;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 
 public class MainUI extends JFrame {
     private JPanel content;
+    private User user;
 
     public MainUI() {
         setLayout(new BorderLayout());
@@ -28,6 +30,14 @@ public class MainUI extends JFrame {
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    public void setUser(User user){
+        this.user = user;
+    }
+
+    public User getUser(){
+        return this.user;
     }
 
     private JPanel createSideBar(){
@@ -66,7 +76,14 @@ public class MainUI extends JFrame {
         buttons.get(0).addActionListener(e -> swapPanel(new HomePanel(thisReference)));
         buttons.get(1).addActionListener(e -> swapPanel(new LibraryPanel(thisReference)));
         buttons.get(2).addActionListener(e -> swapPanel(new SearchPanel(thisReference)));
-        buttons.get(3).addActionListener(e -> swapPanel(new AdminPaymentsPanel(thisReference)));
+        buttons.get(3).addActionListener(e -> {
+            if(this.user.getUsername().equals("dhk")){
+                swapPanel(new AdminPaymentsPanel(thisReference));
+            }
+            else {
+                swapPanel(new UserPaymentsPanel(thisReference));
+            }
+        });
         buttons.get(4).addActionListener(e -> swapPanel(new QueryPanel(thisReference)));
         buttons.get(5).addActionListener(e -> {
             dispose();

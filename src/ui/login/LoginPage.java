@@ -1,6 +1,8 @@
 package ui.login;
 
 import backend.LoginRegistrationEndpoints;
+import backend.PaymentEndpoints;
+import model.User;
 import ui.MainUI;
 import ui.panels.UserPaymentsPanel;
 
@@ -63,11 +65,12 @@ public class LoginPage extends JFrame {
         this.loginButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            System.out.println(username);
-            System.out.println(password);
             if (LoginRegistrationEndpoints.login(username, password)) {
                 dispose();
-                JFrame homepage = new MainUI();
+                MainUI homepage = new MainUI();
+                User user = new User(username);
+                user.setPremium(PaymentEndpoints.getPremiumStatus(user));
+                homepage.setUser(user);
                 homepage.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Login Failed");
