@@ -19,9 +19,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.establishConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "SELECT Name" +
-                            "FROM User u, Playlist p " +
-                            "WHERE u.Username = %s AND u.Username = p.Username", user);
+                    "SELECT Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'", user);
 
             ResultSet rs = statement.executeQuery(query);
 
@@ -44,9 +42,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.establishConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "SELECT ReleaseID, TrackNum, Name, Duration, Genre" +
-                            "FROM Song s INNER JOIN PlaylistIsIn pi " +
-                            "WHERE pi.Username = %s AND pi.Name = %s", user, pname);
+                    "SELECT ReleaseID, TrackNum, Name, Duration, Genre FROM Song s INNER JOIN PlaylistIsIn pi WHERE pi.Username = %s AND pi.Name = %s", user, pname);
 
             ResultSet rs = statement.executeQuery(query);
 

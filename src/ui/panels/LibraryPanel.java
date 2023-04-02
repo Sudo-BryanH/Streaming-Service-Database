@@ -1,33 +1,45 @@
 package ui.panels;
 
+import backend.LibraryEndpoints;
+import model.Playlist;
+import model.User;
 import ui.MainUI;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 
 public class LibraryPanel extends ContentPanel{
+
+    User user = this.mainUI.getUser();
+    ArrayList<Playlist> playlistList;
     public LibraryPanel(MainUI mainUI) {
         super(mainUI);
     }
 
+
+    String[] songList = new String[]{"NULL", "NULL", "NULL"};
     String currentPL = "null playlist";
 
-    int numPL = 10;
+
     @Override
     protected void generate() {
+        getPlayLists();
         setLayout(new BorderLayout());
         JPanel nestedPanels = new JPanel();
         BoxLayout layout = new BoxLayout(nestedPanels, BoxLayout.X_AXIS);
         JButton createPlaylist = createPlButtons("Create a new playlist!");
         createPlaylist.setAlignmentX(Component.LEFT_ALIGNMENT);
         nestedPanels.setLayout(layout);
-        String[] plCol = {"Playlist Name", "Number of songs"};
-        String[] songsCol = {"Song Name", "Artist", "Genre"};
-        JTable plTable = makePlTable("Your Playlists", plCol);
-        JTable songsTable = makePlTable("Songs in " + currentPL, songsCol);
+        String[] plCol = new String[]{"Playlist Name", "Number of songs"};
+        String[] songsCol = new String[]{"Song Name", "Artist", "Genre"};
+//        playListList = ed.getPlaylists(user.getUsername());
+        JPanel plTable = makePLTable();
+
+//        JTable songsTable = makePlTable("Songs in " + currentPL, songsCol);
         JScrollPane plScroll = makeScroll();
         JScrollPane songsScroll = makeScroll();
         songsScroll.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -36,20 +48,78 @@ public class LibraryPanel extends ContentPanel{
         nestedPanels.add(plScroll);
         nestedPanels.add(songsScroll);
         plScroll.setViewportView(plTable);
-        songsScroll.setViewportView(songsTable);
+//        songsScroll.setViewportView(songsTable);
         add(nestedPanels, BorderLayout.CENTER);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     }
 
-    private JTable makePlTable(String text, String[] columnList){
-        DefaultTableModel model = new DefaultTableModel(columnList, 0);
-        JTable pan = new JTable(model);
-        pan.setSize(1400, 50*numPL);
-        pan.setBackground(Color.gray);
-        pan.setOpaque(true);
-        BoxLayout layout = new BoxLayout(pan, BoxLayout.Y_AXIS);
+    void getPlayLists() {
+        playlistList = LibraryEndpoints.getPlaylists(this.mainUI.getUser().getUsername());
 
-        return pan;
+    }
+
+    private JPanel makePLTable(){
+//        playlistList = LibraryEndpoints.getPlaylists("A113").toArray();
+//        String[] playlistList = new String[]{"NULL", "NULL"};
+        getPlayLists();
+        JPanel temp = new JPanel();
+        temp.setSize(new Dimension(400, (20*3)));
+        temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
+        temp.add(makePlResults("pl1", 2));
+        // when querying, make sure to get the number of songs
+        temp.add(makePlResults("pl2" , 2));
+        temp.add(makePlResults("pl3" , 2));
+//        temp.add(makePlResults("pl4" , 2));
+//        temp.add(makePlResults("pl5" , 2));
+//        temp.add(makePlResults("pl6" , 2));
+//        temp.add(makePlResults("pl7" , 2));
+//        temp.add(makePlResults("pl2" , 2));
+//        temp.add(makePlResults("pl3" , 2));
+//        temp.add(makePlResults("pl4" , 2));
+//        temp.add(makePlResults("pl5" , 2));
+//        temp.add(makePlResults("pl6" , 2));
+//        temp.add(makePlResults("pl7" , 2));
+        for (Playlist p : playlistList) {
+            System.out.println(p.getPlName());
+        }
+
+
+        temp.setOpaque(true);
+        return temp;
+
+    }
+
+    private JPanel makePlResults(String pl, int num) {
+        JPanel result = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        result.setSize(396, 18);
+        result.setBackground(Color.white);
+        JLabel playlist = new JLabel(pl);
+        playlist.setPreferredSize(new Dimension(100,20));
+        result.add(playlist);
+
+        JLabel count = new JLabel("# of songs: " +  Integer.toString(num));
+        count.setPreferredSize(new Dimension(100,20));
+        count.setOpaque(true);
+        result.add(count);
+
+        JButton select = new JButton("Select");
+        select.setPreferredSize(new Dimension(100,20));
+        select.setOpaque(true);
+        select.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        result.setOpaque(true);
+        result.add(select);
+        JPanel backing = new JPanel();
+        backing.setOpaque(true);
+        backing.setPreferredSize(new Dimension(400, 20));
+        backing.add(result);
+
+        return backing;
     }
 
 
