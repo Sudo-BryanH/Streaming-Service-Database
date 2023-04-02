@@ -248,8 +248,9 @@ public class PaymentEndpoints {
             Statement statement = connection.createStatement();
             String query = String.format("SELECT * FROM PremiumUser WHERE Username='%s'",user.getUsername());
             ResultSet resultSet = statement.executeQuery(query);
+            boolean status = resultSet.next();
             DatabaseManager.close();
-            return resultSet.next();
+            return status;
         }
         catch (SQLException exception){
             System.out.println("Error " + exception.getMessage() );
