@@ -65,26 +65,15 @@ public class LibraryPanel extends ContentPanel{
         JPanel temp = new JPanel();
         temp.setSize(new Dimension(400, (20*3)));
         temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
-        temp.add(makePlResults("pl1", 2));
-        // when querying, make sure to get the number of songs
-        temp.add(makePlResults("pl2" , 2));
-        temp.add(makePlResults("pl3" , 2));
-//        temp.add(makePlResults("pl4" , 2));
-//        temp.add(makePlResults("pl5" , 2));
-//        temp.add(makePlResults("pl6" , 2));
-//        temp.add(makePlResults("pl7" , 2));
-//        temp.add(makePlResults("pl2" , 2));
-//        temp.add(makePlResults("pl3" , 2));
-//        temp.add(makePlResults("pl4" , 2));
-//        temp.add(makePlResults("pl5" , 2));
-//        temp.add(makePlResults("pl6" , 2));
-//        temp.add(makePlResults("pl7" , 2));
+
+
         for (Playlist p : playlistList) {
-            System.out.println(p.getPlName());
+            temp.add(makePlResults(p.getPlName(), p.getSize()));
         }
 
 
         temp.setOpaque(true);
+        temp.setVisible(true);
         return temp;
 
     }

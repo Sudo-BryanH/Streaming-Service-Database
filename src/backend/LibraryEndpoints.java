@@ -12,21 +12,41 @@ import java.util.ArrayList;
 
 public class LibraryEndpoints {
 
-    public static ArrayList<Playlist> getPlaylists(String user) {
-        ArrayList<Playlist> res = new ArrayList<>();
+    public static int getPlaylistCount(String user) {
+        int count = -1;
         try {
-
+//            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
             Connection connection = DatabaseManager.establishConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "SELECT Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'", user);
+                    "SELECT * FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'", user);
+
+            Boolean b = statement.execute(query);
+
+            count = statement.getUpdateCount();
+
+
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+        }
+        DatabaseManager.close();
+        return count;
+    }
+    public static ArrayList<Playlist> getPlaylists(String user) {
+        ArrayList<Playlist> res = new ArrayList<>();
+        try {
+//            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
+            Connection connection = DatabaseManager.establishConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'", user);
 
             ResultSet rs = statement.executeQuery(query);
 
             while (rs.next()) {
                 Playlist pl = new Playlist(user, rs.getString("Name"));
                 res.add(pl);
-                pl.setSize(getPlaylistCount(user, rs.getString("Name")));
+                pl.setSize(getSongCount(user, rs.getString("Name")));
             }
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
@@ -42,7 +62,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.establishConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "SELECT ReleaseID, TrackNum, Name, Duration, Genre FROM Song s INNER JOIN PlaylistIsIn pi WHERE pi.Username = %s AND pi.Name = %s", user, pname);
+                    "SELECT ReleaseID, TrackNum, Name, Duration, Genre FROM Song s INNER JOIN PlaylistIsIn pi WHERE pi.Username = '%s' AND pi.Name = '%s'", user, pname);
 
             ResultSet rs = statement.executeQuery(query);
 
@@ -85,7 +105,7 @@ public class LibraryEndpoints {
 
     }
 
-    private static int getPlaylistCount(String user, String name) {
+    private static int getSongCount(String user, String name) {
         int count = -1;
         try {
 
@@ -95,7 +115,8 @@ public class LibraryEndpoints {
                     "SELECT COUNT(*)" +
                             "FROM Playlist p INNER JOIN PlaylistIsIn pi" +
                             "WHERE p.Username = %s AND p.Name = %s", user, name);
-            ResultSet rs = statement.executeQuery(query);
+            boolean b = statement.execute(query);
+            count = statement.getUpdateCount();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
