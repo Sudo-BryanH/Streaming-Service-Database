@@ -2,6 +2,7 @@ package backend;
 
 import database.DatabaseManager;
 import model.Playlist;
+import model.Song;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -19,8 +20,8 @@ public class LibraryEndpoints {
             Statement statement = connection.createStatement();
             String query = String.format(
                     "SELECT Name" +
-                    "FROM User u, Playlist p " +
-                    "WHERE u.Username = %d AND u.Username = p.Username", user);
+                            "FROM User u, Playlist p " +
+                            "WHERE u.Username = %s AND u.Username = p.Username", user);
 
             ResultSet rs = statement.executeQuery(query);
 
@@ -29,7 +30,58 @@ public class LibraryEndpoints {
                 res.add(pl);
                 pl.setSize(getPlaylistCount(user, rs.getString("Name")));
             }
-        } catch(SQLException exception) {
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+        }
+        DatabaseManager.close();
+        return res;
+
+    }
+    public static ArrayList<Song> getPlaylistSongs(String user, String pname) {
+        ArrayList<Song> res = new ArrayList<>();
+        try {
+
+            Connection connection = DatabaseManager.establishConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "SELECT ReleaseID, TrackNum, Name, Duration, Genre" +
+                            "FROM Song s INNER JOIN PlaylistIsIn pi " +
+                            "WHERE pi.Username = %s AND pi.Name = %s", user, pname);
+
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next()) {
+                Song s = new Song(rs.getInt("ReleaseID"), rs.getInt("TrackNum"), rs.getString("Name"), rs.getInt("Duration"), rs.getString("Genre"));
+                res.add(s);
+
+            }
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+        }
+        DatabaseManager.close();
+        return res;
+
+    }
+
+    public static ArrayList<Song> getLibrarySongs(String user) {
+        ArrayList<Song> res = new ArrayList<>();
+        try {
+
+            Connection connection = DatabaseManager.establishConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "SELECT ReleaseID, TrackNum, Name, Duration, Genre" +
+                            "FROM Song s INNER JOIN AddsToLibrary a " +
+                            "WHERE a.Username = %s", user);
+
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next()) {
+                Song s = new Song(rs.getInt("ReleaseID"), rs.getInt("TrackNum"), rs.getString("Name"), rs.getInt("Duration"), rs.getString("Genre"));
+                res.add(s);
+
+            }
+        } catch (SQLException exception) {
             System.out.println(exception.getMessage());
         }
         DatabaseManager.close();
@@ -56,3 +108,4 @@ public class LibraryEndpoints {
         return count;
 
     }
+}
