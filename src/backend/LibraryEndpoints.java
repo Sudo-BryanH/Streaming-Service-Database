@@ -63,7 +63,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.establishConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "SELECT ReleaseID, TrackNum, Name, Duration, Genre FROM Song s INNER JOIN PlaylistIsIn pi WHERE pi.Username = '%s' AND pi.Name = '%s'", user, pname);
+    "SELECT s.ReleaseID, s.TrackNum, s.Name, s.Duration, s.Genre FROM Song s, PlaylistIsIn pi WHERE s.ReleaseID = pi.ReleaseID AND pi.TrackNum = s.TrackNum AND pi.Username = '%s' AND pi.Name = '%s'", user, pname);
 
             ResultSet rs = statement.executeQuery(query);
 
@@ -87,9 +87,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.establishConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "SELECT ReleaseID, TrackNum, Name, Duration, Genre" +
-                            "FROM Song s INNER JOIN AddsToLibrary a " +
-                            "WHERE a.Username = %s", user);
+            "SELECT s.ReleaseID, s.TrackNum, s.Name, s.Duration, s.Genre FROM Song s , AddsToLibrary a WHERE s.ReleaseID = a.ReleaseID AND a.TrackNum = s.TrackNum AND a.Username = '%s'", user);
 
             ResultSet rs = statement.executeQuery(query);
 
@@ -125,6 +123,27 @@ public class LibraryEndpoints {
 
         DatabaseManager.close();
         return count;
+
+    }
+
+
+    public static boolean makePL(String user, String name) {
+        boolean insertDone = false;
+        try {
+
+            Connection connection = DatabaseManager.establishConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "INSERT INTO Playlist VALUES('%s', '%s')", user, name);
+           insertDone = statement.execute(query);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        DatabaseManager.close();
+        return insertDone;
 
     }
 }

@@ -20,6 +20,9 @@ public class LibraryPanel extends ContentPanel{
 
     int numPl;
     int numSongs;
+
+    JScrollPane plScroll;
+    JScrollPane songsScroll;
     public LibraryPanel(MainUI mainUI) {
         super(mainUI);
     }
@@ -38,21 +41,21 @@ public class LibraryPanel extends ContentPanel{
         JButton createPlaylist = createPlButtons("Create a new playlist!");
         createPlaylist.setAlignmentX(Component.LEFT_ALIGNMENT);
         nestedPanels.setLayout(layout);
-        String[] plCol = new String[]{"Playlist Name", "Number of songs"};
-        String[] songsCol = new String[]{"Song Name", "Artist", "Genre"};
+        plScroll = makeScroll();
+        songsScroll = makeScroll();
 //        playListList = ed.getPlaylists(user.getUsername());
         JPanel plTable = makePLTable();
+        JPanel songsTable = makeSongTable(null);
 
 //        JTable songsTable = makePlTable("Songs in " + currentPL, songsCol);
-        JScrollPane plScroll = makeScroll();
-        JScrollPane songsScroll = makeScroll();
+
         songsScroll.setAlignmentX(Component.RIGHT_ALIGNMENT);
         plScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(createPlaylist, BorderLayout.PAGE_START);
         nestedPanels.add(plScroll);
         nestedPanels.add(songsScroll);
         plScroll.setViewportView(plTable);
-//        songsScroll.setViewportView(songsTable);
+        songsScroll.setViewportView(songsTable);
         add(nestedPanels, BorderLayout.CENTER);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     }
@@ -86,9 +89,47 @@ public class LibraryPanel extends ContentPanel{
         }
 
 
+
         temp.setOpaque(true);
         temp.setVisible(true);
+        revalidate();
+        repaint();
+
         return temp;
+
+    }
+
+
+
+    private JPanel makeSongTable(String plname) {
+        getSongLists(plname);
+        JPanel temp = new JPanel();
+        temp.setMaximumSize(new Dimension(400, numSongs*20));
+        temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
+
+        temp.setOpaque(true);
+        temp.setVisible(true);
+
+        for (Song s : playlistSongList) {
+            temp.add(makeSongsPanel(s));
+        }
+
+        revalidate();
+        repaint();
+
+        return temp;
+
+    }
+
+    private JPanel makeSongsPanel(Song s) {
+        JPanel result = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        result.setSize(400, 20);
+        result.setBackground(Color.lightGray);
+        JLabel song = new JLabel(s.getName() + "\n");   //TODO include the artist in the panel
+        song.setMaximumSize(new Dimension(300,20));
+        result.add(song);
+
+        return result;
 
     }
 
@@ -97,7 +138,7 @@ public class LibraryPanel extends ContentPanel{
         result.setSize(400, 18);
         result.setBackground(Color.white);
         JLabel playlist = new JLabel(pl);
-        playlist.setPreferredSize(new Dimension(100,20));
+        playlist.setMaximumSize(new Dimension(100,20));
         result.add(playlist);
 
         JLabel count = new JLabel("# of songs: " +  Integer.toString(num));
@@ -111,6 +152,7 @@ public class LibraryPanel extends ContentPanel{
         select.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                songsScroll.setViewportView(makeSongTable(pl));
 
             }
         });
@@ -147,6 +189,7 @@ public class LibraryPanel extends ContentPanel{
     private JPanel makePlaylistWindow() {
         JPanel makePlaylist = new JPanel();
         JTextField name = new JTextField("Playlist Name:");
+
         name.setPreferredSize(new Dimension(300, 50));
         name.setAlignmentX(Component.CENTER_ALIGNMENT);
         name.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -160,12 +203,22 @@ public class LibraryPanel extends ContentPanel{
         doneButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                String newName = name.getText();
+                Boolean b = newPL(newName);
+                makePlaylist.hide();
+
 
             }
         });
         makePlaylist.add(name);
         makePlaylist.add(doneButton);
         return makePlaylist;
+    }
+
+    private boolean newPL(String plname) {
+       Boolean b = LibraryEndpoints.makePL(this.mainUI.getUser().getUsername(), plname);
+        makePLTable();
+        return b;
     }
 
     private JScrollPane makeScroll() {
