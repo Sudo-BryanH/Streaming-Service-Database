@@ -19,11 +19,12 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.establishConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "SELECT * FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'", user);
+                    "SELECT COUNT(*) as count FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'", user);
 
-            Boolean b = statement.execute(query);
-
-            count = statement.getUpdateCount();
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                count = rs.getInt("count");
+            }
 
 
         } catch (SQLException exception) {
@@ -105,18 +106,19 @@ public class LibraryEndpoints {
 
     }
 
-    private static int getSongCount(String user, String name) {
+    public static int getSongCount(String user, String name) {
         int count = -1;
         try {
 
             Connection connection = DatabaseManager.establishConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "SELECT COUNT(*)" +
-                            "FROM Playlist p INNER JOIN PlaylistIsIn pi" +
-                            "WHERE p.Username = %s AND p.Name = %s", user, name);
-            boolean b = statement.execute(query);
-            count = statement.getUpdateCount();
+                    "SELECT COUNT(*) as count FROM Playlist p, PlaylistIsIn pi WHERE p.Username = pi.Username AND p.Username = '%s' AND p.Name = '%s'", user, name);
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                count = rs.getInt("count");
+            }
+            System.out.println(count);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -2,7 +2,7 @@ package ui.panels;
 
 import backend.LibraryEndpoints;
 import model.Playlist;
-import model.User;
+import model.Song;
 import ui.MainUI;
 
 import javax.swing.*;
@@ -14,20 +14,24 @@ import java.util.ArrayList;
 
 public class LibraryPanel extends ContentPanel{
 
-    User user = this.mainUI.getUser();
+//    User user = this.mainUI.getUser();
     ArrayList<Playlist> playlistList;
+    ArrayList<Song> playlistSongList;
+
+    int numPl;
+    int numSongs;
     public LibraryPanel(MainUI mainUI) {
         super(mainUI);
     }
 
 
-    String[] songList = new String[]{"NULL", "NULL", "NULL"};
-    String currentPL = "null playlist";
+
 
 
     @Override
     protected void generate() {
         getPlayLists();
+        getSongLists(null);
         setLayout(new BorderLayout());
         JPanel nestedPanels = new JPanel();
         BoxLayout layout = new BoxLayout(nestedPanels, BoxLayout.X_AXIS);
@@ -55,7 +59,17 @@ public class LibraryPanel extends ContentPanel{
 
     void getPlayLists() {
         playlistList = LibraryEndpoints.getPlaylists(this.mainUI.getUser().getUsername());
+        numPl = LibraryEndpoints.getPlaylistCount(this.mainUI.getUser().getUsername());
+    }
 
+    void getSongLists(String plName) {
+        if (plName == null) {
+            playlistSongList = LibraryEndpoints.getLibrarySongs(this.mainUI.getUser().getUsername());
+            numSongs = playlistSongList.size();
+        } else {
+            playlistSongList = LibraryEndpoints.getPlaylistSongs(this.mainUI.getUser().getUsername(), plName);
+            numSongs = LibraryEndpoints.getSongCount(this.mainUI.getUser().getUsername(), plName);
+        }
     }
 
     private JPanel makePLTable(){
@@ -63,7 +77,7 @@ public class LibraryPanel extends ContentPanel{
 //        String[] playlistList = new String[]{"NULL", "NULL"};
         getPlayLists();
         JPanel temp = new JPanel();
-        temp.setSize(new Dimension(400, (20*3)));
+        temp.setSize(new Dimension(400, numPl*20));
         temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
 
 
@@ -80,7 +94,7 @@ public class LibraryPanel extends ContentPanel{
 
     private JPanel makePlResults(String pl, int num) {
         JPanel result = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        result.setSize(396, 18);
+        result.setSize(400, 18);
         result.setBackground(Color.white);
         JLabel playlist = new JLabel(pl);
         playlist.setPreferredSize(new Dimension(100,20));
@@ -103,12 +117,9 @@ public class LibraryPanel extends ContentPanel{
 
         result.setOpaque(true);
         result.add(select);
-        JPanel backing = new JPanel();
-        backing.setOpaque(true);
-        backing.setPreferredSize(new Dimension(400, 20));
-        backing.add(result);
 
-        return backing;
+
+        return result;
     }
 
 
