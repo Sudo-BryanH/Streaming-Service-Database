@@ -146,4 +146,24 @@ public class LibraryEndpoints {
         return insertDone;
 
     }
+
+    public static boolean deletePL(String user, String name) {
+        boolean deletionDone = false;
+        try {
+
+            Connection connection = DatabaseManager.establishConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "DELETE FROM Playlist p WHERE p.Username = '%s' AND p.Name = '%s'", user, name);
+            deletionDone = statement.execute(query);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        DatabaseManager.close();
+        return deletionDone;
+
+    }
 }

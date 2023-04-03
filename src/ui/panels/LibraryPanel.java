@@ -58,6 +58,7 @@ public class LibraryPanel extends ContentPanel{
         songsScroll.setViewportView(songsTable);
         add(nestedPanels, BorderLayout.CENTER);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
     }
 
     void getPlayLists() {
@@ -157,8 +158,23 @@ public class LibraryPanel extends ContentPanel{
             }
         });
 
+        JButton delete = new JButton("Delete");
+        delete.setBackground(Color.red);
+        delete.setPreferredSize(new Dimension(100,20));
+        delete.setOpaque(true);
+        delete.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                songsScroll.setViewportView(makeSongTable(null));
+
+                deletePL(pl);
+
+            }
+        });
+
         result.setOpaque(true);
         result.add(select);
+        result.add(delete);
 
 
         return result;
@@ -217,7 +233,13 @@ public class LibraryPanel extends ContentPanel{
 
     private boolean newPL(String plname) {
        Boolean b = LibraryEndpoints.makePL(this.mainUI.getUser().getUsername(), plname);
-        makePLTable();
+        plScroll.setViewportView(makePLTable());
+        return b;
+    }
+
+    private boolean deletePL(String plname) {
+        Boolean b = LibraryEndpoints.deletePL(this.mainUI.getUser().getUsername(), plname);
+        plScroll.setViewportView(makePLTable());
         return b;
     }
 
