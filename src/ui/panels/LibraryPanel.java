@@ -14,12 +14,16 @@ import java.util.ArrayList;
 
 public class LibraryPanel extends ContentPanel{
 
-//    User user = this.mainUI.getUser();
+    //    User user = this.mainUI.getUser();
     ArrayList<Playlist> playlistList;
     ArrayList<Song> playlistSongList;
 
     int numPl;
     int numSongs;
+
+    JPanel plTable;
+
+    JPanel songsTable;
 
     JScrollPane plScroll;
     JScrollPane songsScroll;
@@ -38,20 +42,23 @@ public class LibraryPanel extends ContentPanel{
         setLayout(new BorderLayout());
         JPanel nestedPanels = new JPanel();
         BoxLayout layout = new BoxLayout(nestedPanels, BoxLayout.X_AXIS);
-        JButton createPlaylist = createPlButtons("Create a new playlist!");
+        JButton createPlaylist = createPlButton("Create a new playlist!");
+        JButton yourLib = yourLibButton();
         createPlaylist.setAlignmentX(Component.LEFT_ALIGNMENT);
         nestedPanels.setLayout(layout);
         plScroll = makeScroll();
         songsScroll = makeScroll();
 //        playListList = ed.getPlaylists(user.getUsername());
-        JPanel plTable = makePLTable();
-        JPanel songsTable = makeSongTable(null);
+        makePLTable();
+        makeSongTable(null);
 
 //        JTable songsTable = makePlTable("Songs in " + currentPL, songsCol);
 
         songsScroll.setAlignmentX(Component.RIGHT_ALIGNMENT);
         plScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
+        yourLib.setAlignmentX(Component.RIGHT_ALIGNMENT);
         add(createPlaylist, BorderLayout.PAGE_START);
+        add(yourLib, BorderLayout.PAGE_END);
         nestedPanels.add(plScroll);
         nestedPanels.add(songsScroll);
         plScroll.setViewportView(plTable);
@@ -76,96 +83,171 @@ public class LibraryPanel extends ContentPanel{
         }
     }
 
-    private JPanel makePLTable(){
+    private void makePLTable(){
 //        playlistList = LibraryEndpoints.getPlaylists("A113").toArray();
 //        String[] playlistList = new String[]{"NULL", "NULL"};
         getPlayLists();
-        JPanel temp = new JPanel();
-        temp.setSize(new Dimension(400, numPl*20));
-        temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
+        if (plTable == null) {
+            plTable = new JPanel();
+//            plTable.setMaximumSize(new Dimension(400, numPl*10));
 
+            plTable.setLayout(new BoxLayout(plTable, BoxLayout.PAGE_AXIS));
+            plTable.setBackground(Color.white);
+            plTable.setForeground(Color.white);
+        }
 
+        plTable.setMaximumSize(new Dimension(400, numPl*10));
+
+        plTable.removeAll();
         for (Playlist p : playlistList) {
-            temp.add(makePlResults(p.getPlName(), p.getSize()));
+
+            plTable.add(makePlResults(p.getPlName(), p.getSize()));
+
         }
 
 
-
-        temp.setOpaque(true);
-        temp.setVisible(true);
+       plTable.add(Box.createVerticalGlue());
+        plTable.setOpaque(true);
+        plTable.setVisible(true);
         revalidate();
         repaint();
 
-        return temp;
+//        return temp;
 
     }
 
 
 
-    private JPanel makeSongTable(String plname) {
+    private void makeSongTable(String plname) {
+
+
         getSongLists(plname);
-        JPanel temp = new JPanel();
-        temp.setMaximumSize(new Dimension(400, numSongs*20));
-        temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
+        if (songsTable == null) {
+            songsTable = new JPanel();
+//            plTable.setMaximumSize(new Dimension(400, numPl*10));
 
-        temp.setOpaque(true);
-        temp.setVisible(true);
-
-        for (Song s : playlistSongList) {
-            temp.add(makeSongsPanel(s));
+            songsTable.setLayout(new BoxLayout(songsTable, BoxLayout.PAGE_AXIS));
+            songsTable.setBackground(Color.white);
+            songsTable.setForeground(Color.white);
         }
 
+        songsTable.setMaximumSize(new Dimension(400, numPl*10));
+
+        JLabel currPlayList = new JLabel(((plname == null) ? "Your Library": plname));
+        currPlayList.setMaximumSize(new Dimension(400, 20));
+//        currPlayList.setBackground(Color.gray);
+
+        currPlayList.setOpaque(true);
+
+        JPanel grey = new JPanel();
+        grey.setMaximumSize(new Dimension(400, 20));
+        grey.setBackground(Color.gray);
+//        grey.setForeground(Color.gray);
+        grey.setOpaque(true);
+        grey.add(currPlayList);
+
+        songsScroll.setColumnHeaderView(grey);
+
+        songsTable.removeAll();
+        for (Song s : playlistSongList) {
+
+            songsTable.add(makeSongsPanel(s, plname));
+
+        }
+
+        songsTable.add(grey);
+
+        songsTable.add(Box.createVerticalGlue());
+        songsTable.setOpaque(true);
+        songsTable.setVisible(true);
         revalidate();
         repaint();
 
-        return temp;
-
     }
 
-    private JPanel makeSongsPanel(Song s) {
+    private JPanel makeSongsPanel(Song s, String plName) {
         JPanel result = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        result.setSize(400, 20);
+        result.setMaximumSize(new Dimension(400, 10));
         result.setBackground(Color.lightGray);
         JLabel song = new JLabel(s.getName() + "\n");   //TODO include the artist in the panel
-        song.setMaximumSize(new Dimension(300,20));
-        result.add(song);
+        song.setMaximumSize(new Dimension(100,20));
+//        song.setMinimumSize(new Dimension(100,20));
+//        song.setPreferredSize(new Dimension(100,20));
 
+
+        JButton delete = new JButton("Delete");
+        delete.setForeground(Color.red);
+        delete.setPreferredSize(new Dimension(60,20));
+        delete.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        delete.setOpaque(true);
+        delete.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (plName == null) {
+                    boolean b = deleteSongLib(s);
+                } else {
+                    // TODO add the case for deleting from playlist
+                }
+
+//                deletePL(pl);
+
+            }
+
+        });
+        result.add(song);
+        result.add(delete);
         return result;
+
+    }
+
+    private boolean deleteSongLib(Song s) {
+        boolean b = LibraryEndpoints.deleteLibSong(s, this.mainUI.getUser().getUsername());
+        makeSongTable(null);
+
+        return b;
 
     }
 
     private JPanel makePlResults(String pl, int num) {
         JPanel result = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        result.setSize(400, 18);
-        result.setBackground(Color.white);
+        result.setMaximumSize(new Dimension(400, 10));
+        result.setBackground(Color.lightGray);
+        result.setBackground(Color.lightGray);
+
         JLabel playlist = new JLabel(pl);
         playlist.setMaximumSize(new Dimension(100,20));
+//        playlist.setMinimumSize(new Dimension(100,20));
+//        playlist.setPreferredSize(new Dimension(100,20));
         result.add(playlist);
 
-        JLabel count = new JLabel("# of songs: " +  Integer.toString(num));
-        count.setPreferredSize(new Dimension(100,20));
+        JLabel count = new JLabel(num + " songs");
+        count.setPreferredSize(new Dimension(80,20));
         count.setOpaque(true);
         result.add(count);
 
         JButton select = new JButton("Select");
-        select.setPreferredSize(new Dimension(100,20));
+        select.setPreferredSize(new Dimension(60,20));
         select.setOpaque(true);
+        select.setAlignmentX(Component.RIGHT_ALIGNMENT);
         select.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                songsScroll.setViewportView(makeSongTable(pl));
+                makeSongTable(pl);
 
             }
+
+
         });
 
         JButton delete = new JButton("Delete");
-        delete.setBackground(Color.red);
-        delete.setPreferredSize(new Dimension(100,20));
+        delete.setForeground(Color.red);
+        delete.setPreferredSize(new Dimension(60,20));
         delete.setOpaque(true);
+        delete.setAlignmentX(Component.RIGHT_ALIGNMENT);
         delete.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                songsScroll.setViewportView(makeSongTable(null));
+                makeSongTable(null);
 
                 deletePL(pl);
 
@@ -181,10 +263,10 @@ public class LibraryPanel extends ContentPanel{
     }
 
 
-    private JButton createPlButtons(String text) {
+    private JButton createPlButton(String text) {
         JButton temp = new JButton(text);
-        temp.setMaximumSize(new Dimension(400,50));
-        temp.setPreferredSize(new Dimension(400,50));
+        temp.setMaximumSize(new Dimension(200,50));
+        temp.setPreferredSize(new Dimension(200,50));
         temp.setAlignmentX(1);
         temp.setAlignmentY(1);
         temp.setOpaque(true);
@@ -196,6 +278,23 @@ public class LibraryPanel extends ContentPanel{
                 paymentFrame.setContentPane(makePlaylistWindow());
                 paymentFrame.setSize(new Dimension(400,160));
                 paymentFrame.setVisible(true);
+            }
+        });
+        return temp;
+
+    }
+
+    private JButton yourLibButton() {
+        JButton temp = new JButton("Library");
+        temp.setMaximumSize(new Dimension(200,50));
+        temp.setPreferredSize(new Dimension(200,50));
+        temp.setAlignmentX(1);
+        temp.setAlignmentY(1);
+        temp.setOpaque(true);
+        temp.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                makeSongTable(null);
             }
         });
         return temp;
@@ -232,14 +331,16 @@ public class LibraryPanel extends ContentPanel{
     }
 
     private boolean newPL(String plname) {
-       Boolean b = LibraryEndpoints.makePL(this.mainUI.getUser().getUsername(), plname);
-        plScroll.setViewportView(makePLTable());
+        Boolean b = LibraryEndpoints.makePL(this.mainUI.getUser().getUsername(), plname);
+        makePLTable();
+
         return b;
     }
 
     private boolean deletePL(String plname) {
         Boolean b = LibraryEndpoints.deletePL(this.mainUI.getUser().getUsername(), plname);
-        plScroll.setViewportView(makePLTable());
+        makePLTable();
+
         return b;
     }
 

@@ -116,7 +116,7 @@ public class LibraryEndpoints {
             while (rs.next()) {
                 count = rs.getInt("count");
             }
-            System.out.println(count);
+//            System.out.println(count);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -157,6 +157,26 @@ public class LibraryEndpoints {
                     "DELETE FROM Playlist p WHERE p.Username = '%s' AND p.Name = '%s'", user, name);
             deletionDone = statement.execute(query);
 
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+
+        return deletionDone;
+
+    }
+
+    public static boolean deleteLibSong(Song s, String user) {
+        boolean deletionDone = false;
+        try {
+
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "DELETE FROM AddsToLibrary a WHERE a.Username = '%s' AND a.TrackNum = '%s' AND a.ReleaseID = '%s", user, s.getTrackNum(), s.getReleaseID());
+            deletionDone = statement.execute(query);
+// "SELECT s.ReleaseID, s.TrackNum, s.Name, s.Duration, s.Genre FROM Song s , AddsToLibrary a WHERE s.ReleaseID = a.ReleaseID AND a.TrackNum = s.TrackNum AND a.Username = '%s'", user);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
