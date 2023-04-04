@@ -1,6 +1,7 @@
 package util;
 
 import model.Artist;
+import model.Release;
 
 import java.util.List;
 
@@ -27,5 +28,13 @@ public class Misc {
         }
 
         return result.toString();
+    }
+
+    public static void mergeReleaseLists(List<Release> target, List<Release> addition) {
+        for (Release a : addition) {
+            if (!target.contains(a)) {
+                target.add(a);
+            }
+        }
     }
 }
