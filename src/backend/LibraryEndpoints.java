@@ -183,20 +183,11 @@ public class LibraryEndpoints {
             System.out.println(e.getMessage());
         }
 
-
         return deletionDone;
 
     }
-}
 
     public static void addToLibrary(Song song, String username) {
-        // stub
-    }
-
-    public static void removeFromLibrary(Song song, String username) {
-        LibraryEndpoints.unlikeSong(song, username);
-        LibraryEndpoints.undownloadSong(song, username);
-
         // stub
     }
 
