@@ -16,7 +16,7 @@ public class LibraryEndpoints {
         int count = -1;
         try {
 //            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
-            Connection connection = DatabaseManager.establishConnection();
+            Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
                     "SELECT COUNT(*) as count FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'", user);
@@ -30,14 +30,14 @@ public class LibraryEndpoints {
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
         }
-        DatabaseManager.close();
+
         return count;
     }
     public static ArrayList<Playlist> getPlaylists(String user) {
         ArrayList<Playlist> res = new ArrayList<>();
         try {
 //            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
-            Connection connection = DatabaseManager.establishConnection();
+            Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
                     "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'", user);
@@ -52,7 +52,7 @@ public class LibraryEndpoints {
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
         }
-        DatabaseManager.close();
+
         return res;
 
     }
@@ -60,7 +60,7 @@ public class LibraryEndpoints {
         ArrayList<Song> res = new ArrayList<>();
         try {
 
-            Connection connection = DatabaseManager.establishConnection();
+            Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
     "SELECT s.ReleaseID, s.TrackNum, s.Name, s.Duration, s.Genre FROM Song s, PlaylistIsIn pi WHERE s.ReleaseID = pi.ReleaseID AND pi.TrackNum = s.TrackNum AND pi.Username = '%s' AND pi.Name = '%s'", user, pname);
@@ -75,7 +75,7 @@ public class LibraryEndpoints {
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
         }
-        DatabaseManager.close();
+
         return res;
 
     }
@@ -84,7 +84,7 @@ public class LibraryEndpoints {
         ArrayList<Song> res = new ArrayList<>();
         try {
 
-            Connection connection = DatabaseManager.establishConnection();
+            Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
             "SELECT s.ReleaseID, s.TrackNum, s.Name, s.Duration, s.Genre FROM Song s , AddsToLibrary a WHERE s.ReleaseID = a.ReleaseID AND a.TrackNum = s.TrackNum AND a.Username = '%s'", user);
@@ -99,7 +99,7 @@ public class LibraryEndpoints {
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
         }
-        DatabaseManager.close();
+
         return res;
 
     }
@@ -108,7 +108,7 @@ public class LibraryEndpoints {
         int count = -1;
         try {
 
-            Connection connection = DatabaseManager.establishConnection();
+            Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
                     "SELECT COUNT(*) as count FROM Playlist p, PlaylistIsIn pi WHERE p.Username = pi.Username AND p.Username = '%s' AND p.Name = '%s'", user, name);
@@ -121,7 +121,7 @@ public class LibraryEndpoints {
             System.out.println(e.getMessage());
         }
 
-        DatabaseManager.close();
+
         return count;
 
     }
@@ -131,7 +131,7 @@ public class LibraryEndpoints {
         boolean insertDone = false;
         try {
 
-            Connection connection = DatabaseManager.establishConnection();
+            Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
                     "INSERT INTO Playlist VALUES('%s', '%s')", user, name);
@@ -142,7 +142,7 @@ public class LibraryEndpoints {
             System.out.println(e.getMessage());
         }
 
-        DatabaseManager.close();
+
         return insertDone;
 
     }
@@ -151,7 +151,7 @@ public class LibraryEndpoints {
         boolean deletionDone = false;
         try {
 
-            Connection connection = DatabaseManager.establishConnection();
+            Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
                     "DELETE FROM Playlist p WHERE p.Username = '%s' AND p.Name = '%s'", user, name);
@@ -162,7 +162,7 @@ public class LibraryEndpoints {
             System.out.println(e.getMessage());
         }
 
-        DatabaseManager.close();
+
         return deletionDone;
 
     }
