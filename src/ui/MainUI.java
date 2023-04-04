@@ -7,14 +7,17 @@ import ui.panels.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainUI extends JFrame {
     private JPanel content;
     private User user;
+    private boolean admin;
 
     public MainUI(User user) {
         this.user = user;
+        this.admin = this.user.getUsername().equals("admin");
 
         setLayout(new BorderLayout());
         JPanel sidebar = createSideBar();
@@ -35,29 +38,83 @@ public class MainUI extends JFrame {
     }
 
     public User getUser(){
-        return this.user;
+        return user;
+    }
+
+    public boolean isAdmin(){
+        return admin;
     }
 
     private JPanel createSideBar(){
         JPanel sidebar = new JPanel();
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
         sidebar.setBackground(Color.GRAY);
         sidebar.setPreferredSize(new Dimension(150, getHeight()));
 
-        // Create the buttons and add them to the sidebar
-        ArrayList<JButton> buttons = new ArrayList<>();
-        buttons.add(new JButton("Home"));
-        buttons.add(new JButton("Library"));
-        buttons.add(new JButton("Search"));
-        buttons.add(new JButton("Payments"));
-        buttons.add(new JButton("Query"));
-        buttons.add(new JButton("Logout"));
+        List<JButton> regularButtons = addRegularButtons(sidebar);
+        List<JButton> adminButtons = addAdminButtons(sidebar);
+        addLogoutButton(sidebar);
 
-        for (JButton button : buttons) {
+        return sidebar;
+    }
+
+    private List<JButton> addRegularButtons(JPanel sidebar) {
+        List<JButton> regularButtons = new ArrayList<>();
+
+        regularButtons.add(new JButton("Home"));
+        regularButtons.add(new JButton("Library"));
+        regularButtons.add(new JButton("Search"));
+        regularButtons.add(new JButton("Payments"));
+
+        regularButtons.get(0).addActionListener(e -> swapPanel(new HomePanel(this)));
+        regularButtons.get(1).addActionListener(e -> swapPanel(new LibraryPanel(this)));
+        regularButtons.get(2).addActionListener(e -> swapPanel(new SearchPanel(this)));
+        regularButtons.get(3).addActionListener(e -> {
+            if (admin){
+                swapPanel(new AdminPaymentsPanel(this));
+            }
+            else {
+                swapPanel(new UserPaymentsPanel(this));
+            }
+        });
+
+        for (JButton button : regularButtons) {
+            button.setAlignmentX(Component.CENTER_ALIGNMENT);
             sidebar.add(button);
         }
+        return regularButtons;
+    }
 
-        addActionListeners(buttons);
-        return sidebar;
+    private List<JButton> addAdminButtons(JPanel sidebar) {
+        List<JButton> adminButtons = new ArrayList<>();
+
+        if (admin) {
+            adminButtons.add(new JButton("Query"));
+            adminButtons.add(new JButton("Manage Releases"));
+
+            adminButtons.get(0).addActionListener(e -> swapPanel(new QueryPanel(this)));
+            adminButtons.get(1).addActionListener(e -> swapPanel(new ReleasesAdminPanel(this)));
+
+            sidebar.add(Box.createVerticalStrut(20));
+            for (JButton button : adminButtons) {
+                button.setAlignmentX(Component.CENTER_ALIGNMENT);
+                sidebar.add(button);
+            }
+        }
+
+        return adminButtons;
+    }
+
+    private void addLogoutButton(JPanel sidebar) {
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        logoutButton.addActionListener(e -> {
+            dispose();
+            JFrame loginFrame = new LoginPage();
+            loginFrame.setVisible(true);
+        });
+        sidebar.add(Box.createVerticalStrut(20));
+        sidebar.add(logoutButton);
     }
 
     public void swapPanel(ContentPanel newPanel) {
@@ -67,29 +124,6 @@ public class MainUI extends JFrame {
         revalidate();
         repaint();
     }
-
-    // should refactor later, this just exists as is right now for convenience
-    private void addActionListeners(ArrayList<JButton> buttons) {
-        MainUI thisReference = this;
-        buttons.get(0).addActionListener(e -> swapPanel(new HomePanel(thisReference)));
-        buttons.get(1).addActionListener(e -> swapPanel(new LibraryPanel(thisReference)));
-        buttons.get(2).addActionListener(e -> swapPanel(new SearchPanel(thisReference)));
-        buttons.get(3).addActionListener(e -> {
-            if(this.user.getUsername().equals("dhk")){
-                swapPanel(new AdminPaymentsPanel(thisReference));
-            }
-            else {
-                swapPanel(new UserPaymentsPanel(thisReference));
-            }
-        });
-        buttons.get(4).addActionListener(e -> swapPanel(new QueryPanel(thisReference)));
-        buttons.get(5).addActionListener(e -> {
-            dispose();
-            JFrame loginFrame = new LoginPage();
-            loginFrame.setVisible(true);
-        });
-    }
-
 }
 
 

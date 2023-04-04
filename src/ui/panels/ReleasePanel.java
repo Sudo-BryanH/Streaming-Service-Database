@@ -33,6 +33,8 @@ public class ReleasePanel extends ContentPanel{
 
         createSongsScrollPane();
         add(songsScrollPane, BorderLayout.WEST);
+
+        add(new JLabel("Published by " + release.distributor), BorderLayout.SOUTH);
     }
 
     private JPanel createHeader() {
@@ -57,9 +59,10 @@ public class ReleasePanel extends ContentPanel{
     private JPanel getSongPanel(Song song) {
         String username = mainUI.getUser().getUsername();
         JPanel result = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        Dimension miniButtonSize = new Dimension(30,20);
 
         JButton playButton = new JButton("▶");
-        playButton.setPreferredSize(new Dimension(30,20));
+        playButton.setPreferredSize(miniButtonSize);
         result.add(playButton);
 
         JLabel numLabel = new JLabel(Integer.toString(song.trackNum));
@@ -82,6 +85,7 @@ public class ReleasePanel extends ContentPanel{
         durationLabel.setPreferredSize(new Dimension(40,20));
         result.add(durationLabel);
 
+        // TODO handle updates when add/remove from library
         String addButtonLabel = song.added ? "-" : "+";
         JButton addButton = new JButton(addButtonLabel);
         addButton.addActionListener(e -> {
@@ -94,13 +98,13 @@ public class ReleasePanel extends ContentPanel{
             }
             song.added = !song.added;
         });
-        addButton.setPreferredSize(new Dimension(30,20));
+        addButton.setPreferredSize(miniButtonSize);
         result.add(addButton);
 
         String downloadButtonLabel = song.downloaded ? "✕" : "↓";
         JButton downloadButton = new JButton(downloadButtonLabel);
         downloadButton.setEnabled(song.added);
-        downloadButton.setPreferredSize(new Dimension(30,20));
+        downloadButton.setPreferredSize(miniButtonSize);
         downloadButton.addActionListener(e -> {
             if (song.downloaded) {
                 downloadButton.setText("↓");
@@ -116,7 +120,7 @@ public class ReleasePanel extends ContentPanel{
         String likeButtonLabel = song.liked ? "♥" : "♡";
         JButton likeButton = new JButton(likeButtonLabel);
         likeButton.setEnabled(song.added);
-        likeButton.setPreferredSize(new Dimension(30,20));
+        likeButton.setPreferredSize(miniButtonSize);
         likeButton.addActionListener(e -> {
             if (song.liked) {
                 likeButton.setText("♡");
