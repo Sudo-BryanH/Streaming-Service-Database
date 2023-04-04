@@ -50,21 +50,21 @@ public class ReleaseEndpoints {
     public static List<Release> searchReleases(String keywords) {
         String creatingArtist = "SELECT * " +
                 "FROM Artist a1, Creates c " +
-                "WHERE r.ID = c.ReleaseID AND a1.ID = c.ArtistID AND a1.Name LIKE '%%%1$s%%'";
+                "WHERE r.ID = c.ReleaseID AND a1.ID = c.ArtistID AND LOWER(a1.Name) LIKE LOWER('%%%1$s%%')";
         String featuredArtist = "SELECT * " +
                 "FROM Artist a2, FeaturedIn f " +
                 "WHERE s.ReleaseID = f.ReleaseID AND s.TrackNum = f.TrackNum AND " +
-                "a2.ID = f.ArtistID AND a2.Name LIKE '%%%1$s%%'";
+                "a2.ID = f.ArtistID AND LOWER(a2.Name) LIKE LOWER('%%%1$s%%')";
         String existsSong = "SELECT * FROM Song s " +
                 "WHERE r.ID = s.ReleaseID AND " +
-                "(s.Name LIKE '%%%1$s%%' OR EXISTS (" + featuredArtist + "))";
+                "(LOWER(s.Name) LIKE LOWER('%%%1$s%%') OR EXISTS (" + featuredArtist + "))";
 
         String query = "SELECT DISTINCT " +
                 "r.ID as ID, r.Name as Name, Type, ReleaseDate, ArtURL, DistributorName " +
                 "FROM Releases r WHERE " +
                 "EXISTS (" + existsSong + ") OR " +
                 "EXISTS (" + creatingArtist + ") OR " +
-                "r.Name LIKE '%%%1$s%%'";
+                "LOWER(r.Name) LIKE LOWER('%%%1$s%%')";
         return getReleasesHelper(String.format(query, keywords));
     }
 
