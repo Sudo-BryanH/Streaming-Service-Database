@@ -17,7 +17,8 @@ public class DatabaseManager {
             if (connection != null) {
                 connection.close();
             }
-            System.out.println("\nConnected to Oracle!");
+            System.out.println("DatabaseManager: Connected to Oracle!");
+            establishConnection();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -27,21 +28,21 @@ public class DatabaseManager {
         return instance;
     }
 
-    public static Connection getConnectionInstance(){
+    public Connection getConnection(){
         return connection;
     }
 
-    public static Connection establishConnection() throws SQLException{
+    private void establishConnection() throws SQLException{
         connection = DriverManager.getConnection(ORACLE_URL, username, password);
         connection.setAutoCommit(false);
-        return connection;
+        System.out.println("DatabaseManager: Connection established!");
     }
 
-    public static void close() {
+    public void close() {
         try {
             if (connection != null) {
                 connection.close();
-                System.out.println("lost connection");
+                System.out.println("DatabaseManager: Closed the connection.");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
