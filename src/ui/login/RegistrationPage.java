@@ -82,8 +82,7 @@ public class RegistrationPage extends JFrame {
                 String email = emailTextField.getText();
                 if(LoginRegistrationEndpoints.register(username,password,email)){
                     dispose();
-                    MainUI homePage = new MainUI();
-                    homePage.setUser(new User(username));
+                    MainUI homePage = new MainUI(new User(username));
                     homePage.setVisible(true);
                 }
                 else {

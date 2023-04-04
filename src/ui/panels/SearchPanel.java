@@ -62,6 +62,7 @@ public class SearchPanel extends ContentPanel{
         result.add(artistLabel);
 
         JButton viewButton = new JButton("View");
+        viewButton.addActionListener(e -> mainUI.swapPanel(new HomePanel(mainUI)));
         result.add(viewButton);
 
         return result;
