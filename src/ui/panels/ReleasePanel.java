@@ -87,7 +87,7 @@ public class ReleasePanel extends ContentPanel{
         addButton.addActionListener(e -> {
             if (song.added) {
                 addButton.setText("+");
-                LibraryEndpoints.deleteLibSong(song, username);
+                LibraryEndpoints.deleteLibSong(song, username);     // in case of conflicts, deleteLibSong is correct
             } else {
                 addButton.setText("-");
                 LibraryEndpoints.addToLibrary(song, username);

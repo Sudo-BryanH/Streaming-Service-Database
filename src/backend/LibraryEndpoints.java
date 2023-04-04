@@ -63,7 +63,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-    "SELECT s.ReleaseID, s.TrackNum, s.Name, s.Duration, s.Genre FROM Song s, PlaylistIsIn pi WHERE s.ReleaseID = pi.ReleaseID AND pi.TrackNum = s.TrackNum AND pi.Username = '%s' AND pi.Name = '%s'", user, pname);
+                    "SELECT s.ReleaseID, s.TrackNum, s.Name, s.Duration, s.Genre FROM Song s, PlaylistIsIn pi WHERE s.ReleaseID = pi.ReleaseID AND pi.TrackNum = s.TrackNum AND pi.Username = '%s' AND pi.Name = '%s'", user, pname);
 
             ResultSet rs = statement.executeQuery(query);
 
@@ -87,7 +87,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-            "SELECT s.ReleaseID, s.TrackNum, s.Name, s.Duration, s.Genre FROM Song s , AddsToLibrary a WHERE s.ReleaseID = a.ReleaseID AND a.TrackNum = s.TrackNum AND a.Username = '%s'", user);
+                    "SELECT s.ReleaseID, s.TrackNum, s.Name, s.Duration, s.Genre FROM Song s , AddsToLibrary a WHERE s.ReleaseID = a.ReleaseID AND a.TrackNum = s.TrackNum AND a.Username = '%s'", user);
 
             ResultSet rs = statement.executeQuery(query);
 
@@ -111,7 +111,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "SELECT COUNT(*) as count FROM Playlist p, PlaylistIsIn pi WHERE p.Username = pi.Username AND p.Username = '%s' AND p.Name = '%s'", user, name);
+                    "SELECT COUNT(*) as count FROM PlaylistIsIn pi WHERE pi.Username = '%s' AND pi.Name = '%s'", user, name);
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
                 count = rs.getInt("count");
@@ -135,7 +135,7 @@ public class LibraryEndpoints {
             Statement statement = connection.createStatement();
             String query = String.format(
                     "INSERT INTO Playlist VALUES('%s', '%s')", user, name);
-           insertDone = statement.execute(query);
+            insertDone = statement.execute(query);
 
 
         } catch (SQLException e) {
@@ -168,16 +168,35 @@ public class LibraryEndpoints {
     }
 
 
-    public static boolean deleteLibSong(Song s, String user) {
+    public static void deleteLibSong(Song s, String user) {
         boolean deletionDone = false;
         try {
 
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "DELETE FROM AddsToLibrary a WHERE a.Username = '%s' AND a.TrackNum = '%s' AND a.ReleaseID = '%s", user, s.getTrackNum(), s.getReleaseID());
+                    "DELETE FROM AddsToLibrary a WHERE a.Username = '%s' AND a.TrackNum = %d AND a.ReleaseID = %d", user, s.getTrackNum(), s.getReleaseID());
             deletionDone = statement.execute(query);
-// "SELECT s.ReleaseID, s.TrackNum, s.Name, s.Duration, s.Genre FROM Song s , AddsToLibrary a WHERE s.ReleaseID = a.ReleaseID AND a.TrackNum = s.TrackNum AND a.Username = '%s'", user);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        /*return deletionDone;*/
+
+    }
+
+    public static boolean deletePLSong(Song s, String plName, String user) {
+        boolean deletionDone = false;
+        try {
+
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "DELETE FROM PlaylistIsIn pi WHERE pi.Username = '%s'  AND pi.Name = '%s' AND pi.TrackNum = %d AND pi.ReleaseID = %d", user, plName, s.getTrackNum(), s.getReleaseID());
+            deletionDone = statement.execute(query);
+
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -189,22 +208,113 @@ public class LibraryEndpoints {
 
     public static void addToLibrary(Song song, String username) {
         // stub
+        boolean insertDone = false;
+        try {
+
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "INSERT INTO AddsToLibrary a VALUES(%d, %d, '%s', 0, 0)", song.getReleaseID(), song.getTrackNum(), username);
+            insertDone = statement.execute(query);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+
+//        return insertDone;
+
     }
 
     public static void likeSong(Song song, String username) {
         // stub
+        boolean insertDone = false;
+        try {
+
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "UPDATE AddsToLibrary a SET a.Liked = 1 WHERE a.Username = '%s' AND a.TrackNum = %d AND a.ReleaseID = %d", username, song.getTrackNum(), song.getReleaseID());
+            insertDone = statement.execute(query);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+
+//        return insertDone;
+
     }
 
     public static void unlikeSong(Song song, String username) {
         // stub
+        boolean insertDone = false;
+        try {
+
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "UPDATE AddsToLibrary a SET a.Liked = 0 WHERE a.Username = '%s' AND a.TrackNum = %d AND a.ReleaseID = %d", username, song.getTrackNum(), song.getReleaseID());
+            insertDone = statement.execute(query);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public static void downloadSong(Song song, String username) {
         // stub
+        boolean insertDone = false;
+        try {
+
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "UPDATE AddsToLibrary a SET a.Downloaded = 1 WHERE a.Username = '%s' AND a.TrackNum = %d AND a.ReleaseID = %d", username, song.getTrackNum(), song.getReleaseID());
+            insertDone = statement.execute(query);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public static void undownloadSong(Song song, String username) {
         // stub
+        boolean insertDone = false;
+        try {
+
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "UPDATE AddsToLibrary a SET a.Downloaded = 0 WHERE a.Username = '%s' AND a.TrackNum = %d AND a.ReleaseID = %d", username, song.getTrackNum(), song.getReleaseID());
+            insertDone = statement.execute(query);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static void addSongToPl(Song song, String username, String plName) {
+        boolean insertDone = false;
+        try {
+
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "INSERT INTO PlaylistIsIn pi VALUES('%s', '%s', %d, %d)", username, plName, song.getTrackNum(), song.getReleaseID());
+            insertDone = statement.execute(query);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
-
