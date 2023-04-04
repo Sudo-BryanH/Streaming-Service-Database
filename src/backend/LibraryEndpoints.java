@@ -166,4 +166,31 @@ public class LibraryEndpoints {
         return deletionDone;
 
     }
+
+    public static void addToLibrary(Song song, String username) {
+        // stub
+    }
+
+    public static void removeFromLibrary(Song song, String username) {
+        LibraryEndpoints.unlikeSong(song, username);
+        LibraryEndpoints.undownloadSong(song, username);
+
+        // stub
+    }
+
+    public static void likeSong(Song song, String username) {
+        // stub
+    }
+
+    public static void unlikeSong(Song song, String username) {
+        // stub
+    }
+
+    public static void downloadSong(Song song, String username) {
+        // stub
+    }
+
+    public static void undownloadSong(Song song, String username) {
+        // stub
+    }
 }

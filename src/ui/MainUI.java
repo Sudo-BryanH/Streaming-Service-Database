@@ -13,7 +13,9 @@ public class MainUI extends JFrame {
     private JPanel content;
     private User user;
 
-    public MainUI() {
+    public MainUI(User user) {
+        this.user = user;
+
         setLayout(new BorderLayout());
         JPanel sidebar = createSideBar();
 
@@ -30,10 +32,6 @@ public class MainUI extends JFrame {
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-    public void setUser(User user){
-        this.user = user;
     }
 
     public User getUser(){
