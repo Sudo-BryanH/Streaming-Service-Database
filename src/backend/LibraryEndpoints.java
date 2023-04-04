@@ -168,7 +168,7 @@ public class LibraryEndpoints {
     }
 
 
-    public static boolean deleteLibSong(Song s, String user) {
+    public static void deleteLibSong(Song s, String user) {
         boolean deletionDone = false;
         try {
 
@@ -183,7 +183,7 @@ public class LibraryEndpoints {
             System.out.println(e.getMessage());
         }
 
-        return deletionDone;
+        /*return deletionDone;*/
 
     }
 
@@ -194,7 +194,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "DELETE FROM PlaylistIsIn pi WHERE pi.Username = '%s' AND pi.TrackNum = %d AND pi.ReleaseID = %d AND pi.Name = '%s", user, s.getTrackNum(), s.getReleaseID());
+                    "DELETE FROM PlaylistIsIn pi WHERE pi.Username = '%s' AND pi.TrackNum = %d AND pi.ReleaseID = %d AND pi.Name = '%s'", user, s.getTrackNum(), s.getReleaseID(), plName);
             deletionDone = statement.execute(query);
 
 
@@ -300,5 +300,21 @@ public class LibraryEndpoints {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    public static void addSongToPl(Song song, String username, String plName) {
+        boolean insertDone = false;
+        try {
+
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "INSERT INTO PlaylistIsIn pi VALUES('%s', '%s', %d, %d)", username, plName, song.getTrackNum(), song.getReleaseID());
+            insertDone = statement.execute(query);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
