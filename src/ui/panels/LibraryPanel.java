@@ -29,6 +29,7 @@ public class LibraryPanel extends ContentPanel{
 
     JScrollPane plScroll;
     JScrollPane songsScroll;
+    JButton yourLib;
     public LibraryPanel(MainUI mainUI) {
         super(mainUI);
     }
@@ -44,8 +45,8 @@ public class LibraryPanel extends ContentPanel{
         setLayout(new BorderLayout());
         JPanel nestedPanels = new JPanel();
         BoxLayout layout = new BoxLayout(nestedPanels, BoxLayout.X_AXIS);
-        JButton createPlaylist = createPlButton("Create a new playlist!");
-        JButton yourLib = yourLibButton();
+        JButton createPlaylist = createPlButton("✚ Create a new playlist");
+         yourLib = yourLibButton();
         createPlaylist.setAlignmentX(Component.LEFT_ALIGNMENT);
         nestedPanels.setLayout(layout);
         plScroll = makeScroll();
@@ -60,7 +61,7 @@ public class LibraryPanel extends ContentPanel{
         plScroll.setAlignmentX(Component.LEFT_ALIGNMENT);
         yourLib.setAlignmentX(Component.RIGHT_ALIGNMENT);
         add(createPlaylist, BorderLayout.PAGE_START);
-        add(yourLib, BorderLayout.PAGE_END);
+//        add(yourLib, BorderLayout.PAGE_END);
         nestedPanels.add(plScroll);
         nestedPanels.add(songsScroll);
         plScroll.setViewportView(plTable);
@@ -147,7 +148,10 @@ public class LibraryPanel extends ContentPanel{
 //        grey.setForeground(Color.gray);
         grey.setOpaque(true);
         grey.add(currPlayList);
-
+        if (plname != null) {
+            grey.add(yourLib);
+        }
+//        songsTable.add(grey);
         songsScroll.setColumnHeaderView(grey);
 
         songsTable.removeAll();
@@ -157,7 +161,7 @@ public class LibraryPanel extends ContentPanel{
 
         }
 
-        songsTable.add(grey);
+
 
         songsTable.add(Box.createVerticalGlue());
         songsTable.setOpaque(true);
@@ -343,9 +347,9 @@ public class LibraryPanel extends ContentPanel{
     }
 
     private JButton yourLibButton() {
-        JButton temp = new JButton("Library");
-        temp.setMaximumSize(new Dimension(200,50));
-        temp.setPreferredSize(new Dimension(200,50));
+        JButton temp = new JButton("Go To Library");
+        temp.setMaximumSize(new Dimension(120,20));
+        temp.setPreferredSize(new Dimension(120,20));
         temp.setAlignmentX(1);
         temp.setAlignmentY(1);
         temp.setOpaque(true);
