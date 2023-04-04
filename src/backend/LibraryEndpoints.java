@@ -111,7 +111,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "SELECT COUNT(*) as count FROM Playlist p, PlaylistIsIn pi WHERE p.Username = pi.Username AND p.Username = '%s' AND p.Name = '%s'", user, name);
+                    "SELECT COUNT(*) as count FROM PlaylistIsIn pi WHERE pi.Username = '%s' AND pi.Name = '%s'", user, name);
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
                 count = rs.getInt("count");
@@ -194,7 +194,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "DELETE FROM PlaylistIsIn pi WHERE pi.Username = '%s' AND pi.TrackNum = %d AND pi.ReleaseID = %d AND pi.Name = '%s'", user, s.getTrackNum(), s.getReleaseID(), plName);
+                    "DELETE FROM PlaylistIsIn pi WHERE pi.Username = '%s'  AND pi.Name = '%s' AND pi.TrackNum = %d AND pi.ReleaseID = %d", user, plName, s.getTrackNum(), s.getReleaseID());
             deletionDone = statement.execute(query);
 
 
