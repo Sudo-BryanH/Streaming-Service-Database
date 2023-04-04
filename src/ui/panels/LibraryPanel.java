@@ -1,3 +1,5 @@
+
+
 package ui.panels;
 
 import backend.LibraryEndpoints;
@@ -106,7 +108,7 @@ public class LibraryPanel extends ContentPanel{
         }
 
 
-       plTable.add(Box.createVerticalGlue());
+        plTable.add(Box.createVerticalGlue());
         plTable.setOpaque(true);
         plTable.setVisible(true);
         revalidate();
@@ -186,7 +188,7 @@ public class LibraryPanel extends ContentPanel{
                 if (plName == null) {
                     boolean b = deleteSongLib(s);
                 } else {
-                    // TODO add the case for deleting from playlist
+                    boolean b = deleteSongPl(s, plName);
                 }
 
 //                deletePL(pl);
@@ -200,6 +202,14 @@ public class LibraryPanel extends ContentPanel{
 
     }
 
+    private boolean deleteSongPl(Song s, String plName) {
+
+        boolean b = LibraryEndpoints.deletePLSong(s, plName, this.mainUI.getUser().getUsername());
+        makeSongTable(plName);
+
+        return b;
+    }
+
     private boolean deleteSongLib(Song s) {
         boolean b = LibraryEndpoints.deleteLibSong(s, this.mainUI.getUser().getUsername());
         makeSongTable(null);
@@ -209,10 +219,10 @@ public class LibraryPanel extends ContentPanel{
     }
 
     private JPanel makePlResults(String pl, int num) {
-        JPanel result = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel result = new JPanel(new GridLayout(1, 3, 10, 10));
         result.setMaximumSize(new Dimension(400, 10));
         result.setBackground(Color.lightGray);
-        result.setBackground(Color.lightGray);
+        result.setForeground(Color.lightGray);
 
         JLabel playlist = new JLabel(pl);
         playlist.setMaximumSize(new Dimension(100,20));
@@ -221,12 +231,15 @@ public class LibraryPanel extends ContentPanel{
         result.add(playlist);
 
         JLabel count = new JLabel(num + " songs");
-        count.setPreferredSize(new Dimension(80,20));
+        count.setAlignmentX(Component.CENTER_ALIGNMENT);
+        count.setBackground(Color.lightGray);
+        count.setMaximumSize(new Dimension(60,20));
         count.setOpaque(true);
         result.add(count);
 
         JButton select = new JButton("Select");
-        select.setPreferredSize(new Dimension(60,20));
+        select.setMaximumSize(new Dimension(60,20));
+        select.setBackground(Color.lightGray);
         select.setOpaque(true);
         select.setAlignmentX(Component.RIGHT_ALIGNMENT);
         select.addActionListener(new ActionListener(){
@@ -241,7 +254,8 @@ public class LibraryPanel extends ContentPanel{
 
         JButton delete = new JButton("Delete");
         delete.setForeground(Color.red);
-        delete.setPreferredSize(new Dimension(60,20));
+        delete.setMaximumSize(new Dimension(60,20));
+        delete.setBackground(Color.lightGray);
         delete.setOpaque(true);
         delete.setAlignmentX(Component.RIGHT_ALIGNMENT);
         delete.addActionListener(new ActionListener(){
@@ -358,3 +372,4 @@ public class LibraryPanel extends ContentPanel{
         return temp;
     }
 }
+
