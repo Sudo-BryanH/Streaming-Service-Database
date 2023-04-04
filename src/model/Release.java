@@ -3,6 +3,7 @@ package model;
 import util.Misc;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Release {
     public int id;
@@ -25,5 +26,22 @@ public class Release {
 
     public String getArtistNames() {
        return Misc.artistsToString(artists);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Release)) {
+            return false;
+        }
+        Release other = (Release) obj;
+        return this.id == other.id;
     }
 }
