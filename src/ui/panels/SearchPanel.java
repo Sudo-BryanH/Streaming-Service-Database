@@ -1,10 +1,15 @@
 package ui.panels;
 
+import backend.ReleaseEndpoints;
+import model.Release;
 import ui.MainUI;
+import util.Misc;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SearchPanel extends ContentPanel{
     private JPanel resultsPanel;
@@ -28,40 +33,49 @@ public class SearchPanel extends ContentPanel{
     }
 
     private void performSearch(String query) {
-        String[] tempResults;
+        String[] words = query.split("\\s+");
 
-        if (Objects.equals(query, "fill")) {
-           tempResults = new String[]{
-                   "Result 1", "Result 2", "Result 3", "Result 4",
-                   "Result 5", "Result 6", "Result 7", "Result 8",
-                   "Result 9", "Result 10", "Result 11", "Result 12"
-           };
+        List<String> combinations = new ArrayList<>();
+        for (int i = 0; i < words.length; i++) {
+            for (int j = i + 1; j <= words.length; j++) {
+                combinations.add(String.join(" ", Arrays.copyOfRange(words, i, j)));
+            }
+        }
+
+        List<Release> results = new ArrayList<>();
+        for (String c : combinations) {
+            List<Release> newResults = ReleaseEndpoints.searchReleases(c);
+            Misc.mergeReleaseLists(results, newResults);
+        }
+
+        if (results.size() > 0) {
+            resultsPanel.removeAll();
+            for (Release release : results) {
+                resultsPanel.add(getResultPanel(release));
+            }
+
+            resultsScrollPane.setVisible(true);
         } else {
-           tempResults = new String[]{"Result 1", "Result 2", "Result 3"};
+            resultsScrollPane.setVisible(false);
         }
 
-        resultsPanel.removeAll();
-        for (String r : tempResults) {
-            resultsPanel.add(getResultPanel(r, "Fake Artist"));
-        }
-
-        resultsScrollPane.setVisible(true);
         revalidate();
         repaint();
     }
 
-    private JPanel getResultPanel(String name, String artist) {
+    private JPanel getResultPanel(Release release) {
         JPanel result = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
 
-        JLabel nameLabel = new JLabel(name);
+        JLabel nameLabel = new JLabel(release.name);
         nameLabel.setPreferredSize(new Dimension(325,20));
         result.add(nameLabel);
 
-        JLabel artistLabel = new JLabel(artist);
+        JLabel artistLabel = new JLabel(release.getArtistNames());
         artistLabel.setPreferredSize(new Dimension(325,20));
         result.add(artistLabel);
 
         JButton viewButton = new JButton("View");
+        viewButton.addActionListener(e -> mainUI.swapPanel(new ReleasePanel(mainUI, release)));
         result.add(viewButton);
 
         return result;

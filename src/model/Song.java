@@ -1,26 +1,34 @@
 package model;
 
 public class Song {
-    int trackNum;
-    int releaseID;
+    public int releaseID;
+    public int trackNum;
 
-    String name;
+    public String name;
+    public int duration;
+    public String genre;
+    public int plays;
+    public boolean added;
 
-    int duration;
+    public boolean downloaded;
+    public boolean liked;
 
-
-    String genre;
-
-    public Song(){}
-
-    public Song(int track, int release, String name, int duration, String genre) {
-        trackNum = track;
-        releaseID = release;
+    public Song(int trackNum, int releaseID, String name, int duration, String genre) {
+        this.trackNum = trackNum;
+        this.releaseID = releaseID;
         this.name = name;
         this.duration = duration;
         this.genre = genre;
     }
 
+    public Song(int releaseID, int trackNum, String name, int duration, String genre, int plays) {
+        this.releaseID = releaseID;
+        this.trackNum = trackNum;
+        this.name = name;
+        this.duration = duration;
+        this.genre = genre;
+        this.plays = plays;
+    }
 
     public int getTrackNum() {
         return trackNum;

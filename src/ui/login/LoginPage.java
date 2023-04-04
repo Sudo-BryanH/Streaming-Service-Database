@@ -67,10 +67,9 @@ public class LoginPage extends JFrame {
             String password = new String(passwordField.getPassword());
             if (LoginRegistrationEndpoints.login(username, password)) {
                 dispose();
-                MainUI homepage = new MainUI();
                 User user = new User(username);
+                MainUI homepage = new MainUI(user);
                 user.setPremium(PaymentEndpoints.getPremiumStatus(user));
-                homepage.setUser(user);
                 homepage.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Login Failed");
