@@ -14,19 +14,17 @@ public class LoginRegistrationEndpoints {
 
     public static boolean login(String username, String password){
         try {
-            Connection connection = DatabaseManager.establishConnection();
+            Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             password = PasswordHasher.hashPassword(password);
             String query = "SELECT * FROM Users WHERE Username='" + username + "' AND Password='" + password + "'";
             ResultSet resultSet = statement.executeQuery(query);
             boolean status = resultSet.next();
-            DatabaseManager.close();
             return status;
         }
         catch (SQLException exception){
             System.out.println(exception.getMessage());
         }
-        DatabaseManager.close();
         return false;
     }
 
@@ -36,18 +34,16 @@ public class LoginRegistrationEndpoints {
         String formattedDate = currentDate.format(formatter);
         password = PasswordHasher.hashPassword(password);
         try{
-            Connection connection = DatabaseManager.establishConnection();
+            Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format("INSERT INTO USERS VALUES('%s', '%s', '%s', '%s')",username,email,password,formattedDate);
             statement.executeQuery(query);
             query = String.format("INSERT INTO FreeUser VALUES('%s', %d)",username,0);
             statement.executeQuery(query);
-            DatabaseManager.close();
             return true;
         }
         catch (SQLException exception){
             System.out.println(exception.getMessage());
-            DatabaseManager.close();
         }
         return false;
     }
