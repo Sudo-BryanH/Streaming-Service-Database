@@ -177,9 +177,9 @@ public class LibraryPanel extends ContentPanel{
 //        song.setPreferredSize(new Dimension(100,20));
 
 
-        JButton delete = new JButton("Delete");
+        JButton delete = new JButton("⨂");
         delete.setForeground(Color.red);
-        delete.setPreferredSize(new Dimension(60,20));
+        delete.setPreferredSize(new Dimension(20,20));
         delete.setAlignmentX(Component.RIGHT_ALIGNMENT);
         delete.setOpaque(true);
         delete.addActionListener(new ActionListener(){
@@ -252,9 +252,9 @@ public class LibraryPanel extends ContentPanel{
 
         });
 
-        JButton delete = new JButton("Delete");
+        JButton delete = new JButton("⨂");
         delete.setForeground(Color.red);
-        delete.setMaximumSize(new Dimension(60,20));
+        delete.setMaximumSize(new Dimension(20,20));
         delete.setBackground(Color.lightGray);
         delete.setOpaque(true);
         delete.setAlignmentX(Component.RIGHT_ALIGNMENT);

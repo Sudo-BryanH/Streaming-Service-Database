@@ -175,7 +175,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "DELETE FROM AddsToLibrary a WHERE a.Username = '%s' AND a.TrackNum = '%d' AND a.ReleaseID = '%d'", user, s.getTrackNum(), s.getReleaseID());
+                    "DELETE FROM AddsToLibrary a WHERE a.Username = '%s' AND a.TrackNum = %d AND a.ReleaseID = %d", user, s.getTrackNum(), s.getReleaseID());
             deletionDone = statement.execute(query);
 
 
@@ -194,7 +194,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "DELETE FROM PlaylistIsIn pi WHERE pi.Username = '%s' AND pi.TrackNum = '%d' AND pi.ReleaseID = '%d' AND pi.Name = '%s", user, s.getTrackNum(), s.getReleaseID());
+                    "DELETE FROM PlaylistIsIn pi WHERE pi.Username = '%s' AND pi.TrackNum = %d AND pi.ReleaseID = %d AND pi.Name = '%s", user, s.getTrackNum(), s.getReleaseID());
             deletionDone = statement.execute(query);
 
 
@@ -208,6 +208,23 @@ public class LibraryEndpoints {
 
     public static void addToLibrary(Song song, String username) {
         // stub
+        boolean insertDone = false;
+        try {
+
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format(
+                    "INSERT INTO AddsToLibrary a VALUES(%d, %d, '%s', 0, 0)", song.getReleaseID(), song.getTrackNum(), username);
+            insertDone = statement.execute(query);
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+
+//        return insertDone;
+
     }
 
     public static void likeSong(Song song, String username) {
@@ -218,7 +235,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "UPDATE AddsToLibrary a SET a.Liked = 1 WHERE a.Username = '%s' AND a.TrackNum = '%d' AND a.ReleaseID = '%d'", username, song.getTrackNum(), song.getReleaseID());
+                    "UPDATE AddsToLibrary a SET a.Liked = 1 WHERE a.Username = '%s' AND a.TrackNum = %d AND a.ReleaseID = %d", username, song.getTrackNum(), song.getReleaseID());
             insertDone = statement.execute(query);
 
 
@@ -239,7 +256,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "UPDATE AddsToLibrary a SET a.Liked = 0 WHERE a.Username = '%s' AND a.TrackNum = '%d' AND a.ReleaseID = '%d'", username, song.getTrackNum(), song.getReleaseID());
+                    "UPDATE AddsToLibrary a SET a.Liked = 0 WHERE a.Username = '%s' AND a.TrackNum = %d AND a.ReleaseID = %d", username, song.getTrackNum(), song.getReleaseID());
             insertDone = statement.execute(query);
 
 
@@ -257,7 +274,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "UPDATE AddsToLibrary a SET a.Downloaded = 1 WHERE a.Username = '%s' AND a.TrackNum = '%d' AND a.ReleaseID = '%d'", username, song.getTrackNum(), song.getReleaseID());
+                    "UPDATE AddsToLibrary a SET a.Downloaded = 1 WHERE a.Username = '%s' AND a.TrackNum = %d AND a.ReleaseID = %d", username, song.getTrackNum(), song.getReleaseID());
             insertDone = statement.execute(query);
 
 
@@ -275,7 +292,7 @@ public class LibraryEndpoints {
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String query = String.format(
-                    "UPDATE AddsToLibrary a SET a.Downloaded = 0 WHERE a.Username = '%s' AND a.TrackNum = '%d' AND a.ReleaseID = '%d'", username, song.getTrackNum(), song.getReleaseID());
+                    "UPDATE AddsToLibrary a SET a.Downloaded = 0 WHERE a.Username = '%s' AND a.TrackNum = %d AND a.ReleaseID = %d", username, song.getTrackNum(), song.getReleaseID());
             insertDone = statement.execute(query);
 
 
