@@ -3,6 +3,8 @@ package util;
 import model.Artist;
 import model.Release;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Misc {
@@ -36,5 +38,13 @@ public class Misc {
                 target.add(a);
             }
         }
+    }
+
+    public static String slashDateToDash (String slashDate) {
+        DateTimeFormatter slashDateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate date = LocalDate.parse(slashDate, slashDateFormatter);
+
+        DateTimeFormatter dashDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(dashDateFormatter);
     }
 }

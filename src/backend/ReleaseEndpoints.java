@@ -1,7 +1,9 @@
 package backend;
 
 import database.DatabaseManager;
-import model.*;
+import model.Artist;
+import model.Release;
+import model.Song;
 import util.Misc;
 
 import java.sql.Connection;
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReleaseEndpoints {
-    private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
     private static ResultSet query(String query) {
         try {
@@ -28,8 +30,19 @@ public class ReleaseEndpoints {
     }
 
     public static List<Release> getReleases() {
-        String query = "SELECT ID, Name, Type, ReleaseDate, ArtURL, DistributorName FROM Releases";
+        String query = "SELECT ID, Name, Type, ReleaseDate, ArtURL, DistributorName FROM Releases ORDER BY ID ASC";
         return getReleasesHelper(query);
+    }
+
+    public static Release getReleaseByID(int id) {
+        String query = "SELECT ID, Name, Type, ReleaseDate, ArtURL, DistributorName FROM Releases WHERE ID = %d";
+        List<Release> result = getReleasesHelper(String.format(query, id));
+
+        if (result != null && result.size() == 1) {
+            return result.get(0);
+        } else {
+            return null;
+        }
     }
 
     public static List<Release> getReleasesByUser(String username) {
@@ -64,12 +77,27 @@ public class ReleaseEndpoints {
                 "FROM Releases r WHERE " +
                 "EXISTS (" + existsSong + ") OR " +
                 "EXISTS (" + creatingArtist + ") OR " +
-                "LOWER(r.Name) LIKE LOWER('%%%1$s%%')";
+                "LOWER(r.Name) LIKE LOWER('%%%1$s%%') " +
+                "ORDER BY r.ID ASC";
         return getReleasesHelper(String.format(query, keywords));
     }
 
+    public static void addRelease(Release release) {
+        String query = "INSERT INTO Releases VALUES (%d, '%s', '%s', '%s', '%s', '%s')";
+        query(String.format(query, release.id, release.name, release.type, release.releaseDate, release.artUrl, release.distributor));
+    }
 
+    public static void editRelease(Release release) {
+        String query = "UPDATE Releases SET " +
+                "Name = '%s', Type = '%s', ReleaseDate = '%s', ArtURL = '%s', DistributorName = '%s' " +
+                "WHERE ID = %d";
+        query(String.format(query, release.name, release.type, release.releaseDate, release.artUrl, release.distributor, release.id));
+    }
 
+    public static void removeRelease(Release release) {
+        String query = "DELETE FROM Releases WHERE id = %d";
+        query(String.format(query, release.id));
+    }
 
     // **************** HELPERS ****************
 

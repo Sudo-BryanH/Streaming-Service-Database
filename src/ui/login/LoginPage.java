@@ -50,6 +50,7 @@ public class LoginPage extends JFrame {
         loginForm.add(passwordField);
         JPanel buttonPanel = new JPanel(new FlowLayout());
         this.loginButton = new JButton("Login");
+        getRootPane().setDefaultButton(loginButton);
         this.registerButton = new JButton("Register?");
         buttonPanel.add(registerButton);
         buttonPanel.add(loginButton);

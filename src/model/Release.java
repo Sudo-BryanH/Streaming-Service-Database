@@ -24,6 +24,15 @@ public class Release {
         this.distributor = distributor;
     }
 
+    public Release(int id, String name, String type, String releaseDate, String artUrl, String distributor) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.releaseDate = releaseDate;
+        this.artUrl = artUrl;
+        this.distributor = distributor;
+    }
+
     public String getArtistNames() {
        return Misc.artistsToString(artists);
     }
