@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class QueryPanel extends ContentPanel {
+public class UsersPanel extends ContentPanel {
 
     ArrayList<Pair<String, String>> userInfo;
     JScrollPane userScroll;
@@ -20,7 +20,7 @@ public class QueryPanel extends ContentPanel {
     boolean matter = false;
     boolean PorF = false;
 
-    public QueryPanel(MainUI mainUI) {
+    public UsersPanel(MainUI mainUI) {
         super(mainUI);
     }
 
