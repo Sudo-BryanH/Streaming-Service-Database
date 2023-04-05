@@ -33,6 +33,29 @@ public class ReleaseEndpoints {
         String query = "SELECT ID, Name, Type, ReleaseDate, ArtURL, DistributorName FROM Releases ORDER BY ID ASC";
         return getReleasesHelper(query);
     }
+    public static String getGoatedSongs(){
+        String query = "SELECT Name FROM Song S WHERE NOT EXISTS ((SELECT Username FROM Users U) MINUS (SELECT A.Username FROM AddsToLibrary A WHERE A.ReleaseID = S.ReleaseID AND A.TrackNum = S.TrackNum))";
+        ResultSet results = query(query);
+        ArrayList<String> songs = new ArrayList<>();
+        try {
+            while (results.next()){
+                String name = results.getString("Name");
+                songs.add(name);
+            }
+
+            results.close();
+            if (songs.isEmpty()) {
+                return "No Goated Songs Yet. :(";
+            } else {
+                return String.join(", ", songs);
+            }
+
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+            return "No Goated Songs Yet. :(";
+        }
+    }
+
 
     public static Release getReleaseByID(int id) {
         String query = "SELECT ID, Name, Type, ReleaseDate, ArtURL, DistributorName FROM Releases WHERE ID = %d";
