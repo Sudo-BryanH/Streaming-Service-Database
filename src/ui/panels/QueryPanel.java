@@ -6,6 +6,8 @@ import model.User;
 import ui.MainUI;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -166,7 +168,7 @@ public class QueryPanel extends ContentPanel {
         User us = QueryEndpoints.findUserInfo(username);
         JPanel panel = new JPanel();
         GridLayout grid = new GridLayout(8, 2);
-        panel.setPreferredSize(new Dimension(400, 400));
+        panel.setPreferredSize(new Dimension(400, 650));
 
         JLabel userLabel = genButtons("Username: ");
         JLabel user = genButtons(username);
@@ -186,6 +188,30 @@ public class QueryPanel extends ContentPanel {
         JLabel subStartLabel = genButtons("Subscription Start Date: ");
         JLabel subStart = genButtons((us.getPremium()) ? ((us.getSubStart() == null)? "N/A":us.getSubStart().toString()): "N/A");
 
+        ArrayList<Pair<String, Integer>> mostLiked = QueryEndpoints.mostLikedGenres(username);
+        System.out.println(mostLiked.size());
+        String[] cols = new String[]{"Genre", "Liked Songs"};
+
+
+        DefaultTableModel model = new DefaultTableModel(cols, 0);
+        for (Pair<String, Integer> m : mostLiked) {
+            Object[] items = {m.getKey(), m.getValue()};
+            model.addRow(items);
+        }
+
+        JTable genres = new JTable(model);
+//        genres.setMaximumSize(new Dimension( 300, 300));
+//        genres.setPreferredSize(new Dimension( 300, 300));
+        JTableHeader head = genres.getTableHeader();
+        head.setVisible(true);
+        head.setOpaque(true);
+        genres.setOpaque(true);
+        genres.setVisible(true);
+
+
+
+
+
         panel.setVisible(true);
         panel.add(userLabel);
         panel.add(user);
@@ -199,12 +225,13 @@ public class QueryPanel extends ContentPanel {
         panel.add(adsServed);
         panel.add(subStartLabel);
         panel.add(subStart);
+        panel.add(genres);
 
 
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setContentPane(panel);
-        frame.setSize(new Dimension(400,400));
+        frame.setSize(new Dimension(400,650));
         frame.setVisible(true);
 
         return frame;

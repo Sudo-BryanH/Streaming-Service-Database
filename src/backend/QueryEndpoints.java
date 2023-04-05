@@ -121,4 +121,32 @@ public class QueryEndpoints {
 
         return u;
     }
+
+    public static ArrayList<Pair<String, Integer>> mostLikedGenres(String username) {
+        ArrayList<Pair<String, Integer>> topFiveGenres = new ArrayList<>();
+        try {
+//            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+
+            String query = String.format(
+"SELECT Genre, COUNT(*) as count FROM Song s, AddsToLibrary a, Users u WHERE a.Username = u.Username AND u.Username = '%s' AND a.TrackNum = s.TrackNum AND a.ReleaseID = a.ReleaseID GROUP BY s.Genre HAVING COUNT(*) > 1",
+                    username);
+            ResultSet rs = statement.executeQuery(query);
+
+        int counter = 5;
+
+        while (rs.next() && counter > 0) {
+            topFiveGenres.add(new Pair<String, Integer>(rs.getString("Genre"), rs.getInt("count")));
+            counter--;
+        }
+
+
+
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return topFiveGenres;
+
+    }
 }
