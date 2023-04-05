@@ -61,8 +61,7 @@ CREATE TABLE Song
 CREATE TABLE Artist
 (
     ID               INT PRIMARY KEY,
-    Name             VARCHAR(50),
-    MonthlyListeners INT
+    Name             VARCHAR(50)
 );
 
 CREATE TABLE CardTable
@@ -345,17 +344,17 @@ INSERT INTO Song
 VALUES (6, 1, 'Take On Me (2017 Acoustic)', 184, 'Pop', 6666852);
 
 INSERT INTO Artist
-VALUES (1, 'Rick Astley', 5829256);
+VALUES (1, 'Rick Astley');
 INSERT INTO Artist
-VALUES (2, 'Smash Mouth', 3950387);
+VALUES (2, 'Smash Mouth');
 INSERT INTO Artist
-VALUES (3, 'Curb Your Enthusiasm', 38358);
+VALUES (3, 'Curb Your Enthusiasm');
 INSERT INTO Artist
-VALUES (4, 'Luciano Michelini', 35294);
+VALUES (4, 'Luciano Michelini');
 INSERT INTO Artist
-VALUES (5, 'Nemesis', 200000);
+VALUES (5, 'Nemesis');
 INSERT INTO Artist
-VALUES (6, 'a-ha', 72108658);
+VALUES (6, 'a-ha');
 
 INSERT INTO CardTable
 VALUES ('Visa', 2394235323332438, '2025-01-01');
