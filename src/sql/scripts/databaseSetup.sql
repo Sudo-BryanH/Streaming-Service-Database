@@ -209,6 +209,14 @@ CREATE TABLE Creates
             ON DELETE CASCADE
 );
 
+CREATE VIEW CountSongsPerArtist
+AS SELECT ID, Name, COUNT(*) as Count
+    FROM ((SELECT a1.ID as ID, a1.Name, c1.ReleaseID as RID, s1.TrackNum FROM Artist a1, Song s1, Creates c1
+            WHERE a1.ID = c1.ArtistID AND c1.ReleaseID = s1.ReleaseID)
+    UNION (SELECT a2.ID as ID, a2.Name, s2.ReleaseID as RID, s2.TrackNum FROM Artist a2, Song s2, FeaturedIn f2
+            WHERE a2.ID = f2.ArtistID AND s2.ReleaseID = f2.ReleaseID AND s2.TrackNum = f2.TrackNum))
+   GROUP BY ID, Name;
+
 
 INSERT INTO Distributor
 VALUES ('BMG Rights Management (UK) Limited', 'https://www.bmg.com/');
