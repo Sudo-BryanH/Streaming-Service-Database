@@ -80,30 +80,37 @@ public class QueryEndpoints {
         try {
 //            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
             Connection connection = DatabaseManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-            String emailQ = String.format("SELECT Email FROM Users u WHERE u.Username = '%s'", username);
-            String CreationQ = String.format("SELECT CreationDate FROM Users u WHERE u.Username = '%s'", username);
-            ResultSet rs = statement.executeQuery(emailQ);
+            String emailQ = "SELECT Email FROM Users u WHERE u.Username = ?";
+            String CreationQ = "SELECT CreationDate FROM Users u WHERE u.Username = ?";
+            PreparedStatement statement = connection.prepareStatement(emailQ);
+            statement.setString(1,username);
+            ResultSet rs = statement.executeQuery();
             rs.next();
             u.setEmail(rs.getString("Email"));
 
-            rs = statement.executeQuery(CreationQ);
+            statement = connection.prepareStatement(CreationQ);
+            statement.setString(1,username);
+            rs = statement.executeQuery();
             rs.next();
             u.setCreationDate(rs.getDate("CreationDate"));
 
-            String freeQuery = String.format("SELECT * FROM FreeUser f WHERE f.Username = '%s'", username);
-
-            rs = statement.executeQuery(freeQuery);
+            String freeQuery = "SELECT * FROM FreeUser f WHERE f.Username = ?";
+            statement = connection.prepareStatement(freeQuery);
+            statement.setString(1,username);
+            rs = statement.executeQuery();
             if (rs.next()) {
                 u.setPremium(false);
-                u.setAdsServed(rs.getInt(rs.getInt("AdsServed")));
+                u.setAdsServed(rs.getInt("AdsServed"));
             } else {
-                String premQuery = String.format("SELECT * FROM PremiumUser p WHERE p.Username = '%s'", username);
-                rs = statement.executeQuery(premQuery);
-
-                u.setPremium(true);
-                u.setSubStart(rs.getDate("SubStartDate"));
-                u.setSubEnd(rs.getDate("SubEndDate"));
+                String premQuery = "SELECT * FROM PremiumUser p WHERE p.Username = ?";
+                statement = connection.prepareStatement(premQuery);
+                statement.setString(1,username);
+                rs = statement.executeQuery();
+                while (rs.next()){
+                    u.setPremium(true);
+                    u.setSubStart(rs.getDate("SubStartDate"));
+                    u.setSubEnd(rs.getDate("SubEndDate"));
+                }
             }
 
 
@@ -124,12 +131,12 @@ public class QueryEndpoints {
         try {
 //            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
             Connection connection = DatabaseManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
 
-            String query = String.format(
-"SELECT Genre, COUNT(*) as count FROM Song s, AddsToLibrary a, Users u WHERE a.Username = u.Username AND u.Username = '%s' AND a.TrackNum = s.TrackNum AND a.ReleaseID = a.ReleaseID GROUP BY s.Genre HAVING COUNT(*) > 1",
-                    username);
-            ResultSet rs = statement.executeQuery(query);
+
+            String query = "SELECT Genre, COUNT(*) as count FROM Song s, AddsToLibrary a, Users u WHERE a.Username = u.Username AND u.Username = ? AND a.TrackNum = s.TrackNum AND a.ReleaseID = a.ReleaseID GROUP BY s.Genre HAVING COUNT(*) > 1";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1,username);
+            ResultSet rs = statement.executeQuery();
 
         int counter = 5;
 
@@ -165,9 +172,9 @@ public class QueryEndpoints {
         try {
 //            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
             Connection connection = DatabaseManager.getInstance().getConnection();
-           Statement statement = connection.createStatement();
+            Statement statement = connection.createStatement();
 
-      //      String query = "SELECT ? as tabOne, COUNT(*) as count FROM ? ? GROUP BY ?";
+            //      String query = "SELECT ? as tabOne, COUNT(*) as count FROM ? ? GROUP BY ?";
 //            PreparedStatement ps = connection.prepareStatement(query);
 //            ps.setString(1, condition[0]);
 //            ps.setString(2, condition[1]);
