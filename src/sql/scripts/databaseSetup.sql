@@ -272,10 +272,102 @@ VALUES ('admin', '2023-04-01', '2024-04-01');
 INSERT INTO Releases
 VALUES (1, 'Whenever You Need Somebody', 'Album', '1987-11-12', 'https://cdn.spotube.com/img/rickroll.png',
         'BMG Rights Management (UK) Limited');
+INSERT INTO Releases
+VALUES (2, 'Astro Lounge', 'Album', '1999-06-08', 'https://cdn.spotube.com/img/shrek.png',
+        'Interscope Geffen (A&M) Records');
+INSERT INTO Releases
+VALUES (3, 'Curb Your Enthusiasm (Music From the TV Series)', 'Album', '2006-04-17',
+        'https://cdn.spotube.com/img/frolic.png', 'Mellowdrama Records');
+INSERT INTO Releases
+VALUES (4, 'Tritio Jatra', 'Album', '2006-04-17', 'https://cdn.spotube.com/img/nemesis.png', 'Studio Bangi');
+INSERT INTO Releases
+VALUES (5, 'Superunknown', 'EP', '2006-04-17', 'https://cdn.spotube.com/img/soundgarden.png', 'Sony Music');
+INSERT INTO Releases
+VALUES (6, 'Take On Me (2017 Acoustic)', 'Single', '1984-09- 01', 'https://cdn.spotube.com/img/aha.png',
+        'Swinglong Ltd.');
+INSERT INTO Releases
+VALUES (7, 'Meowfest', 'Album', '2003-10-10', 'https://cdn.spotube.com/img/kitty.png',
+        'Monstercat');
+INSERT INTO Releases
+VALUES (8, 'The Barker is in Town', 'EP', '2003-01-01', 'https://cdn.spotube.com/img/doggo.png',
+        'Monstercat');
+INSERT INTO Releases
+VALUES (9, 'Dogs Don''t Suck', 'Single', '2003-10-10', 'https://cdn.spotube.com/img/friends.png',
+        'Monstercat');
+INSERT INTO Releases
+VALUES (10, 'The Barker is in Town', 'EP', '2015-02-27', 'https://cdn.spotube.com/img/notuu.png',
+        'Warner Music Group');
+INSERT INTO Releases
+VALUES (11, 'Sonder', 'EP', '2015-08-12', 'https://cdn.spotube.com/img/sonder.png',
+        'Warner Music Group');
+INSERT INTO Releases
+VALUES (12, 'Not A Chance', 'Single', '2012-05-29', 'https://cdn.spotube.com/img/nac.png',
+        'Monstercat');
+INSERT INTO Releases
+VALUES (13, 'Zeka', 'Single', '2018-12-31', 'https://cdn.spotube.com/img/zeka.png',
+        'Sony Music');
+INSERT INTO Releases
+VALUES (14, 'Basic', 'Single', '2018-12-31', 'https://cdn.spotube.com/img/basic.png',
+        'Sony Music');
+
 INSERT INTO Artist
 VALUES (1, 'Rick Astley');
+INSERT INTO Artist
+VALUES (2, 'Smash Mouth');
+INSERT INTO Artist
+VALUES (3, 'Curb Your Enthusiasm');
+INSERT INTO Artist
+VALUES (4, 'Luciano Michelini');
+INSERT INTO Artist
+VALUES (5, 'Nemesis');
+INSERT INTO Artist
+VALUES (6, 'Soundgarden');
+INSERT INTO Artist
+VALUES (7, 'a-ha');
+INSERT INTO Artist
+VALUES (8, 'DJ KitKat');
+INSERT INTO Artist
+VALUES (9, 'Mr. Barker');
+INSERT INTO Artist
+VALUES (10, 'Not UU');
+INSERT INTO Artist
+VALUES (11, 'Zeka');
+INSERT INTO Artist
+VALUES (12, 'John Doe');
+
 INSERT INTO Creates
 VALUES (1, 1);
+INSERT INTO Creates
+VALUES (2, 2);
+INSERT INTO Creates
+VALUES (3, 3);
+INSERT INTO Creates
+VALUES (3, 4);
+INSERT INTO Creates
+VALUES (4, 5);
+INSERT INTO Creates
+VALUES (5, 6);
+INSERT INTO Creates
+VALUES (6, 7);
+INSERT INTO Creates
+VALUES (7, 8);
+INSERT INTO Creates
+VALUES (8, 9);
+INSERT INTO Creates
+VALUES (9, 8);
+INSERT INTO Creates
+VALUES (9, 9);
+INSERT INTO Creates
+VALUES (10, 10);
+INSERT INTO Creates
+VALUES (11, 10);
+INSERT INTO Creates
+VALUES (12, 8);
+INSERT INTO Creates
+VALUES (13, 11);
+INSERT INTO Creates
+VALUES (14, 12);
+
 INSERT INTO Song
 VALUES (1, 1, 'Never Gonna Give You Up', 214, 'Pop', 213422997);
 INSERT INTO Song
@@ -296,15 +388,6 @@ INSERT INTO Song
 VALUES (1, 9, 'You Move Me', 243, 'Pop', 949624);
 INSERT INTO Song
 VALUES (1, 10, 'When I Fall in Love', 183, 'Pop', 595731);
-
-
-INSERT INTO Releases
-VALUES (2, 'Astro Lounge', 'Album', '1999-06-08', 'https://cdn.spotube.com/img/shrek.png',
-        'Interscope Geffen (A&M) Records');
-INSERT INTO Artist
-VALUES (2, 'Smash Mouth');
-INSERT INTO Creates
-VALUES (2, 2);
 INSERT INTO Song
 VALUES (2, 1, 'Who''s There', 214, 'Alternative', 150983);
 INSERT INTO Song
@@ -317,18 +400,6 @@ INSERT INTO Song
 VALUES (2, 5, 'All Star', 190, 'Alternative', 692894289);
 INSERT INTO Song
 VALUES (2, 6, 'Satellite', 218, 'Alternative', 5261034);
-
-INSERT INTO Releases
-VALUES (3, 'Curb Your Enthusiasm (Music From the TV Series)', 'Album', '2006-04-17',
-        'https://cdn.spotube.com/img/frolic.png', 'Mellowdrama Records');
-INSERT INTO Artist
-VALUES (3, 'Curb Your Enthusiasm');
-INSERT INTO Artist
-VALUES (4, 'Luciano Michelini');
-INSERT INTO Creates
-VALUES (3, 3);
-INSERT INTO Creates
-VALUES (3, 4);
 INSERT INTO Song
 VALUES (3, 1, 'Frolic', 210, 'Soundtrack', 5359039);
 INSERT INTO Song
@@ -339,14 +410,6 @@ INSERT INTO Song
 VALUES (3, 4, 'For Whom the Bell Tolls', 64, 'Soundtrack', 93682);
 INSERT INTO Song
 VALUES (3, 5, 'The Stranger', 142, 'Soundtrack', 77515);
-
-
-INSERT INTO Releases
-VALUES (4, 'Tritio Jatra', 'Album', '2006-04-17', 'https://cdn.spotube.com/img/nemesis.png', 'Studio Bangi');
-INSERT INTO Artist
-VALUES (5, 'Nemesis');
-INSERT INTO Creates
-VALUES (4, 5);
 INSERT INTO Song
 VALUES (4, 1, 'Kobe', 254, 'Rock', 249567);
 INSERT INTO Song
@@ -355,47 +418,14 @@ INSERT INTO Song
 VALUES (4, 3, 'Tritio Jatra', 254, 'Rock', 645791);
 INSERT INTO Song
 VALUES (4, 4, 'Nirbashon', 234, 'Rock', 5359039);
-
-INSERT INTO Releases
-VALUES (5, 'Superunknown', 'EP', '2006-04-17', 'https://cdn.spotube.com/img/soundgarden.png', 'Sony Music');
-INSERT INTO Artist
-VALUES (6, 'Soundgarden');
-INSERT INTO Creates
-VALUES (5, 6);
 INSERT INTO Song
 VALUES (5, 1, 'Let Me Down', 313, 'Hard Rock', 508989);
 INSERT INTO Song
 VALUES (5, 2, 'My Wave', 283, 'Hard Rock', 623314);
 INSERT INTO Song
 VALUES (5, 3, 'Fell On Black Days', 396, 'Hard Rock', 726962);
-
-INSERT INTO Releases
-VALUES (6, 'Take On Me (2017 Acoustic)', 'Single', '1984-09- 01', 'https://cdn.spotube.com/img/aha.png',
-        'Swinglong Ltd.');
-INSERT INTO Artist
-VALUES (7, 'a-ha');
-INSERT INTO Creates
-VALUES (6, 7);
 INSERT INTO Song
 VALUES (6, 1, 'Take On Me (2017 Acoustic)', 184, 'Pop', 6666852);
-
-INSERT INTO Releases
-VALUES (6, 'Take On Me (2017 Acoustic)', 'Single', '1984-09- 01', 'https://cdn.spotube.com/img/aha.png',
-        'Swinglong Ltd.');
-INSERT INTO Artist
-VALUES (7, 'a-ha');
-INSERT INTO Creates
-VALUES (6, 7);
-INSERT INTO Song
-VALUES (6, 1, 'Take On Me (2017 Acoustic)', 184, 'Pop', 6666852);
-
-INSERT INTO Releases
-VALUES (7, 'Meowfest', 'Album', '2003-10-10', 'https://cdn.spotube.com/img/kitty.png',
-        'Monstercat');
-INSERT INTO Artist
-VALUES (8, 'DJ KitKat');
-INSERT INTO Creates
-VALUES (7, 8);
 INSERT INTO Song
 VALUES (7, 1, 'Start Hop, Jump', 294, 'Dance', 1412892);
 INSERT INTO Song
@@ -424,14 +454,6 @@ INSERT INTO Song
 VALUES (7, 13, 'Unlucky', 182, 'Dance', 12590125);
 INSERT INTO Song
 VALUES (7, 14, 'Dogs Suck', 450, 'Pop', 12590125);
-
-INSERT INTO Releases
-VALUES (8, 'The Barker is in Town', 'EP', '2003-01-01', 'https://cdn.spotube.com/img/doggo.png',
-        'Monstercat');
-INSERT INTO Artist
-VALUES (9, 'Mr. Barker');
-INSERT INTO Creates
-VALUES (8, 9);
 INSERT INTO Song
 VALUES (8, 1, 'Woof, Poof Roof', 241, 'Electronic', 1412892);
 INSERT INTO Song
@@ -442,24 +464,8 @@ INSERT INTO Song
 VALUES (8, 4, 'Cone of Shame', 301, 'Classical', 2932104);
 INSERT INTO Song
 VALUES (8, 5, 'Wag, Wag', 127, 'Pop', 292501);
-
-INSERT INTO Releases
-VALUES (9, 'Dogs Don''t Suck', 'Single', '2003-10-10', 'https://cdn.spotube.com/img/friends.png',
-        'Monstercat');
-INSERT INTO Creates
-VALUES (9, 8);
-INSERT INTO Creates
-VALUES (9, 9);
 INSERT INTO Song
 VALUES (9, 1, 'Dogs Don''t Suck', 193, 'Dance', 12521521);
-
-INSERT INTO Releases
-VALUES (10, 'The Barker is in Town', 'EP', '2015-02-27', 'https://cdn.spotube.com/img/notuu.png',
-        'Warner Music Group');
-INSERT INTO Artist
-VALUES (10, 'Not UU');
-INSERT INTO Creates
-VALUES (10, 10);
 INSERT INTO Song
 VALUES (10, 1, 'Would You', 209, 'Pop', 24121453);
 INSERT INTO Song
@@ -468,42 +474,14 @@ INSERT INTO Song
 VALUES (10, 3, 'Be Fine', 158, 'Pop', 2920959025);
 INSERT INTO Song
 VALUES (10, 4, 'Blue UU', 148, 'Pop', 428948429);
-
-INSERT INTO Releases
-VALUES (11, 'Sonder', 'EP', '2015-08-12', 'https://cdn.spotube.com/img/sonder.png',
-        'Warner Music Group');
-INSERT INTO Creates
-VALUES (11, 10);
 INSERT INTO Song
 VALUES (11, 1, 'Sonder', 294, 'Alternative', 2392498);
-
-INSERT INTO Releases
-VALUES (11, 'Not A Chance', 'Single', '2012-05-29', 'https://cdn.spotube.com/img/nac.png',
-        'Monstercat');
-INSERT INTO Creates
-VALUES (11, 8);
 INSERT INTO Song
-VALUES (11, 1, 'Not A Chance', 359, 'Trance', 29485290);
-
-INSERT INTO Releases
-VALUES (12, 'Zeka', 'Single', '2018-12-31', 'https://cdn.spotube.com/img/zeka.png',
-        'Sony Music');
-INSERT INTO Artist
-VALUES (11, 'Zeka');
-INSERT INTO Creates
-VALUES (12, 11);
+VALUES (12, 1, 'Not A Chance', 359, 'Trance', 29485290);
 INSERT INTO Song
-VALUES (12, 1, 'Zeka', 180, 'Bluegrass', 2727920);
-
-INSERT INTO Releases
-VALUES (13, 'Basic', 'Single', '2018-12-31', 'https://cdn.spotube.com/img/basic.png',
-        'Sony Music');
-INSERT INTO Artist
-VALUES (12, 'John Doe');
-INSERT INTO Creates
-VALUES (13, 12);
+VALUES (13, 1, 'Zeka', 180, 'Bluegrass', 2727920);
 INSERT INTO Song
-VALUES (13, 1, 'Basic', 153, 'Pop', 2727920);
+VALUES (14, 1, 'Basic', 153, 'Pop', 2727920);
 
 
 INSERT INTO CardTable
