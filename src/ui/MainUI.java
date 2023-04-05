@@ -65,6 +65,7 @@ public class MainUI extends JFrame {
         regularButtons.add(new JButton("Library"));
         regularButtons.add(new JButton("Search"));
         regularButtons.add(new JButton("Payments"));
+        regularButtons.add(new JButton("Records"));
 
         regularButtons.get(0).addActionListener(e -> swapPanel(new HomePanel(this)));
         regularButtons.get(1).addActionListener(e -> swapPanel(new LibraryPanel(this)));
@@ -77,6 +78,7 @@ public class MainUI extends JFrame {
                 swapPanel(new UserPaymentsPanel(this));
             }
         });
+        regularButtons.get(4).addActionListener(e -> swapPanel(new RecordsPanel(this)));
 
         for (JButton button : regularButtons) {
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
