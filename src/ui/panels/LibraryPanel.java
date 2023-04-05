@@ -183,46 +183,46 @@ public class LibraryPanel extends ContentPanel{
         JComboBox<String> playlists = makePlaylistDropdown(s);
 
 
-//        JButton delete = new JButton("⨂");
-//        delete.setForeground(Color.red);
-//        delete.setPreferredSize(new Dimension(20,20));
-//        delete.setAlignmentX(Component.RIGHT_ALIGNMENT);
-//        delete.setEnabled(true);
-//        delete.setOpaque(true);
-//        delete.addActionListener(new ActionListener(){
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if (plName == null) {
-//                    boolean b = deleteSongLib(s);
-//                } else {
-//                    boolean b = deleteSongPl(s, plName);
-//                }
-//
-////                deletePL(pl);
-//
-//            }
-//
-//        });
+        JButton delete = new JButton("⨂");
+        delete.setForeground(Color.red);
+        delete.setPreferredSize(new Dimension(20,20));
+        delete.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        delete.setEnabled(false);
+        delete.setOpaque(true);
+        delete.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (plName == null) {
+                    deleteSongLib(s);
+                } else {
+                    deleteSongPl(s, plName);
+                }
 
-        JButton likeButton = new JButton((s.liked)? "♥" : "♡");
-        likeButton.setForeground((s.liked)? Color.green : Color.black);
-        likeButton.setPreferredSize(new Dimension(20,20));
-        likeButton.addActionListener(e -> {
-            if (s.liked) {
-                likeButton.setText("♡");
-                likeButton.setForeground(Color.black);
-                LibraryEndpoints.unlikeSong(s, this.mainUI.getUser().getUsername());
-            } else {
-                likeButton.setText("♥");
-                likeButton.setForeground(Color.green);
-                LibraryEndpoints.likeSong(s, this.mainUI.getUser().getUsername());
+//                deletePL(pl);
+
             }
-            s.liked = !s.liked;
+
         });
+
+//        JButton likeButton = new JButton((s.liked)? "♥" : "♡");
+//        likeButton.setForeground((s.liked)? Color.green : Color.black);
+//        likeButton.setPreferredSize(new Dimension(20,20));
+//        likeButton.addActionListener(e -> {
+//            if (s.liked) {
+//                likeButton.setText("♡");
+//                likeButton.setForeground(Color.black);
+//                LibraryEndpoints.unlikeSong(s, this.mainUI.getUser().getUsername());
+//            } else {
+//                likeButton.setText("♥");
+//                likeButton.setForeground(Color.green);
+//                LibraryEndpoints.likeSong(s, this.mainUI.getUser().getUsername());
+//            }
+//            s.liked = !s.liked;
+//        });
 
         result.add(song);
         result.add(playlists);
-        result.add(likeButton);
+        result.add(delete);
         return result;
 
     }
@@ -248,6 +248,9 @@ public class LibraryPanel extends ContentPanel{
 
 
                 Object selected = comboBox1.getSelectedItem();
+//                if (((String)selected).equals("Add to Playlist")) {
+//                    deleteSongLib(s);
+//                }
 
                 addSongPl(s, (String) selected);
 
@@ -417,10 +420,10 @@ public class LibraryPanel extends ContentPanel{
     }
 
     private boolean deletePL(String plname) {
-        Boolean b = LibraryEndpoints.deletePL(this.mainUI.getUser().getUsername(), plname);
+        LibraryEndpoints.deletePL(this.mainUI.getUser().getUsername(), plname);
         makePLTable();
 
-        return b;
+        return true;
     }
 
     private JScrollPane makeScroll() {

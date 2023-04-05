@@ -15,18 +15,21 @@ import java.util.ArrayList;
 
 public class QueryPanel extends ContentPanel {
 
-    ArrayList<Pair<String, String>> userInfo;
-    ArrayList<Pair<String, Integer>> userAggInfo;
-    JScrollPane userScroll;
-    JPanel PFButtons;
-    JPanel userTable;
-    boolean matter = false;
-    boolean PorF = false;
+    private ArrayList<Pair<String, String>> userInfo;
+    private ArrayList<Pair<String, Integer>> userAggInfo;
+    private JScrollPane userScroll;
 
-    boolean conditional = false; // f: list of users t: conditional queries
-    JButton condButton;
+    private JScrollPane userAggScroll;
+    private JPanel PFButtons;
+    private JPanel userTable;
+    private boolean matter = false;
+    private boolean PorF = false;
 
-    JPanel userAggTable;
+    private boolean conditional = false; // f: list of users t: conditional queries
+    private JButton condButton;
+    private String[] toInsert;
+
+    private JPanel userAggTable;
 
     public QueryPanel(MainUI mainUI) {
         super(mainUI);
@@ -40,10 +43,17 @@ public class QueryPanel extends ContentPanel {
         BoxLayout layout = new BoxLayout(nestedPanels, BoxLayout.Y_AXIS);
         nestedPanels.setLayout(layout);
         PFButtons = makePFButtons();
-        userScroll = makeScroll();
+
+
+        userScroll = makeScroll(PFButtons);
         userScroll.setViewportView(userTable);
         nestedPanels.add(userScroll);
-        userAggInfo = QueryEndpoints.countCreationDate();
+
+        userAggInfo = QueryEndpoints.countConditionGroupBy(new String[]{"Username ", " Playlist p", "", " p.Username"});
+        makeUserAggTable();
+        userAggScroll = makeScroll(makeCondButtons());
+        userAggScroll.setViewportView(userAggTable);
+        nestedPanels.add(userAggScroll);
 
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -54,9 +64,12 @@ public class QueryPanel extends ContentPanel {
 
     private JPanel makePFButtons() {
         JPanel temp = new JPanel();
-        temp.setLayout(new FlowLayout(1, 0, 5));
+        temp.setLayout(new GridLayout(1, 3));
         temp.setBackground(Color.gray);
         temp.setMaximumSize(new Dimension(800, 100));
+
+        JLabel exp = new JLabel ("Generic User lookup: ");
+        exp.setVisible(true);
 
         JButton free = new JButton("Free Users");
         free.setVisible(true);
@@ -85,10 +98,73 @@ public class QueryPanel extends ContentPanel {
 
         );
 
+        temp.add(exp);
         temp.add(free);
         temp.add(prem);
         temp.setOpaque(true);
         return temp;
+    }
+
+    private JPanel makeCondButtons() {
+        JPanel head = new JPanel();
+        head.setLayout(new GridLayout(1, 3));
+        head.setBackground(Color.gray);
+        head.setMaximumSize(new Dimension(800, 100));
+
+        JLabel exp = new JLabel ("Information about Users by Condition: ");
+        exp.setVisible(true);
+
+        JButton submit = new JButton("Submit");
+        submit.setVisible(true);
+        submit.setEnabled(true);
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                userAggInfo = QueryEndpoints.countConditionGroupBy(toInsert);
+                makeUserAggTable();
+            }
+        });
+
+        String[] conds = new String[]{"Select Condition", "1. Creation Date", "2. # of Playlists", "3. # of Songs in Library"};
+        JComboBox<String> options = new JComboBox<>(conds);
+        options.setVisible(true);
+        options.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox comboBox1 = (JComboBox) e.getSource();
+                Object selected = comboBox1.getSelectedItem();
+                switch ((String) selected) {
+                    case "1. Creation Date":
+
+                        toInsert = new String[]{"EXTRACT(year FROM CreationDate) ", " Users u ", " WHERE u.CreationDate IS NOT NULL", " EXTRACT(year FROM CreationDate)"};
+                        break;
+                    case "2. # of Playlists":
+
+                        toInsert = new String[]{"Username ", " Playlist p", "", " p.Username"};
+                        break;
+                    case "3. # of Songs in Library":
+
+                        break;
+                    default:
+
+                        toInsert = new String[]{"Username ", " AddsToLibrary a", "", " a.Username"};
+                        String s = toInsert[0];
+                        break;
+                }
+
+
+            }
+        });
+
+
+
+        head.add(exp);
+        head.add(options);
+        head.add(submit);
+        head.setVisible(true);
+        head.setOpaque(true);
+
+        return head;
     }
 
     private void queryUsers() {
@@ -126,29 +202,28 @@ public class QueryPanel extends ContentPanel {
 
     }
 
-    // Let user choose between GROUPBY <Ads, Playlists, CreationDate (year)> by COUNT
-    // Each will have its own query method
     private void makeUserAggTable() {
 //        queryUsers();
 
         if (userAggTable == null) {
             userAggTable = new JPanel();
 
-            userAggTable.setLayout(new BoxLayout(userTable, BoxLayout.PAGE_AXIS));
+            userAggTable.setLayout(new BoxLayout(userAggTable, BoxLayout.PAGE_AXIS));
             userAggTable.setBackground(Color.white);
             userAggTable.setForeground(Color.white);
         }
 
-        int size = QueryEndpoints.countUsers(matter, PorF);
+        int size = userAggInfo.size();
+        System.out.println(size);
 
         userAggTable.setMaximumSize(new Dimension(800, size*40));
         userAggTable.setPreferredSize(new Dimension(800, size*40));
 
-        userAggInfo = QueryEndpoints.countCreationDate();
+//        userAggInfo = QueryEndpoints.countCreationDate();
 
         userAggTable.removeAll();
-        for (Pair<String, String> p : userInfo) {
-            userTable.add(makeUserPanel(p.getKey(), p.getValue()));
+        for (Pair<String, Integer> p : userAggInfo) {
+            userAggTable.add(makeUserAggPanel(p.getKey(), p.getValue()));
         }
 
         userAggTable.setVisible(true);
@@ -158,7 +233,50 @@ public class QueryPanel extends ContentPanel {
         repaint();
 
     }
+    private JPanel makeUserAggPanel(String username, int count) {
+        JPanel result = new JPanel();
+        result.setLayout(new GridLayout(1, 3));
+        result.setMaximumSize(new Dimension(800, 40));
+        result.setPreferredSize(new Dimension(800, 40));
+        result.setBackground(Color.lightGray);
 
+        JLabel user = new JLabel(username);
+        user.setMaximumSize(new Dimension(180,30));
+        user.setMinimumSize(new Dimension(180,30));
+        user.setPreferredSize(new Dimension(180,30));
+        user.setOpaque(true);
+
+        JLabel countLabel = new JLabel(Integer.toString(count));
+        countLabel.setMaximumSize(new Dimension(180,30));
+        countLabel.setMinimumSize(new Dimension(180,30));
+        countLabel.setPreferredSize(new Dimension(180,30));
+        countLabel.setOpaque(true);
+
+
+//        JButton select = new JButton("Select");
+//
+//        select.setPreferredSize(new Dimension(80,30));
+//        select.setMaximumSize(new Dimension(80,30));
+//        select.setAlignmentX(Component.RIGHT_ALIGNMENT);
+//        select.setEnabled(true);
+//        select.setOpaque(true);
+//        select.addActionListener(new ActionListener(){
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+////                deletePL(pl);
+//                JFrame selection = userSelect(username);
+//
+//            }
+//
+//        });
+        result.add(user);
+        result.add(countLabel);
+//        result.add(select);
+        result.setOpaque(true);
+        result.setVisible(true);
+        return result;
+    }
     private JPanel makeUserPanel(String username, String emailAd) {
         JPanel result = new JPanel(new GridLayout(1, 3));
         result.setMaximumSize(new Dimension(800, 40));
@@ -289,17 +407,17 @@ public class QueryPanel extends ContentPanel {
 
 
 
-    private JScrollPane makeScroll() {
+    private JScrollPane makeScroll(JPanel column) {
 
         JScrollPane temp = new JScrollPane();
         JScrollBar sb = new JScrollBar();
         sb.setOpaque(true);
         temp.setVerticalScrollBar(sb);
         temp.setBackground(Color.lightGray);
-        temp.setMaximumSize(new Dimension(800,450));
-        temp.setPreferredSize(new Dimension(800,450));
+        temp.setMaximumSize(new Dimension(800,250));
+        temp.setPreferredSize(new Dimension(800,250));
         temp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        temp.setColumnHeaderView(PFButtons);
+        temp.setColumnHeaderView(column);
         temp.setOpaque(true);
         temp.setVisible(true);
         return temp;

@@ -4,10 +4,7 @@ import database.DatabaseManager;
 import javafx.util.Pair;
 import model.User;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class QueryEndpoints {
@@ -155,70 +152,52 @@ public class QueryEndpoints {
         FROM Playlist p
         GROUP BY p.Username
 
-        SELECT #Ads, COUNT(*)
-        FROM Users u INNER JOIN FreeUser f ON u.Username = f.Username
-        GROUP BY f.AdsServed
+
+
+        SELECT Username, COUNT(*)
+        FROM AddsToLibrary a
+        GROUP BY a.Username
 
 
      */
-    public static ArrayList<Pair<String, Integer>> countCreationDate() {
-        ArrayList<Pair<String, Integer>> topFiveGenres = new ArrayList<>();
+    public static ArrayList<Pair<String, Integer>> countConditionGroupBy(String[] condition) {
+        ArrayList<Pair<String, Integer>> result = new ArrayList<>();
         try {
 //            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
             Connection connection = DatabaseManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
+           Statement statement = connection.createStatement();
 
+      //      String query = "SELECT ? as tabOne, COUNT(*) as count FROM ? ? GROUP BY ?";
+//            PreparedStatement ps = connection.prepareStatement(query);
+//            ps.setString(1, condition[0]);
+//            ps.setString(2, condition[1]);
+//            ps.setString(3, condition[2]);
+//            ps.setString(4, condition[3]);
+//            ResultSet rs = ps.executeQuery();
             String query = String.format(
-                    "SELECT EXTRACT(year FROM CreationDate) as YearJoined, COUNT(*) as count FROM Users u WHERE year IS NOT NULL GROUP BY EXTRACT(year FROM CreationDate)");
+                    "SELECT %s as tabOne, COUNT(*) as count FROM %s %s GROUP BY %s", condition[0], condition[1], condition[2], condition[3]);
             ResultSet rs = statement.executeQuery(query);
 
-
-
-
+           int count = 0;
 
             while (rs.next()) {
-
-                topFiveGenres.add(new Pair<String, Integer>(Integer.toString(rs.getInt("YearJoined")), rs.getInt("count")));
-
+                try {
+                    result.add(new Pair<String, Integer>(Integer.toString(rs.getInt("tabOne")), rs.getInt("count")));
+                } catch (SQLException e) {
+                    result.add(new Pair<String, Integer>(rs.getString("tabOne"), rs.getInt("count")));
+                }
+                count++;
             }
+            System.out.println(count);
 
 
 
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
         }
-        return topFiveGenres;
+        return result;
 
     }
 
-    public static ArrayList<Pair<String, Integer>> countAds() {
-        ArrayList<Pair<String, Integer>> topFiveGenres = new ArrayList<>();
-        try {
-//            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
-            Connection connection = DatabaseManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-
-            String query = String.format(
-                    "SELECT f.AdsServed as YearJoined, COUNT(*) as count FROM Users u, FreeUser f GROUP BY f.AdsServed");
-            ResultSet rs = statement.executeQuery(query);
-
-
-
-
-
-            while (rs.next()) {
-
-                topFiveGenres.add(new Pair<String, Integer>(Integer.toString(rs.getInt("YearJoined")), rs.getInt("count")));
-
-            }
-
-
-
-        } catch (SQLException exception) {
-            System.out.println(exception.getMessage());
-        }
-        return topFiveGenres;
-
-    }
 
 }
