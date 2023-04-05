@@ -7,10 +7,7 @@ import model.Payment;
 import model.User;
 import ui.panels.AdminPaymentsPanel;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -24,14 +21,15 @@ public class PaymentEndpoints {
         try {
             Connection connection = DatabaseManager.getInstance().getConnection();
             ArrayList<Payment> payments = new ArrayList<>();
-            Statement statement = connection.createStatement();
             String query;
             if (Objects.requireNonNull(type) == AdminPaymentsPanel.PaymentType.USERS) {
-                query = "SELECT \"Date\", AMOUNT FROM UserPayment WHERE Username='" + username + "'";
+                query = "SELECT \"Date\", AMOUNT FROM UserPayment WHERE Username= ?";
             } else {
-                query = "SELECT \"Date\", AMOUNT FROM CompanyPayment WHERE DistributorName='" + username + "'";
+                query = "SELECT \"Date\", AMOUNT FROM CompanyPayment WHERE DistributorName= ?";
             }
-            ResultSet resultSet = statement.executeQuery(query);
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1,username);
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 String date = (dateFormat.format(resultSet.getDate("Date")));
@@ -69,23 +67,27 @@ public class PaymentEndpoints {
 
     public static void insertBillingAddress(BillingAddress billingAddress){
         Connection connection;
-        Statement statement;
+        PreparedStatement statement;
         try {
             connection = DatabaseManager.getInstance().getConnection();
-            statement = connection.createStatement();
-            String postalQuery = String.format("INSERT INTO PostalCodeCityProvince VALUES ('%s', '%s', '%s')",
-                    billingAddress.getCity(),billingAddress.getProvince(),billingAddress.getPostalCode());
-            statement.executeQuery(postalQuery);
+            String postalQuery = "INSERT INTO PostalCodeCityProvince VALUES (?, ?, ?)";
+            statement = connection.prepareStatement(postalQuery);
+            statement.setString(1,billingAddress.getCity());
+            statement.setString(2,billingAddress.getProvince());
+            statement.setString(3,billingAddress.getPostalCode());
+            statement.executeQuery();
         }
         catch (SQLException exception){
             System.out.println(exception.getMessage());
         }
         try {
             connection = DatabaseManager.getInstance().getConnection();
-            statement = connection.createStatement();
-            String billingQuery = String.format("INSERT INTO BillingAddress VALUES (%d, '%s', '%s')",
-                    billingAddress.getStreetNum(),billingAddress.getStreetName(),billingAddress.getPostalCode());
-            statement.executeQuery(billingQuery);
+            String billingQuery = "INSERT INTO BillingAddress VALUES (?, ?, ?)";
+            statement = connection.prepareStatement(billingQuery);
+            statement.setInt(1,billingAddress.getStreetNum());
+            statement.setString(2,billingAddress.getStreetName());
+            statement.setString(3,billingAddress.getPostalCode());
+            statement.executeQuery();
         }
         catch (SQLException exception){
             System.out.println(exception.getMessage());
@@ -93,7 +95,7 @@ public class PaymentEndpoints {
     }
 
 
-    public static boolean makePayment(User user, Card card, BillingAddress billingAddress, float amount){
+    public static boolean makePayment(User user, Card card, BillingAddress billingAddress, double amount){
         if(!user.getPremium()){
             try{
                 deleteCurrentUser(user.getUsername());
@@ -116,13 +118,19 @@ public class PaymentEndpoints {
             Payment payment = new Payment(formattedDate,amount);
             registerCard(card);
             Connection connection = DatabaseManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
             int paymentID = generateUniqueHashcode(user.getUsername());
-            String paymentQuery = String.format(
-                    "INSERT INTO UserPayment VALUES (%d, %.2f , TO_DATE('%s', 'yyyy-MM-dd'), %d, '%s', %d, '%s', '%s')",
-                    paymentID,payment.getAmount(),payment.getDate(),card.getCardNum(),user.getUsername(),
-                    billingAddress.getStreetNum(),billingAddress.getStreetName(),billingAddress.getPostalCode());
-            statement.executeQuery(paymentQuery);
+            String paymentQuery = "INSERT INTO UserPayment VALUES (?, ? , TO_DATE(?, 'yyyy-MM-dd'), ?, ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(paymentQuery);
+            statement.setInt(1,paymentID);
+            System.out.println(payment.getAmount());
+            statement.setDouble(2,Math.round(payment.getAmount() * 100.0) / 100.0);
+            statement.setString(3,payment.getDate());
+            statement.setLong(4,card.getCardNum());
+            statement.setString(5,user.getUsername());
+            statement.setInt(6,billingAddress.getStreetNum());
+            statement.setString(7,billingAddress.getStreetName());
+            statement.setString(8,billingAddress.getPostalCode());
+            statement.executeQuery();
             updateSubscriptionDate(user.getUsername());
             user.setPremium(true);
             return true;
@@ -135,34 +143,42 @@ public class PaymentEndpoints {
 
     private static void deleteCurrentUser(String user) throws SQLException {
         Connection connection = DatabaseManager.getInstance().getConnection();
-        Statement statement = connection.createStatement();
-        String deleteQuery = String.format("DELETE FROM FreeUser WHERE Username='%s'", user);
-        statement.executeQuery(deleteQuery);
+        String deleteQuery = "DELETE FROM FreeUser WHERE Username=?";
+        PreparedStatement statement = connection.prepareStatement(deleteQuery);
+        statement.setString(1,user);
+        statement.executeQuery();
     }
 
     private static void makeCurrentUserPremium(String user) throws SQLException {
         Connection connection = DatabaseManager.getInstance().getConnection();
-        Statement statement = connection.createStatement();
         String currentDate = getCurrentDate();
         String monthLater = nextMonth(currentDate);
-        String makePremiumQuery = String.format("INSERT INTO PremiumUser VALUES ('%s','%s','%s')", user,currentDate,monthLater);
-        statement.executeQuery(makePremiumQuery);
+        String makePremiumQuery = "INSERT INTO PremiumUser VALUES (?,?,?)";
+        PreparedStatement statement = connection.prepareStatement(makePremiumQuery);
+        statement.setString(1,user);
+        statement.setString(2,currentDate);
+        statement.setString(3,monthLater);
+        statement.executeQuery();
     }
 
 
-    public static boolean makePaymentToDistributor(String distributor, BillingAddress billingAddress, float amount){
+    public static boolean makePaymentToDistributor(String distributor, BillingAddress billingAddress, double amount){
         try {
             String formattedDate = getCurrentDate();
             Payment payment = new Payment(formattedDate,amount);
             Connection connection = DatabaseManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
             int paymentID = generateUniqueHashcode(distributor);
-            String paymentQuery = String.format(
-                    "INSERT INTO CompanyPayment VALUES (%d, %.2f , TO_DATE('%s', 'yyyy-MM-dd'), %d, '%s', '%s', '%s')",
-                    paymentID,payment.getAmount(),payment.getDate(), billingAddress.getStreetNum(),
-                    billingAddress.getStreetName(),billingAddress.getPostalCode(),distributor);
+            String paymentQuery = "INSERT INTO CompanyPayment VALUES (?, ? , TO_DATE(?, 'yyyy-MM-dd'), ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(paymentQuery);
+            statement.setInt(1,paymentID);
+            statement.setDouble(2,Math.round(payment.getAmount() * 100.0) / 100.0);
+            statement.setString(3,payment.getDate());
+            statement.setInt(4,billingAddress.getStreetNum());
+            statement.setString(5,billingAddress.getStreetName());
+            statement.setString(6,billingAddress.getPostalCode());
+            statement.setString(7,distributor);
             System.out.println(paymentQuery);
-            statement.executeQuery(paymentQuery);
+            statement.executeQuery();
             return true;
         }
         catch (SQLException exception){
@@ -188,11 +204,13 @@ public class PaymentEndpoints {
     private static void registerCard(Card card){
         try{
             Connection connection = DatabaseManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
             System.out.println(card.getExpiryDate());
-            String cardQuery = String.format("INSERT INTO CardTable VALUES ('%s', %d, TO_DATE('%s', 'yyyy-MM-dd'))",
-                    card.getCompany(),card.getCardNum(),card.getExpiryDate());
-            statement.executeQuery(cardQuery);
+            String cardQuery = "INSERT INTO CardTable VALUES (?, ?, TO_DATE(?, 'yyyy-MM-dd'))";
+            PreparedStatement statement = connection.prepareStatement(cardQuery);
+            statement.setString(1,card.getCompany());
+            statement.setLong(2,card.getCardNum());
+            statement.setString(3,card.getExpiryDate());
+            statement.executeQuery();
         }
         catch (SQLException exception){
             System.out.println("card error: " + exception.getMessage() );
@@ -227,9 +245,10 @@ public class PaymentEndpoints {
     public static boolean getPremiumStatus(User user){
         try{
             Connection connection = DatabaseManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-            String query = String.format("SELECT * FROM PremiumUser WHERE Username='%s'",user.getUsername());
-            ResultSet resultSet = statement.executeQuery(query);
+            String query = "SELECT * FROM PremiumUser WHERE Username=?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1,user.getUsername());
+            ResultSet resultSet = statement.executeQuery();
             boolean status = resultSet.next();
             return status;
         }
@@ -242,9 +261,10 @@ public class PaymentEndpoints {
     public static String getSubscriptionPeriod(User user){
         try{
             Connection connection = DatabaseManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-            String query = String.format("SELECT SubStartDate,SubEndDate FROM PremiumUser WHERE Username='%s'",user.getUsername());
-            ResultSet resultSet = statement.executeQuery(query);
+            String query = "SELECT SubStartDate,SubEndDate FROM PremiumUser WHERE Username=?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1,user.getUsername());
+            ResultSet resultSet = statement.executeQuery();
             String result = "";
             while (resultSet.next()){
                 LocalDate start = resultSet.getDate("SubStartDate").toLocalDate();
@@ -264,11 +284,14 @@ public class PaymentEndpoints {
     private static void updateSubscriptionDate(String user){
         try{
             Connection connection = DatabaseManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
             String currentDate = getCurrentDate();
             String monthLater = nextMonth(currentDate);
-            String makePremiumQuery = String.format("UPDATE PremiumUser SET SubStartDate = '%s', SubEndDate = '%s' WHERE Username='%s'", currentDate,monthLater,user);
-            statement.executeQuery(makePremiumQuery);
+            String makePremiumQuery = "UPDATE PremiumUser SET SubStartDate = ?, SubEndDate = ? WHERE Username=?";
+            PreparedStatement statement = connection.prepareStatement(makePremiumQuery);
+            statement.setString(1,currentDate);
+            statement.setString(2,monthLater);
+            statement.setString(3,user);
+            statement.executeQuery();
         }
         catch (SQLException e){
             System.out.println("Could not update the subscription");
