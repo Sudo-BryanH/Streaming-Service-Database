@@ -70,14 +70,7 @@ public class MainUI extends JFrame {
         regularButtons.get(0).addActionListener(e -> swapPanel(new HomePanel(this)));
         regularButtons.get(1).addActionListener(e -> swapPanel(new LibraryPanel(this)));
         regularButtons.get(2).addActionListener(e -> swapPanel(new SearchPanel(this)));
-        regularButtons.get(3).addActionListener(e -> {
-            if (admin){
-                swapPanel(new AdminPaymentsPanel(this));
-            }
-            else {
-                swapPanel(new UserPaymentsPanel(this));
-            }
-        });
+        regularButtons.get(3).addActionListener(e -> swapPanel(new UserPaymentsPanel(this)));
         regularButtons.get(4).addActionListener(e -> swapPanel(new RecordsPanel(this)));
 
         for (JButton button : regularButtons) {
@@ -95,11 +88,13 @@ public class MainUI extends JFrame {
             adminButtons.add(new JButton("Releases"));
             adminButtons.add(new JButton("Artists"));
             adminButtons.add(new JButton("Distributors"));
+            adminButtons.add(new JButton("Admin Payments"));
 
             adminButtons.get(0).addActionListener(e -> swapPanel(new QueryPanel(this)));
             adminButtons.get(1).addActionListener(e -> swapPanel(new ReleasesAdminPanel(this)));
             adminButtons.get(2).addActionListener(e -> swapPanel(new ArtistsAdminPanel(this)));
             adminButtons.get(3).addActionListener(e -> swapPanel(new DistributorsAdminPanel(this)));
+            adminButtons.get(4).addActionListener(e -> swapPanel(new AdminPaymentsPanel(this)));
 
             sidebar.add(Box.createVerticalStrut(20));
             for (JButton button : adminButtons) {
