@@ -93,7 +93,7 @@ public class AdminPaymentsPanel extends PaymentPanel{
                     BillingAddress billingAddress = new BillingAddress(Integer.parseInt(streetNumberTextField.getText()),
                             streetTextField.getText(),cityTextField.getText(),provinceTextField.getText(),postalCodeTextField.getText());
                     PaymentEndpoints.insertBillingAddress(billingAddress);
-                    if(PaymentEndpoints.makePaymentToDistributor(distributor,billingAddress,Float.parseFloat(this.amountField.getText()))){
+                    if(PaymentEndpoints.makePaymentToDistributor(distributor,billingAddress,Double.parseDouble(this.amountField.getText()))){
                         paymentFrame.dispose();
                         JOptionPane.showMessageDialog(this, "Payment Successful to " + distributor);
                     }
