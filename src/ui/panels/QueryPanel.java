@@ -23,6 +23,9 @@ public class QueryPanel extends ContentPanel {
     boolean matter = false;
     boolean PorF = false;
 
+    boolean conditional = false; // f: list of users t: conditional queries
+    JButton condButton;
+
     JPanel userAggTable;
 
     public QueryPanel(MainUI mainUI) {

@@ -183,29 +183,46 @@ public class LibraryPanel extends ContentPanel{
         JComboBox<String> playlists = makePlaylistDropdown(s);
 
 
-        JButton delete = new JButton("⨂");
-        delete.setForeground(Color.red);
-        delete.setPreferredSize(new Dimension(20,20));
-        delete.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        delete.setEnabled(true);
-        delete.setOpaque(true);
-        delete.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (plName == null) {
-                    boolean b = deleteSongLib(s);
-                } else {
-                    boolean b = deleteSongPl(s, plName);
-                }
+//        JButton delete = new JButton("⨂");
+//        delete.setForeground(Color.red);
+//        delete.setPreferredSize(new Dimension(20,20));
+//        delete.setAlignmentX(Component.RIGHT_ALIGNMENT);
+//        delete.setEnabled(true);
+//        delete.setOpaque(true);
+//        delete.addActionListener(new ActionListener(){
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if (plName == null) {
+//                    boolean b = deleteSongLib(s);
+//                } else {
+//                    boolean b = deleteSongPl(s, plName);
+//                }
+//
+////                deletePL(pl);
+//
+//            }
+//
+//        });
 
-//                deletePL(pl);
-
+        JButton likeButton = new JButton((s.liked)? "♥" : "♡");
+        likeButton.setForeground((s.liked)? Color.green : Color.black);
+        likeButton.setPreferredSize(new Dimension(20,20));
+        likeButton.addActionListener(e -> {
+            if (s.liked) {
+                likeButton.setText("♡");
+                likeButton.setForeground(Color.black);
+                LibraryEndpoints.unlikeSong(s, this.mainUI.getUser().getUsername());
+            } else {
+                likeButton.setText("♥");
+                likeButton.setForeground(Color.green);
+                LibraryEndpoints.likeSong(s, this.mainUI.getUser().getUsername());
             }
-
+            s.liked = !s.liked;
         });
+
         result.add(song);
         result.add(playlists);
-        result.add(delete);
+        result.add(likeButton);
         return result;
 
     }

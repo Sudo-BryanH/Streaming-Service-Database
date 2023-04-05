@@ -199,7 +199,7 @@ public class QueryEndpoints {
             Statement statement = connection.createStatement();
 
             String query = String.format(
-                    "SELECT f.AdsServed as YearJoined, COUNT(*) as count FROM Users u, FreeUser f GROUP BY f.AdsServed")
+                    "SELECT f.AdsServed as YearJoined, COUNT(*) as count FROM Users u, FreeUser f GROUP BY f.AdsServed");
             ResultSet rs = statement.executeQuery(query);
 
 
