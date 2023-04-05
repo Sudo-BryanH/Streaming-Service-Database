@@ -61,8 +61,7 @@ CREATE TABLE Song
 CREATE TABLE Artist
 (
     ID               INT PRIMARY KEY,
-    Name             VARCHAR(50),
-    MonthlyListeners INT
+    Name             VARCHAR(50)
 );
 
 CREATE TABLE CardTable
@@ -210,6 +209,14 @@ CREATE TABLE Creates
             ON DELETE CASCADE
 );
 
+CREATE VIEW CountSongsPerArtist
+AS SELECT ID, Name, COUNT(*) as Count
+    FROM ((SELECT a1.ID as ID, a1.Name, c1.ReleaseID as RID, s1.TrackNum FROM Artist a1, Song s1, Creates c1
+            WHERE a1.ID = c1.ArtistID AND c1.ReleaseID = s1.ReleaseID)
+    UNION (SELECT a2.ID as ID, a2.Name, s2.ReleaseID as RID, s2.TrackNum FROM Artist a2, Song s2, FeaturedIn f2
+            WHERE a2.ID = f2.ArtistID AND s2.ReleaseID = f2.ReleaseID AND s2.TrackNum = f2.TrackNum))
+   GROUP BY ID, Name;
+
 
 INSERT INTO Distributor
 VALUES ('BMG Rights Management (UK) Limited', 'https://www.bmg.com/');
@@ -244,6 +251,8 @@ INSERT INTO Users
 VALUES ('kimdol', 'kimdol@yahoo.com', 'CS304Sucks', '2022-03-04');
 INSERT INTO Users
 VALUES ('A113', 'A113@outlook.com', 'CS304Sucks', '2022-09-10');
+INSERT INTO Users
+VALUES ('admin', 'admin@admin.com', 'admin', '2023-04-01');
 
 INSERT INTO FreeUser
 VALUES ('harperk', 13);
@@ -266,7 +275,8 @@ INSERT INTO PremiumUser
 VALUES ('celloist', '2023-03-01', '2024-02-01');
 INSERT INTO PremiumUser
 VALUES ('notstevejobs', '2021-03-01', '2022-02-01');
-
+INSERT INTO PremiumUser
+VALUES ('admin', '2023-04-01', '2024-04-01');
 
 INSERT INTO Releases
 VALUES (1, 'Whenever You Need Somebody', 'Album', '1987-11-12', 'https://cdn.spotube.com/img/rickroll.png',
@@ -345,17 +355,17 @@ INSERT INTO Song
 VALUES (6, 1, 'Take On Me (2017 Acoustic)', 184, 'Pop', 6666852);
 
 INSERT INTO Artist
-VALUES (1, 'Rick Astley', 5829256);
+VALUES (1, 'Rick Astley');
 INSERT INTO Artist
-VALUES (2, 'Smash Mouth', 3950387);
+VALUES (2, 'Smash Mouth');
 INSERT INTO Artist
-VALUES (3, 'Curb Your Enthusiasm', 38358);
+VALUES (3, 'Curb Your Enthusiasm');
 INSERT INTO Artist
-VALUES (4, 'Luciano Michelini', 35294);
+VALUES (4, 'Luciano Michelini');
 INSERT INTO Artist
-VALUES (5, 'Nemesis', 200000);
+VALUES (5, 'Nemesis');
 INSERT INTO Artist
-VALUES (6, 'a-ha', 72108658);
+VALUES (6, 'a-ha');
 
 INSERT INTO CardTable
 VALUES ('Visa', 2394235323332438, '2025-01-01');

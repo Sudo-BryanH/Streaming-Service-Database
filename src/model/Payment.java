@@ -2,9 +2,9 @@ package model;
 
 public class Payment {
     private String date;
-    private float amount;
+    private double amount;
 
-    public Payment(String date, float amount){
+    public Payment(String date, double amount){
         this.date = date;
         this.amount = amount;
     }

@@ -2,18 +2,18 @@ package model;
 
 import java.util.Objects;
 
-public class Artist {
-    public int id;
+public class Distributor {
     public String name;
+    public String website;
 
-    public Artist(int id, String name) {
-        this.id = id;
+    public Distributor(String name, String website) {
         this.name = name;
+        this.website = website;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(name);
     }
 
     @Override
@@ -25,6 +25,6 @@ public class Artist {
             return false;
         }
         Release other = (Release) obj;
-        return this.id == other.id;
+        return this.name.equals(other.name);
     }
 }

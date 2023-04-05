@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class QueryPanel extends ContentPanel {
+public class UsersPanel extends ContentPanel {
 
     private ArrayList<Pair<String, String>> userInfo;
     private ArrayList<Pair<String, Integer>> userAggInfo;
@@ -31,7 +31,7 @@ public class QueryPanel extends ContentPanel {
 
     private JPanel userAggTable;
 
-    public QueryPanel(MainUI mainUI) {
+    public UsersPanel(MainUI mainUI) {
         super(mainUI);
     }
 

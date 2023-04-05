@@ -1,10 +1,11 @@
 package util;
 
 import model.Artist;
-import model.Release;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Misc {
@@ -32,19 +33,24 @@ public class Misc {
         return result.toString();
     }
 
-    public static void mergeReleaseLists(List<Release> target, List<Release> addition) {
-        for (Release a : addition) {
-            if (!target.contains(a)) {
-                target.add(a);
-            }
-        }
-    }
-
     public static String slashDateToDash (String slashDate) {
         DateTimeFormatter slashDateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDate date = LocalDate.parse(slashDate, slashDateFormatter);
 
         DateTimeFormatter dashDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return date.format(dashDateFormatter);
+    }
+
+    public static List<String> stringCombinations (String input) {
+        String[] words = input.split("\\s+");
+        List<String> combinations = new ArrayList<>();
+
+        for (int i = 0; i < words.length; i++) {
+            for (int j = i + 1; j <= words.length; j++) {
+                combinations.add(String.join(" ", Arrays.copyOfRange(words, i, j)));
+            }
+        }
+
+        return combinations;
     }
 }
