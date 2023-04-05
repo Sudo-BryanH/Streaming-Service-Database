@@ -11,11 +11,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class ReleaseSongsPanel extends ContentPanel{
+public class ReleaseSongsAdminPanel extends ContentPanel{
     private JPanel infoPanel;
     private JScrollPane infoScrollPane;
     private Release release;
-    public ReleaseSongsPanel(MainUI mainUI, Release release) {
+    public ReleaseSongsAdminPanel(MainUI mainUI, Release release) {
         super(mainUI);
         this.release = release;
         generateCustom(); // man sometimes i would like to do things before the super ;-;
@@ -50,7 +50,7 @@ public class ReleaseSongsPanel extends ContentPanel{
 
         JButton manageButton = new JButton("Manage Artists");
         buttonsPanel.add(manageButton, BorderLayout.EAST);
-        manageButton.addActionListener(e -> mainUI.swapPanel(new ReleaseArtistsPanel(mainUI, release)));
+        manageButton.addActionListener(e -> mainUI.swapPanel(new ReleaseArtistsAdminPanel(mainUI, release)));
 
         return buttonsPanel;
     }

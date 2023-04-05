@@ -85,7 +85,7 @@ public class ReleasesAdminPanel extends ContentPanel{
 
         JButton songsButton = new JButton("Manage");
         songsButton.setPreferredSize(new Dimension(60,20));
-        songsButton.addActionListener(e -> mainUI.swapPanel(new ReleaseSongsPanel(mainUI, release)));
+        songsButton.addActionListener(e -> mainUI.swapPanel(new ReleaseSongsAdminPanel(mainUI, release)));
         result.add(songsButton);
 
         JButton editButton = new JButton("✎");
