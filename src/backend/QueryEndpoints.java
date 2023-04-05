@@ -2,8 +2,12 @@ package backend;
 
 import database.DatabaseManager;
 import javafx.util.Pair;
+import model.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class QueryEndpoints {
@@ -31,7 +35,7 @@ public class QueryEndpoints {
             }
 
             while (rs.next()) {
-                res.add(new Pair<>(rs.getString("Email"), rs.getString("Username")));
+                res.add(new Pair<>(rs.getString("Username"), rs.getString("Email")));
             }
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
@@ -72,5 +76,49 @@ public class QueryEndpoints {
 
         return res;
 
+    }
+
+    public static User findUserInfo(String username) {
+        User u = new User(username);
+        try {
+//            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String emailQ = String.format("SELECT Email FROM Users u WHERE u.Username = '%s'", username);
+            String CreationQ = String.format("SELECT CreationDate FROM Users u WHERE u.Username = '%s'", username);
+            ResultSet rs = statement.executeQuery(emailQ);
+            rs.next();
+            u.setEmail(rs.getString("Email"));
+
+            rs = statement.executeQuery(CreationQ);
+            rs.next();
+            u.setCreationDate(rs.getDate("CreationDate"));
+
+            String freeQuery = String.format("SELECT * FROM FreeUser f WHERE f.Username = '%s'", username);
+
+            rs = statement.executeQuery(freeQuery);
+            if (rs.next()) {
+                u.setPremium(false);
+                u.setAdsServed(rs.getInt(rs.getInt("AdsServed")));
+            } else {
+                String premQuery = String.format("SELECT * FROM PremiumUser p WHERE p.Username = '%s'", username);
+                rs = statement.executeQuery(premQuery);
+
+                u.setPremium(true);
+                u.setSubStart(rs.getDate("SubStartDate"));
+                u.setSubEnd(rs.getDate("SubEndDate"));
+            }
+
+
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+        }
+
+
+
+
+
+
+        return u;
     }
 }

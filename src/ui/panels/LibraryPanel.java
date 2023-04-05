@@ -335,11 +335,11 @@ public class LibraryPanel extends ContentPanel{
         temp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame paymentFrame = new JFrame("Create Playlist");
-                paymentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                paymentFrame.setContentPane(makePlaylistWindow());
-                paymentFrame.setSize(new Dimension(400,160));
-                paymentFrame.setVisible(true);
+                JFrame makeFrame= new JFrame("Create Playlist");
+                makeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                makeFrame.setContentPane(makePlaylistWindow());
+                makeFrame.setSize(new Dimension(400,160));
+                makeFrame.setVisible(true);
             }
         });
         return temp;

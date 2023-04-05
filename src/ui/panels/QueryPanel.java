@@ -2,6 +2,7 @@ package ui.panels;
 
 import backend.QueryEndpoints;
 import javafx.util.Pair;
+import model.User;
 import ui.MainUI;
 
 import javax.swing.*;
@@ -148,6 +149,7 @@ public class QueryPanel extends ContentPanel {
             public void actionPerformed(ActionEvent e) {
 
 //                deletePL(pl);
+                JFrame selection = userSelect(username);
 
             }
 
@@ -159,6 +161,63 @@ public class QueryPanel extends ContentPanel {
         result.setVisible(true);
         return result;
     }
+
+    private JFrame userSelect(String username) {
+        User us = QueryEndpoints.findUserInfo(username);
+        JPanel panel = new JPanel();
+        GridLayout grid = new GridLayout(8, 2);
+        panel.setPreferredSize(new Dimension(400, 400));
+
+        JLabel userLabel = genButtons("Username: ");
+        JLabel user = genButtons(username);
+
+        JLabel emailLabel = genButtons("Email: ");
+        JLabel email = genButtons(us.getEmail());
+
+        JLabel creationDateLabel = genButtons("Creation Date: ");
+        JLabel creationDate = genButtons(us.getCreationDate().toString());
+
+        JLabel tierLabel = genButtons("Tier: ");
+        JLabel tier = genButtons((us.getPremium()) ? "Premium" : "Free");
+
+        JLabel adsServedLabel = genButtons("adsServed: ");
+        JLabel adsServed = genButtons((us.getPremium()) ? Integer.toString(us.getAdsServed()) : Integer.toString(us.getAdsServed()));
+
+        JLabel subStartLabel = genButtons("Subscription Start Date: ");
+        JLabel subStart = genButtons((us.getPremium()) ? ((us.getSubStart() == null)? "N/A":us.getSubStart().toString()): "N/A");
+
+        panel.setVisible(true);
+        panel.add(userLabel);
+        panel.add(user);
+        panel.add(emailLabel);
+        panel.add(email);
+        panel.add(creationDateLabel);
+        panel.add(creationDate);
+        panel.add(tierLabel);
+        panel.add(tier);
+        panel.add(adsServedLabel);
+        panel.add(adsServed);
+        panel.add(subStartLabel);
+        panel.add(subStart);
+
+
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setContentPane(panel);
+        frame.setSize(new Dimension(400,400));
+        frame.setVisible(true);
+
+        return frame;
+    }
+
+    private JLabel genButtons(String text) {
+        JLabel temp = new JLabel(text);
+        temp.setPreferredSize(new Dimension(150, 40));
+        temp.setMaximumSize(new Dimension(240, 40));
+        return temp;
+    }
+
+
 
     private JScrollPane makeScroll() {
 
