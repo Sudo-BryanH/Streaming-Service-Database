@@ -8,7 +8,6 @@ import util.Misc;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SearchPanel extends ContentPanel{
@@ -33,19 +32,12 @@ public class SearchPanel extends ContentPanel{
     }
 
     private void performSearch(String query) {
-        String[] words = query.split("\\s+");
-
-        List<String> combinations = new ArrayList<>();
-        for (int i = 0; i < words.length; i++) {
-            for (int j = i + 1; j <= words.length; j++) {
-                combinations.add(String.join(" ", Arrays.copyOfRange(words, i, j)));
-            }
-        }
+        List<String> combinations = Misc.stringCombinations(query);
 
         List<Release> results = new ArrayList<>();
         for (String c : combinations) {
             List<Release> newResults = ReleaseEndpoints.searchReleases(c);
-            Misc.mergeReleaseLists(results, newResults);
+            mergeLists(results, newResults);
         }
 
         if (results.size() > 0) {
@@ -102,5 +94,13 @@ public class SearchPanel extends ContentPanel{
 
         resultsScrollPane = new JScrollPane(resultsPanel);
         resultsScrollPane.setVisible(false);
+    }
+
+    public static void mergeLists(List<Release> target, List<Release> addition) {
+        for (Release a : addition) {
+            if (!target.contains(a)) {
+                target.add(a);
+            }
+        }
     }
 }
