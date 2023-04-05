@@ -31,6 +31,20 @@ public class SongEndpoints {
         return getSongsHelper(String.format(query, releaseID), username);
     }
 
+    public static Song getSongsByReleaseTrackNum(Release release, int trackNum, String username) {
+        int releaseID = release.id;
+        String query = "SELECT ReleaseID, TrackNum, Name, Duration, Genre, Plays " +
+                "FROM Song WHERE ReleaseID = %d AND TrackNum = %d";
+
+        List<Song> result = getSongsHelper(String.format(query, release.id, trackNum), username);
+
+        if (result != null && result.size() == 1) {
+            return result.get(0);
+        } else {
+            return null;
+        }
+    }
+
     public static void addSong(Song song) {
         String query = "INSERT INTO Song VALUES (%d, %d, '%s', %d, '%s', %d)";
         query(String.format(query, song.releaseID, song.trackNum, song.name, song.duration, song.genre, song.plays));
