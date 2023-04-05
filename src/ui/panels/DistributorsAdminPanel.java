@@ -124,7 +124,7 @@ public class DistributorsAdminPanel extends ContentPanel{
             DistributorEndpoints.addDistributor(distributor);
 
             Distributor check = DistributorEndpoints.getDistributorByName(distributor.name);
-            if (check != null && check.name.equals(distributor.name)){
+            if (check != null && check.name.equals(distributor.name) && check.website.equals(distributor.website)){
                 JOptionPane.showMessageDialog(this, "Distributor '" + distributor.name + "' added!");
                 performSearch(queryString);
             } else {

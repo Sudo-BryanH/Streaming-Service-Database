@@ -117,7 +117,9 @@ public class ReleaseSongsAdminPanel extends ContentPanel{
             SongEndpoints.addSong(song);
 
             Song check = SongEndpoints.getSongsByReleaseTrackNum(release, song.trackNum, mainUI.getUser().getUsername());
-            if (check != null && check.releaseID == song.releaseID && check.trackNum == song.trackNum){
+            if (check != null && check.releaseID == song.releaseID && check.trackNum == song.trackNum &&
+                    check.name.equals(song.name) && check.genre.equals(song.genre) && check.duration == song.duration &&
+                    check.plays == song.plays) {
                 JOptionPane.showMessageDialog(this, "Song '" + song.name + "' added!");
                 fillSongs();
             } else {

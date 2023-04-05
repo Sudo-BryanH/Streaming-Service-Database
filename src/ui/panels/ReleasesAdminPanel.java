@@ -137,8 +137,8 @@ public class ReleasesAdminPanel extends ContentPanel{
 
             Release check = ReleaseEndpoints.getReleaseByID(release.id);
             if (check != null && check.id == release.id){
-                JOptionPane.showMessageDialog(this, "Release '" + release.name + "' added!");
                 performSearch(queryString);
+                JOptionPane.showMessageDialog(this, "Release '" + release.name + "' added!");
             } else {
                 JOptionPane.showMessageDialog(this, "Release add failed :(");
             }
