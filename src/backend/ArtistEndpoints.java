@@ -2,6 +2,7 @@ package backend;
 
 import database.DatabaseManager;
 import model.Artist;
+import model.Release;
 import model.Song;
 
 import java.sql.Connection;
@@ -56,6 +57,13 @@ public class ArtistEndpoints {
                 "(a.ID = f.ArtistID AND s.ReleaseID = f.ReleaseID AND s.TrackNum = f.TrackNum)) " +
                 "AND s.ReleaseID = %d AND s.TrackNum = %d";
         return getArtistsHelper(String.format(query, song.releaseID, song.trackNum));
+    }
+
+    public static List<Artist> getArtistsNotInRelease(Release release) {
+        String query = "SELECT a.ID, a.Name FROM Artist a WHERE NOT EXISTS (" +
+                "SELECT * FROM Creates c, Releases r " +
+                "WHERE a.ID = c.ArtistID AND r.ID = c.ReleaseID AND c.ReleaseID = %d)";
+        return getArtistsHelper(String.format(query, release.id));
     }
 
     public static List<Artist> searchArtists(String keywords) {
