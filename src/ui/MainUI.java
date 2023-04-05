@@ -84,13 +84,13 @@ public class MainUI extends JFrame {
         List<JButton> adminButtons = new ArrayList<>();
 
         if (admin) {
-            adminButtons.add(new JButton("Query"));
+            adminButtons.add(new JButton("Users"));
             adminButtons.add(new JButton("Releases"));
             adminButtons.add(new JButton("Artists"));
             adminButtons.add(new JButton("Distributors"));
             adminButtons.add(new JButton("Admin Payments"));
 
-            adminButtons.get(0).addActionListener(e -> swapPanel(new QueryPanel(this)));
+            adminButtons.get(0).addActionListener(e -> swapPanel(new UsersPanel(this)));
             adminButtons.get(1).addActionListener(e -> swapPanel(new ReleasesAdminPanel(this)));
             adminButtons.get(2).addActionListener(e -> swapPanel(new ArtistsAdminPanel(this)));
             adminButtons.get(3).addActionListener(e -> swapPanel(new DistributorsAdminPanel(this)));
