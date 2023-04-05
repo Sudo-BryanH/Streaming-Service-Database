@@ -73,7 +73,7 @@ public class UserPaymentsPanel extends PaymentPanel{
                     streetTextField.getText(),cityTextField.getText(),provinceTextField.getText(),postalCodeTextField.getText());
                     Card card = new Card(expDateTextField.getText(),Long.parseLong(cardNumberTextField.getText()),"Visa");
                     PaymentEndpoints.insertBillingAddress(billingAddress);
-                    if(PaymentEndpoints.makePayment(this.mainUI.getUser(),card,billingAddress,Float.parseFloat(this.amountField.getText()))){
+                    if(PaymentEndpoints.makePayment(this.mainUI.getUser(),card,billingAddress,Double.parseDouble(this.amountField.getText()))){
                         paymentFrame.dispose();
                         JOptionPane.showMessageDialog(this, "Payment Successful, Subscription Renewed");
                     }
