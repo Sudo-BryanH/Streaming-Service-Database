@@ -88,22 +88,10 @@ public class ReleasePanel extends ContentPanel{
         // TODO handle updates when add/remove from library
         String addButtonLabel = song.added ? "-" : "+";
         JButton addButton = new JButton(addButtonLabel);
-        addButton.addActionListener(e -> {
-            if (song.added) {
-                addButton.setText("+");
-                LibraryEndpoints.deleteLibSong(song, username);     // in case of conflicts, deleteLibSong is correct
-            } else {
-                addButton.setText("-");
-                LibraryEndpoints.addToLibrary(song, username);
-            }
-            song.added = !song.added;
-        });
         addButton.setPreferredSize(miniButtonSize);
         result.add(addButton);
 
-        String downloadButtonLabel = song.downloaded ? "✕" : "↓";
-        JButton downloadButton = new JButton(downloadButtonLabel);
-        downloadButton.setEnabled(song.added);
+        JButton downloadButton = new JButton();
         downloadButton.setPreferredSize(miniButtonSize);
         downloadButton.addActionListener(e -> {
             if (song.downloaded) {
@@ -117,9 +105,8 @@ public class ReleasePanel extends ContentPanel{
         });
         result.add(downloadButton);
 
-        String likeButtonLabel = song.liked ? "♥" : "♡";
-        JButton likeButton = new JButton(likeButtonLabel);
-        likeButton.setEnabled(song.added);
+
+        JButton likeButton = new JButton();
         likeButton.setPreferredSize(miniButtonSize);
         likeButton.addActionListener(e -> {
             if (song.liked) {
@@ -133,7 +120,32 @@ public class ReleasePanel extends ContentPanel{
         });
         result.add(likeButton);
 
+        addButton.addActionListener(e -> {
+            if (song.added) {
+                addButton.setText("+");
+                LibraryEndpoints.deleteLibSong(song, username);
+                song.downloaded = false;
+                song.liked = false;
+            } else {
+                addButton.setText("-");
+                LibraryEndpoints.addToLibrary(song, username);
+            }
+            song.added = !song.added;
+            updateButtons(song, downloadButton, likeButton);
+        });
+
+        updateButtons(song, downloadButton, likeButton);
         return result;
+    }
+
+    private void updateButtons(Song song, JButton downloadButton, JButton likeButton) {
+        String downloadButtonLabel = song.downloaded ? "✕" : "↓";
+        downloadButton.setEnabled(song.added);
+        downloadButton.setText(downloadButtonLabel);
+
+        String likeButtonLabel = song.liked ? "♥" : "♡";
+        likeButton.setEnabled(song.added);
+        likeButton.setText(likeButtonLabel);
     }
 
     private void createSongsScrollPane() {
