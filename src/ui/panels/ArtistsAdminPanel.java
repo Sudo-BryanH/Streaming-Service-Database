@@ -119,7 +119,7 @@ public class ArtistsAdminPanel extends ContentPanel {
             ArtistEndpoints.addArtist(artist);
 
             Artist check = ArtistEndpoints.getArtistByID(artist.id);
-            if (check != null && check.id == artist.id){
+            if (check != null && check.id == artist.id && check.name.equals(artist.name)){
                 JOptionPane.showMessageDialog(this, "Artist '" + artist.name + "' added!");
                 performSearch(queryString);
             } else {
