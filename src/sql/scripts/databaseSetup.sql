@@ -243,6 +243,8 @@ INSERT INTO Users
 VALUES ('kimdol', 'kimdol@yahoo.com', 'CS304Sucks', '2022-03-04');
 INSERT INTO Users
 VALUES ('A113', 'A113@outlook.com', 'CS304Sucks', '2022-09-10');
+INSERT INTO Users
+VALUES ('admin', 'admin@admin.com', 'admin', '2023-04-01');
 
 INSERT INTO FreeUser
 VALUES ('harperk', 13);
@@ -265,7 +267,8 @@ INSERT INTO PremiumUser
 VALUES ('celloist', '2023-03-01', '2024-02-01');
 INSERT INTO PremiumUser
 VALUES ('notstevejobs', '2021-03-01', '2022-02-01');
-
+INSERT INTO PremiumUser
+VALUES ('admin', '2023-04-01', '2024-04-01');
 
 INSERT INTO Releases
 VALUES (1, 'Whenever You Need Somebody', 'Album', '1987-11-12', 'https://cdn.spotube.com/img/rickroll.png',
