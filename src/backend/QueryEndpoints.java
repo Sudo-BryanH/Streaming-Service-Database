@@ -149,4 +149,76 @@ public class QueryEndpoints {
         return topFiveGenres;
 
     }
+    // TODO maybe use a string array to list what needs to be considered for each part
+    /*
+        SELECT Username, COUNT(*)
+        FROM Playlist p
+        GROUP BY p.Username
+
+        SELECT #Ads, COUNT(*)
+        FROM Users u INNER JOIN FreeUser f ON u.Username = f.Username
+        GROUP BY f.AdsServed
+
+
+     */
+    public static ArrayList<Pair<String, Integer>> countCreationDate() {
+        ArrayList<Pair<String, Integer>> topFiveGenres = new ArrayList<>();
+        try {
+//            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+
+            String query = String.format(
+                    "SELECT EXTRACT(year FROM CreationDate) as YearJoined, COUNT(*) as count FROM Users u WHERE year IS NOT NULL GROUP BY EXTRACT(year FROM CreationDate)");
+            ResultSet rs = statement.executeQuery(query);
+
+
+
+
+
+            while (rs.next()) {
+
+                topFiveGenres.add(new Pair<String, Integer>(Integer.toString(rs.getInt("YearJoined")), rs.getInt("count")));
+
+            }
+
+
+
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return topFiveGenres;
+
+    }
+
+    public static ArrayList<Pair<String, Integer>> countAds() {
+        ArrayList<Pair<String, Integer>> topFiveGenres = new ArrayList<>();
+        try {
+//            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
+            Connection connection = DatabaseManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+
+            String query = String.format(
+                    "SELECT f.AdsServed as YearJoined, COUNT(*) as count FROM Users u, FreeUser f GROUP BY f.AdsServed")
+            ResultSet rs = statement.executeQuery(query);
+
+
+
+
+
+            while (rs.next()) {
+
+                topFiveGenres.add(new Pair<String, Integer>(Integer.toString(rs.getInt("YearJoined")), rs.getInt("count")));
+
+            }
+
+
+
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return topFiveGenres;
+
+    }
+
 }

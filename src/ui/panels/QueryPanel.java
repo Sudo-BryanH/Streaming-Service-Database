@@ -16,11 +16,14 @@ import java.util.ArrayList;
 public class QueryPanel extends ContentPanel {
 
     ArrayList<Pair<String, String>> userInfo;
+    ArrayList<Pair<String, Integer>> userAggInfo;
     JScrollPane userScroll;
     JPanel PFButtons;
     JPanel userTable;
     boolean matter = false;
     boolean PorF = false;
+
+    JPanel userAggTable;
 
     public QueryPanel(MainUI mainUI) {
         super(mainUI);
@@ -37,7 +40,7 @@ public class QueryPanel extends ContentPanel {
         userScroll = makeScroll();
         userScroll.setViewportView(userTable);
         nestedPanels.add(userScroll);
-
+        userAggInfo = QueryEndpoints.countCreationDate();
 
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -114,6 +117,39 @@ public class QueryPanel extends ContentPanel {
 
         userTable.setVisible(true);
         userTable.setOpaque(true);
+
+        revalidate();
+        repaint();
+
+    }
+
+    // Let user choose between GROUPBY <Ads, Playlists, CreationDate (year)> by COUNT
+    // Each will have its own query method
+    private void makeUserAggTable() {
+//        queryUsers();
+
+        if (userAggTable == null) {
+            userAggTable = new JPanel();
+
+            userAggTable.setLayout(new BoxLayout(userTable, BoxLayout.PAGE_AXIS));
+            userAggTable.setBackground(Color.white);
+            userAggTable.setForeground(Color.white);
+        }
+
+        int size = QueryEndpoints.countUsers(matter, PorF);
+
+        userAggTable.setMaximumSize(new Dimension(800, size*40));
+        userAggTable.setPreferredSize(new Dimension(800, size*40));
+
+        userAggInfo = QueryEndpoints.countCreationDate();
+
+        userAggTable.removeAll();
+        for (Pair<String, String> p : userInfo) {
+            userTable.add(makeUserPanel(p.getKey(), p.getValue()));
+        }
+
+        userAggTable.setVisible(true);
+        userAggTable.setOpaque(true);
 
         revalidate();
         repaint();
@@ -207,6 +243,10 @@ public class QueryPanel extends ContentPanel {
         head.setOpaque(true);
         genres.setOpaque(true);
         genres.setVisible(true);
+        JScrollPane table = new JScrollPane(genres);
+        table.setPreferredSize(new Dimension(400, 300));
+        table.setMaximumSize(new Dimension(400, 300));
+        table.setVisible(true);
 
 
 
@@ -225,7 +265,7 @@ public class QueryPanel extends ContentPanel {
         panel.add(adsServed);
         panel.add(subStartLabel);
         panel.add(subStart);
-        panel.add(genres);
+        panel.add(table);
 
 
         JFrame frame = new JFrame();
