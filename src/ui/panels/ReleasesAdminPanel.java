@@ -1,19 +1,19 @@
 package ui.panels;
 
+import backend.DistributorEndpoints;
 import backend.ReleaseEndpoints;
+import model.Distributor;
 import model.Release;
 import ui.MainUI;
 import util.Misc;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ReleasesAdminPanel extends ContentPanel{
-    private static final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private String queryString;
     private JPanel resultsPanel;
     private JScrollPane resultsScrollPane;
@@ -184,7 +184,11 @@ public class ReleasesAdminPanel extends ContentPanel{
         JTextField typeField = new JTextField(20);
         JTextField dateField = new JTextField(20);
         JTextField urlField = new JTextField(20);
-        JTextField distField = new JTextField(20);
+
+        Distributor[] distributors = DistributorEndpoints.getDistributors().toArray(new Distributor[0]);
+        String[] distNames = Arrays.stream(distributors).map(d -> d.name).toArray(String[]::new);
+        JComboBox distSelector = new JComboBox<>(distNames);
+        infoContent.add(distSelector);
 
         if (release != null) {
             idField.setText(String.valueOf(release.id));
@@ -193,7 +197,7 @@ public class ReleasesAdminPanel extends ContentPanel{
             typeField.setText(release.type);
             dateField.setText(Misc.slashDateToDash(release.releaseDate));
             urlField.setText(release.artUrl);
-            distField.setText(release.distributor);
+            distSelector.setSelectedItem(release.distributor);
         }
 
         JButton submitButton = new JButton("Submit");
@@ -204,7 +208,7 @@ public class ReleasesAdminPanel extends ContentPanel{
                 String type = typeField.getText();
                 String date = dateField.getText();
                 String url = urlField.getText();
-                String dist = distField.getText();
+                String dist = distSelector.getSelectedItem().toString();
 
                 callback.apply(new Release(id, name, type, date, url, dist));
             } catch (Exception ex) {
@@ -225,7 +229,7 @@ public class ReleasesAdminPanel extends ContentPanel{
         infoContent.add(urlLabel);
         infoContent.add(urlField);
         infoContent.add(distLabel);
-        infoContent.add(distField);
+        infoContent.add(distSelector);
         infoContent.add(new JLabel());
         infoContent.add(submitButton);
 
