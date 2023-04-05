@@ -26,7 +26,6 @@ public class RecordsPanel extends ContentPanel{
         headerPanel.add(createTitle("Records"), BorderLayout.NORTH);
         JLabel goatedSongs = createBoldedTitle("Goated Songs: " + ReleaseEndpoints.getGoatedSongs());
         goatedSongs.setPreferredSize(new Dimension(20,50));
-        goatedSongs.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
         headerPanel.add(goatedSongs, BorderLayout.CENTER);
         return headerPanel;
     }
