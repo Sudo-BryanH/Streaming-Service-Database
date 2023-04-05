@@ -2,7 +2,7 @@ package ui.panels;
 
 import backend.ArtistEndpoints;
 import backend.LibraryEndpoints;
-import backend.ReleaseEndpoints;
+import backend.SongEndpoints;
 import model.Release;
 import model.Song;
 import ui.MainUI;
@@ -48,7 +48,7 @@ public class ReleasePanel extends ContentPanel{
     }
 
     private void fillSongs() {
-        List<Song> songs = ReleaseEndpoints.getSongsByRelease(release, mainUI.getUser().getUsername());
+        List<Song> songs = SongEndpoints.getSongsByRelease(release, mainUI.getUser().getUsername());
         for (Song song : songs) {
             songsPanel.add(getSongPanel(song));
         }
@@ -59,22 +59,22 @@ public class ReleasePanel extends ContentPanel{
     private JPanel getSongPanel(Song song) {
         String username = mainUI.getUser().getUsername();
         JPanel result = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        Dimension miniButtonSize = new Dimension(30,20);
+        Dimension miniButtonSize = new Dimension(25,20);
 
         JButton playButton = new JButton("▶");
         playButton.setPreferredSize(miniButtonSize);
         result.add(playButton);
 
         JLabel numLabel = new JLabel(Integer.toString(song.trackNum));
-        numLabel.setPreferredSize(new Dimension(15,20));
+        numLabel.setPreferredSize(new Dimension(25,20));
         result.add(numLabel);
 
         JLabel nameLabel = new JLabel(song.name);
-        nameLabel.setPreferredSize(new Dimension(200,20));
+        nameLabel.setPreferredSize(new Dimension(210,20));
         result.add(nameLabel);
 
         JLabel artistLabel = new JLabel(Misc.artistsToString(ArtistEndpoints.getArtistsBySong(song)));
-        artistLabel.setPreferredSize(new Dimension(175,20));
+        artistLabel.setPreferredSize(new Dimension(185,20));
         result.add(artistLabel);
 
         JLabel genreLabel = new JLabel(song.genre);

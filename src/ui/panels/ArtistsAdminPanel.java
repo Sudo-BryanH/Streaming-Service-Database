@@ -160,7 +160,6 @@ public class ArtistsAdminPanel extends ContentPanel {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Info parsing failed :(\n" + ex.getMessage());
             }
-
             infoFrame.dispose();
         });
 
