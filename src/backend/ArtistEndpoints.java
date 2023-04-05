@@ -88,6 +88,14 @@ public class ArtistEndpoints {
         query(String.format(query, artist.id));
     }
 
+    public static List<Artist> getArtistsMostSongs() {
+        String query = "SELECT c1.ID, c1.Name " +
+                "FROM CountSongsPerArtist c1 " +
+                "WHERE c1.Count >= ALL (SELECT c2.Count FROM CountSongsPerArtist c2)";
+        return getArtistsHelper(query);
+    }
+
+
     // **************** HELPERS ****************
 
     private static List<Artist> getArtistsHelper(String query){

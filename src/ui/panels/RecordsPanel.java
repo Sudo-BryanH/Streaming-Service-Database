@@ -1,10 +1,14 @@
 package ui.panels;
 
+import backend.ArtistEndpoints;
 import backend.ReleaseEndpoints;
+import model.Artist;
 import ui.MainUI;
+import util.Misc;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 import static ui.panels.UserPaymentsPanel.createBoldedTitle;
 
@@ -17,16 +21,27 @@ public class RecordsPanel extends ContentPanel{
     protected void generate() {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        JPanel goatedSongsPanel = generateGoatedSongsPanel();
-        add(goatedSongsPanel,BorderLayout.NORTH);
+
+        add(createTitle("Records"), BorderLayout.NORTH);
+
+        JPanel innerPanel = new JPanel();
+        innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
+        add(innerPanel, BorderLayout.WEST);
+
+        innerPanel.add(generateGoatedSongs());
+        innerPanel.add(generateMostSongs());
     }
 
-    private JPanel generateGoatedSongsPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.add(createTitle("Records"), BorderLayout.NORTH);
+    private JLabel generateGoatedSongs() {
         JLabel goatedSongs = createBoldedTitle("Goated Songs: " + ReleaseEndpoints.getGoatedSongs());
-        goatedSongs.setPreferredSize(new Dimension(20,50));
-        headerPanel.add(goatedSongs, BorderLayout.CENTER);
-        return headerPanel;
+        goatedSongs.setPreferredSize(new Dimension(500,40));
+        return goatedSongs;
+    }
+
+    private JLabel generateMostSongs() {
+        List<Artist> artists = ArtistEndpoints.getArtistsMostSongs();
+        JLabel label = createBoldedTitle("Artist(s) with Most Songs: " + Misc.artistsToString(artists));
+        label.setPreferredSize(new Dimension(500,40));
+        return label;
     }
 }
