@@ -10,7 +10,6 @@ import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ReleasesAdminPanel extends ContentPanel{
@@ -29,7 +28,6 @@ public class ReleasesAdminPanel extends ContentPanel{
 
     @Override
     protected void generate() {
-
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -46,19 +44,12 @@ public class ReleasesAdminPanel extends ContentPanel{
 
     private void performSearch(String query) {
         queryString = query;
-        String[] words = query.split("\\s+");
-
-        List<String> combinations = new ArrayList<>();
-        for (int i = 0; i < words.length; i++) {
-            for (int j = i + 1; j <= words.length; j++) {
-                combinations.add(String.join(" ", Arrays.copyOfRange(words, i, j)));
-            }
-        }
+        List<String> combinations = Misc.stringCombinations(query);
 
         List<Release> results = new ArrayList<>();
         for (String c : combinations) {
             List<Release> newResults = ReleaseEndpoints.searchReleases(c);
-            Misc.mergeReleaseLists(results, newResults);
+            mergeLists(results, newResults);
         }
 
         if (results.size() > 0) {
@@ -92,14 +83,14 @@ public class ReleasesAdminPanel extends ContentPanel{
         artistLabel.setPreferredSize(new Dimension(250,20));
         result.add(artistLabel);
 
-        JButton songsButton = new JButton("View");
+        JButton songsButton = new JButton("Manage");
         songsButton.setPreferredSize(new Dimension(60,20));
         songsButton.addActionListener(e -> mainUI.swapPanel(new ReleasePanel(mainUI, release)));
         result.add(songsButton);
 
         JButton editButton = new JButton("✎");
         editButton.setPreferredSize(miniButtonSize);
-        editButton.addActionListener(e -> releaseInfoPrompt(release, this::editRelease));
+        editButton.addActionListener(e -> infoPrompt(release, this::edit));
         result.add(editButton);
 
         JButton deleteButton = new JButton("✕");
@@ -126,7 +117,7 @@ public class ReleasesAdminPanel extends ContentPanel{
         searchBarPanel.add(enterButton);
 
         JButton addButton = new JButton("Add Release");
-        addButton.addActionListener(e -> releaseInfoPrompt(null, this::addRelease));
+        addButton.addActionListener(e -> infoPrompt(null, this::add));
         searchBarPanel.add(addButton);
 
         return searchBarPanel;
@@ -140,7 +131,7 @@ public class ReleasesAdminPanel extends ContentPanel{
         resultsScrollPane.setVisible(false);
     }
 
-    private void addRelease(Release release) {
+    private void add(Release release) {
         try {
             ReleaseEndpoints.addRelease(release);
 
@@ -157,7 +148,7 @@ public class ReleasesAdminPanel extends ContentPanel{
         }
     }
 
-    private void editRelease(Release release) {
+    private void edit(Release release) {
         try {
             ReleaseEndpoints.editRelease(release);
 
@@ -173,7 +164,7 @@ public class ReleasesAdminPanel extends ContentPanel{
         }
     }
 
-    private void releaseInfoPrompt(Release release, FunctionCallback callback) {
+    private void infoPrompt(Release release, FunctionCallback callback) {
         JFrame infoFrame = new JFrame("Release Info");
         infoFrame.setSize(new Dimension(450,300));
         infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -197,6 +188,7 @@ public class ReleasesAdminPanel extends ContentPanel{
 
         if (release != null) {
             idField.setText(String.valueOf(release.id));
+            idField.setEnabled(false);
             nameField.setText(release.name);
             typeField.setText(release.type);
             dateField.setText(Misc.slashDateToDash(release.releaseDate));
@@ -239,5 +231,13 @@ public class ReleasesAdminPanel extends ContentPanel{
 
         infoContent.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         infoFrame.add(infoContent);
+    }
+
+    public static void mergeLists(List<Release> target, List<Release> addition) {
+        for (Release a : addition) {
+            if (!target.contains(a)) {
+                target.add(a);
+            }
+        }
     }
 }

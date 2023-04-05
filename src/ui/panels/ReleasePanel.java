@@ -85,7 +85,6 @@ public class ReleasePanel extends ContentPanel{
         durationLabel.setPreferredSize(new Dimension(40,20));
         result.add(durationLabel);
 
-        // TODO handle updates when add/remove from library
         String addButtonLabel = song.added ? "-" : "+";
         JButton addButton = new JButton(addButtonLabel);
         addButton.setPreferredSize(miniButtonSize);
@@ -104,7 +103,6 @@ public class ReleasePanel extends ContentPanel{
             song.downloaded = !song.downloaded;
         });
         result.add(downloadButton);
-
 
         JButton likeButton = new JButton();
         likeButton.setPreferredSize(miniButtonSize);
