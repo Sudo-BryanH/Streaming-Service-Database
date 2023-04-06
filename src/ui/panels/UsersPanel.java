@@ -115,7 +115,7 @@ public class UsersPanel extends ContentPanel {
                     case "Email":
                         insertGen = new String[]{"u.Email"};
                         break;
-                    case "Account Age":
+                    case "Account Age (Month)":
                         insertGen = new String[]{"(TO_DATE('2023-04-05', 'YYYY-MM-DD') -  u.CreationDate) / 30"};
                         PorF = false;
                         break;
