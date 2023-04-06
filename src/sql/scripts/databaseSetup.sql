@@ -622,6 +622,8 @@ INSERT INTO AddsToLibrary
 VALUES (4, 1, 'jfk1975', 1, 1);
 INSERT INTO AddsToLibrary
 VALUES (4, 1, 'sleepy', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (3, 1, 'sleepy', 1, 1);
 
 INSERT INTO FeaturedIn
 VALUES (1, 1, 1);

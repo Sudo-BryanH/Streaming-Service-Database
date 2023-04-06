@@ -6,6 +6,8 @@ import java.security.NoSuchAlgorithmException;
 
 
 // https://www.baeldung.com/java-password-hashing
+// https://stackoverflow.com/questions/2624192/good-hash-function-for-strings
+//https://www.baeldung.com/sha-256-hashing-java
 public class PasswordHasher {
     public static String hashPassword(String password) {
         try {
