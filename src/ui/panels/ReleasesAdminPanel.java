@@ -212,6 +212,10 @@ public class ReleasesAdminPanel extends ContentPanel{
                 String url = urlField.getText();
                 String dist = distSelector.getSelectedItem().toString();
 
+                if (date.equals("")) {
+                    throw new Exception("Date is empty!");
+                }
+
                 callback.apply(new Release(id, name, type, date, url, dist));
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Info parsing failed :(\n" + ex.getMessage());
