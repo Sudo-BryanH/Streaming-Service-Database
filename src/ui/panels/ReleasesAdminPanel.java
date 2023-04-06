@@ -136,7 +136,9 @@ public class ReleasesAdminPanel extends ContentPanel{
             ReleaseEndpoints.addRelease(release);
 
             Release check = ReleaseEndpoints.getReleaseByID(release.id);
-            if (check != null && check.id == release.id){
+            if (check != null && check.id == release.id && check.name.equals(release.name) && check.type.equals(release.type)
+                && check.releaseDate.equals(release.releaseDate) && check.artUrl.equals(release.artUrl)
+                && check.distributor.equals(release.distributor)){
                 performSearch(queryString);
                 JOptionPane.showMessageDialog(this, "Release '" + release.name + "' added!");
             } else {

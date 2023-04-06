@@ -79,7 +79,7 @@ public class ArtistEndpoints {
     }
 
     public static void addArtist(Artist artist) {
-        String query = "INSERT INTO Artist VALUES (%d, '%s', NULL)";
+        String query = "INSERT INTO Artist VALUES (%d, '%s')";
         query(String.format(query, artist.id, artist.name));
     }
 
