@@ -39,7 +39,7 @@ public class UsersPanel extends ContentPanel {
     @Override
     protected void generate(){
 
-
+//        ArrayList<ArrayList<String>> s = ProjectionEndpoint.getProjection("Users", new String[]{"Username", "Email", "Password", "CreationDate"});
         JPanel nestedPanels = new JPanel();
         BoxLayout layout = new BoxLayout(nestedPanels, BoxLayout.Y_AXIS);
         nestedPanels.setLayout(layout);
@@ -192,11 +192,11 @@ public class UsersPanel extends ContentPanel {
                         insertCond = new String[]{"Username ", " Playlist p", "", " p.Username"};
                         break;
                     case "3. # of Songs in Library":
+                        insertCond = new String[]{"Username ", " AddsToLibrary a", "", " a.Username"};
 
                         break;
                     default:
 
-                        insertCond = new String[]{"Username ", " AddsToLibrary a", "", " a.Username"};
                         String s = insertCond[0];
                         break;
                 }
