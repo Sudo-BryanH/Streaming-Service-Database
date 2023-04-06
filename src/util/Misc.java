@@ -1,6 +1,7 @@
 package util;
 
 import model.Artist;
+import model.Release;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +26,19 @@ public class Misc {
 
         for (Artist artist : artists) {
             result.append(artist.name).append(", ");
+        }
+        if (result.length() != 0) {
+            result.delete(result.length() - 2, result.length());
+        }
+
+        return result.toString();
+    }
+
+    public static String releasesToString(List<Release> releases) {
+        StringBuilder result = new StringBuilder();
+
+        for (Release release : releases) {
+            result.append(release.name).append(", ");
         }
         if (result.length() != 0) {
             result.delete(result.length() - 2, result.length());
