@@ -50,7 +50,7 @@ CREATE TABLE Song
     TrackNum  INT,
     Name      VARCHAR(50),
     Duration  INT,
-    Genre     CHAR(50),
+    Genre     VARCHAR(50),
     Plays     INT,
     PRIMARY KEY (ReleaseID, TrackNum),
     FOREIGN KEY (ReleaseID)
@@ -183,19 +183,6 @@ CREATE TABLE FeaturedIn
             ON DELETE CASCADE
 );
 
-CREATE TABLE Follows
-(
-    Username VARCHAR(50),
-    ArtistID INT,
-    PRIMARY KEY (Username, ArtistID),
-    FOREIGN KEY (Username)
-        REFERENCES Users (Username)
-            ON DELETE CASCADE,
-    FOREIGN KEY (ArtistID)
-        REFERENCES Artist (ID)
-            ON DELETE CASCADE
-);
-
 CREATE TABLE Creates
 (
     ReleaseID INT,
@@ -230,29 +217,33 @@ INSERT INTO Distributor
 VALUES ('Sony Music', 'https://www.sonymusic.com');
 INSERT INTO Distributor
 VALUES ('Swinglong Ltd.', NULL);
+INSERT INTO Distributor
+VALUES ('Monstercat', 'https://www.monstercat.com/');
+INSERT INTO Distributor
+VALUES ('Warner Music Group', 'https://www.wmg.com/');
 
 INSERT INTO Users
-VALUES ('eenie meenie', 'eenie@gmail.com', 'whatever', '2021-02-09');
+VALUES ('eenie meenie', 'eenie@gmail.com', '85738f8f9a7f1b04b5329c590ebcb9e425925c6d0984089c43a022de4f19c281', '2021-02-09');
 INSERT INTO Users
-VALUES ('sleepy', 'sleepingInClass@gmail.com', 'allnighter', '2023-01-01');
+VALUES ('sleepy', 'sleepingInClass@gmail.com', '1510a248a4c1b04080c784b146b67252c6fcfa790a28aa0cef1b86a67a884126', '2023-01-01');
 INSERT INTO Users
-VALUES ('celloist', 'cello-ing@yahoo.com', 'prez', '2021-04-06');
+VALUES ('celloist', 'cello-ing@yahoo.com', '0d303c1ac4b39b31576f09333e181e5e27b4167aeafd5e3bce3c871bb8629f56', '2021-04-06');
 INSERT INTO Users
-VALUES ('notstevejobs', 'jobs@gmail.com', 'googlebest', '2020-01-09');
+VALUES ('notstevejobs', 'jobs@gmail.com', '2d665312f36c582fd82a5fc80e82ea3cb5b77b2b250e7d8e54830374bbdcccf9', '2020-01-09');
 INSERT INTO Users
-VALUES ('jfk1975', 'jfk@yahoo.com', 'ishouldbedead', '2019-01-03');
+VALUES ('jfk1975', 'jfk@yahoo.com', 'aa98ae2f5bc668bd7e3795732a89ad3722cf3868eed7a3fc0e671447aa7c5a6c', '2019-01-03');
 INSERT INTO Users
 VALUES ('bryanh', 'bryan@gmail.com', 'bcb3f69829ca414398514d9ec8a4c2214023c77a79e49f6eb1e4869a90741309', '2022-01-01');
 INSERT INTO Users
-VALUES ('harperk', 'harper@gmail.com', 'CS310Sucks', '2022-02-02');
+VALUES ('harperk', 'harper@gmail.com', '9d7eb6416f0f999a65a35fdecbba884be223a41417d1d6ba6f60afb78a6056bb', '2022-02-02');
 INSERT INTO Users
-VALUES ('dhrubok', 'dhrubo@hotmail.com', 'CS210Sucks', '2021-09-01');
+VALUES ('dhrubok', 'dhrubo@hotmail.com', 'a087b25fa26d62555cfa02310c095b86e065cfcdc8fadeacbfcf4252e9c652e3', '2021-09-01');
 INSERT INTO Users
-VALUES ('kimdol', 'kimdol@yahoo.com', 'CS304Sucks', '2022-03-04');
+VALUES ('kimdol', 'kimdol@yahoo.com', '4cfd8250b504a3d141f853397a90bcfda8c7a291549d7ab37448fe59ee97c435', '2022-03-04');
 INSERT INTO Users
-VALUES ('A113', 'A113@outlook.com', 'CS304Sucks', '2022-09-10');
+VALUES ('A113', 'A113@outlook.com', '4cfd8250b504a3d141f853397a90bcfda8c7a291549d7ab37448fe59ee97c435', '2022-09-10');
 INSERT INTO Users
-VALUES ('admin', 'admin@admin.com', 'admin', '2023-04-01');
+VALUES ('admin', 'admin@admin.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', '2023-04-01');
 
 INSERT INTO FreeUser
 VALUES ('harperk', 13);
@@ -294,6 +285,88 @@ VALUES (5, 'Superunknown', 'EP', '2006-04-17', 'https://cdn.spotube.com/img/soun
 INSERT INTO Releases
 VALUES (6, 'Take On Me (2017 Acoustic)', 'Single', '1984-09- 01', 'https://cdn.spotube.com/img/aha.png',
         'Swinglong Ltd.');
+INSERT INTO Releases
+VALUES (7, 'Meowfest', 'Album', '2003-10-10', 'https://cdn.spotube.com/img/kitty.png',
+        'Monstercat');
+INSERT INTO Releases
+VALUES (8, 'The Barker is in Town', 'EP', '2003-01-01', 'https://cdn.spotube.com/img/doggo.png',
+        'Monstercat');
+INSERT INTO Releases
+VALUES (9, 'Dogs Don''t Suck', 'Single', '2003-10-10', 'https://cdn.spotube.com/img/friends.png',
+        'Monstercat');
+INSERT INTO Releases
+VALUES (10, 'Only Me', 'EP', '2015-02-27', 'https://cdn.spotube.com/img/notuu.png',
+        'Warner Music Group');
+INSERT INTO Releases
+VALUES (11, 'Sonder', 'EP', '2015-08-12', 'https://cdn.spotube.com/img/sonder.png',
+        'Warner Music Group');
+INSERT INTO Releases
+VALUES (12, 'Not A Chance', 'Single', '2012-05-29', 'https://cdn.spotube.com/img/nac.png',
+        'Monstercat');
+INSERT INTO Releases
+VALUES (13, 'Zeka', 'Single', '2018-12-31', 'https://cdn.spotube.com/img/zeka.png',
+        'Sony Music');
+INSERT INTO Releases
+VALUES (14, 'Basic', 'Single', '2018-12-31', 'https://cdn.spotube.com/img/basic.png',
+        'Sony Music');
+
+INSERT INTO Artist
+VALUES (1, 'Rick Astley');
+INSERT INTO Artist
+VALUES (2, 'Smash Mouth');
+INSERT INTO Artist
+VALUES (3, 'Curb Your Enthusiasm');
+INSERT INTO Artist
+VALUES (4, 'Luciano Michelini');
+INSERT INTO Artist
+VALUES (5, 'Nemesis');
+INSERT INTO Artist
+VALUES (6, 'Soundgarden');
+INSERT INTO Artist
+VALUES (7, 'a-ha');
+INSERT INTO Artist
+VALUES (8, 'DJ KitKat');
+INSERT INTO Artist
+VALUES (9, 'Mr. Barker');
+INSERT INTO Artist
+VALUES (10, 'Not UU');
+INSERT INTO Artist
+VALUES (11, 'Zeka');
+INSERT INTO Artist
+VALUES (12, 'John Doe');
+
+INSERT INTO Creates
+VALUES (1, 1);
+INSERT INTO Creates
+VALUES (2, 2);
+INSERT INTO Creates
+VALUES (3, 3);
+INSERT INTO Creates
+VALUES (3, 4);
+INSERT INTO Creates
+VALUES (4, 5);
+INSERT INTO Creates
+VALUES (5, 6);
+INSERT INTO Creates
+VALUES (6, 7);
+INSERT INTO Creates
+VALUES (7, 8);
+INSERT INTO Creates
+VALUES (8, 9);
+INSERT INTO Creates
+VALUES (9, 8);
+INSERT INTO Creates
+VALUES (9, 9);
+INSERT INTO Creates
+VALUES (10, 10);
+INSERT INTO Creates
+VALUES (11, 10);
+INSERT INTO Creates
+VALUES (12, 8);
+INSERT INTO Creates
+VALUES (13, 11);
+INSERT INTO Creates
+VALUES (14, 12);
 
 INSERT INTO Song
 VALUES (1, 1, 'Never Gonna Give You Up', 214, 'Pop', 213422997);
@@ -348,24 +421,70 @@ VALUES (4, 4, 'Nirbashon', 234, 'Rock', 5359039);
 INSERT INTO Song
 VALUES (5, 1, 'Let Me Down', 313, 'Hard Rock', 508989);
 INSERT INTO Song
-VALUES (5, 2, 'My Wave', 283, 'Hard Rock', 623314);
+VALUES (5, 2, 'My Wave', 304, 'Hard Rock', 623314);
 INSERT INTO Song
 VALUES (5, 3, 'Fell On Black Days', 396, 'Hard Rock', 726962);
 INSERT INTO Song
 VALUES (6, 1, 'Take On Me (2017 Acoustic)', 184, 'Pop', 6666852);
+INSERT INTO Song
+VALUES (7, 1, 'Start Hop, Jump', 294, 'Dance', 1412892);
+INSERT INTO Song
+VALUES (7, 2, 'Pounce Bounce House', 287, 'Dance', 3295024);
+INSERT INTO Song
+VALUES (7, 3, 'Pawsitivity', 124, 'Pop', 12895982);
+INSERT INTO Song
+VALUES (7, 4, 'Tails Up, Tails Down', 252, 'Dance', 2932104);
+INSERT INTO Song
+VALUES (7, 5, 'Meowrr', 244, 'Alternative', 292501);
+INSERT INTO Song
+VALUES (7, 6, 'Just a Mere Kitten', 355, 'Ballad', 214214901);
+INSERT INTO Song
+VALUES (7, 7, 'Show Your Stripes', 294, 'Dance', 125292);
+INSERT INTO Song
+VALUES (7, 8, 'Not 4 You', 204, 'Dance', 25920);
+INSERT INTO Song
+VALUES (7, 9, 'Kickback, Relax', 292, 'Dance', 242425);
+INSERT INTO Song
+VALUES (7, 10, 'Meowrr Part 2', 189, 'Dance', 1412892);
+INSERT INTO Song
+VALUES (7, 11, 'High on Catnip St.', 193, 'Hip-hop', 12591250);
+INSERT INTO Song
+VALUES (7, 12, 'KitKat', 290, 'Dance', 215912590);
+INSERT INTO Song
+VALUES (7, 13, 'Unlucky', 182, 'Dance', 12590125);
+INSERT INTO Song
+VALUES (7, 14, 'Dogs Suck', 450, 'Pop', 12590125);
+INSERT INTO Song
+VALUES (7, 15, 'Paws Off My Ending', 900, 'Trance', 2592050);
+INSERT INTO Song
+VALUES (8, 1, 'Woof, Poof Roof', 241, 'Electronic', 1412892);
+INSERT INTO Song
+VALUES (8, 2, 'The Barker is in Town', 192, 'Hip-hop', 3295024);
+INSERT INTO Song
+VALUES (8, 3, 'Barked Up the Wrong Tree', 285, 'Electronic', 12895982);
+INSERT INTO Song
+VALUES (8, 4, 'Cone of Shame', 301, 'Classical', 2932104);
+INSERT INTO Song
+VALUES (8, 5, 'Wag, Wag', 127, 'Pop', 292501);
+INSERT INTO Song
+VALUES (9, 1, 'Dogs Don''t Suck', 193, 'Dance', 12521521);
+INSERT INTO Song
+VALUES (10, 1, 'Would You', 209, 'Pop', 24121453);
+INSERT INTO Song
+VALUES (10, 2, 'Only Me', 124, 'Pop', 9358249);
+INSERT INTO Song
+VALUES (10, 3, 'Be Fine', 158, 'Pop', 2920959025);
+INSERT INTO Song
+VALUES (10, 4, 'Blue UU', 148, 'Pop', 428948429);
+INSERT INTO Song
+VALUES (11, 1, 'Sonder', 294, 'Alternative', 2392498);
+INSERT INTO Song
+VALUES (12, 1, 'Not A Chance', 359, 'Trance', 29485290);
+INSERT INTO Song
+VALUES (13, 1, 'Zeka', 180, 'Bluegrass', 2727920);
+INSERT INTO Song
+VALUES (14, 1, 'Basic', 153, 'Pop', 2727920);
 
-INSERT INTO Artist
-VALUES (1, 'Rick Astley');
-INSERT INTO Artist
-VALUES (2, 'Smash Mouth');
-INSERT INTO Artist
-VALUES (3, 'Curb Your Enthusiasm');
-INSERT INTO Artist
-VALUES (4, 'Luciano Michelini');
-INSERT INTO Artist
-VALUES (5, 'Nemesis');
-INSERT INTO Artist
-VALUES (6, 'a-ha');
 
 INSERT INTO CardTable
 VALUES ('Visa', 2394235323332438, '2025-01-01');
@@ -481,6 +600,30 @@ INSERT INTO AddsToLibrary
 VALUES (4, 4, 'sleepy', 1, 0);
 INSERT INTO AddsToLibrary
 VALUES (3, 1, 'A113', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'A113', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'admin', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'eenie meenie', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'bryanh', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'harperk', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'dhrubok', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'kimdol', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'celloist', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'notstevejobs', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'jfk1975', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'sleepy', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (3, 1, 'sleepy', 1, 1);
 
 INSERT INTO FeaturedIn
 VALUES (1, 1, 1);
@@ -492,26 +635,4 @@ INSERT INTO FeaturedIn
 VALUES (4, 4, 4);
 INSERT INTO FeaturedIn
 VALUES (5, 3, 1);
-
-INSERT INTO Follows
-VALUES ('bryanh', 1);
-INSERT INTO Follows
-VALUES ('kimdol', 2);
-INSERT INTO Follows
-VALUES ('eenie meenie', 3);
-INSERT INTO Follows
-VALUES ('A113', 2);
-INSERT INTO Follows
-VALUES ('sleepy', 5);
-
-INSERT INTO Creates
-VALUES (1, 1);
-INSERT INTO Creates
-VALUES (2, 2);
-INSERT INTO Creates
-VALUES (3, 3);
-INSERT INTO Creates
-VALUES (4, 4);
-INSERT INTO Creates
-VALUES (5, 5);
 
