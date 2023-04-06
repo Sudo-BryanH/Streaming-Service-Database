@@ -88,11 +88,11 @@ public class ArtistEndpoints {
         query(String.format(query, artist.id));
     }
 
-    public static List<Artist> getArtistsMostSongs() {
-        String query = "SELECT c1.ID, c1.Name " +
+    public static String getArtistsMostSongs() {
+        String query = "SELECT c1.Name " +
                 "FROM CountSongsPerArtist c1 " +
                 "WHERE c1.Count >= ALL (SELECT c2.Count FROM CountSongsPerArtist c2)";
-        return getArtistsHelper(query);
+        return getArtistsNameList(query);
     }
 
 
@@ -113,6 +113,28 @@ public class ArtistEndpoints {
 
             results.close();
             return artists;
+
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+            return null;
+        }
+    }
+
+    private static String getArtistsNameList(String query){
+        ResultSet results = query(query);
+        try {
+            StringBuilder releases = new StringBuilder();
+
+            while (results.next()){
+                String name = results.getString("Name");
+                releases.append(name).append(", ");
+            }
+            if (releases.length() != 0) {
+                releases.delete(releases.length() - 2, releases.length());
+            }
+
+            results.close();
+            return releases.toString();
 
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
