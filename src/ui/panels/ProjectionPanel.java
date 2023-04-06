@@ -1,8 +1,11 @@
 package ui.panels;
 
+import backend.ProjectionEndpoint;
 import ui.MainUI;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +39,7 @@ public class ProjectionPanel extends ContentPanel{
     private void initializeDropDownsCheckBoxes() {
         tableColumns = new HashMap<>();
         tableColumns.put("Distributor", new ArrayList<>(Arrays.asList("Name","Website")));
-        tableColumns.put("Users", new ArrayList<>(Arrays.asList("Username", "Email", "Password")));
+        tableColumns.put("Users", new ArrayList<>(Arrays.asList("Username", "Email", "Password","CreationDate")));
         tableColumns.put("FreeUser", new ArrayList<>(Arrays.asList("Username", "AdsServed")));
         tableColumns.put("PremiumUser", new ArrayList<>(Arrays.asList("Username", "SubStartDate", "SubEndDate")));
         tableColumns.put("Releases", new ArrayList<>(Arrays.asList("ID", "Name", "Type","ReleaseDate","ArtURL","DistributorName")));
@@ -62,18 +65,51 @@ public class ProjectionPanel extends ContentPanel{
         }
         JButton projectionButton = new JButton("Project!");
         projectionButton.addActionListener(e -> {
-            System.out.println(selectedTable);
+            ArrayList<String> columns = new ArrayList<>();
             for (Component comp : checkboxesPanel.getComponents()) {
                 if (comp instanceof JCheckBox) {
                     JCheckBox checkbox = (JCheckBox) comp;
                     if (checkbox.isSelected()) {
-                        System.out.println(checkbox.getText());
+                        columns.add(checkbox.getText());
                     }
                 }
             }
+            ArrayList<ArrayList<String>> result = ProjectionEndpoint.getProjection(selectedTable,columns);
+            generateViewFrame(selectedTable,result,columns);
+
         });
         checkboxesPanel.add(projectionButton);
         checkboxesPanel.repaint();
         checkboxesPanel.revalidate();
+    }
+
+    private void generateViewFrame(String tableHeader, ArrayList<ArrayList<String>> columnsResult, ArrayList<String> columnHeader){
+        JFrame viewFrame = new JFrame();
+        JTable table = new JTable();
+        JTableHeader header = table.getTableHeader();
+        header.setBackground(Color.GRAY);
+        header.setForeground(Color.WHITE);
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel title = UserPaymentsPanel.createBoldedTitle(tableHeader);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        Object[] columns = columnHeader.toArray();
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(columns);
+        if(columnsResult != null){
+            for(ArrayList<String> row : columnsResult){
+                model.addRow(row.toArray());
+            }
+        }
+        table.setModel(model);
+        JScrollPane pane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+        table.setPreferredScrollableViewportSize(new Dimension(800, 600));
+        panel.add(title,BorderLayout.NORTH);
+        panel.add(pane,BorderLayout.WEST);
+        viewFrame.add(panel);
+        viewFrame.setLocationRelativeTo(null);
+        viewFrame.setSize(1000,1000);
+        viewFrame.setResizable(false);
+        viewFrame.setVisible(true);
     }
 }
