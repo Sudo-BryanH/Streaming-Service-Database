@@ -223,27 +223,27 @@ INSERT INTO Distributor
 VALUES ('Warner Music Group', 'https://www.wmg.com/');
 
 INSERT INTO Users
-VALUES ('eenie meenie', 'eenie@gmail.com', 'whatever', '2021-02-09');
+VALUES ('eenie meenie', 'eenie@gmail.com', '85738f8f9a7f1b04b5329c590ebcb9e425925c6d0984089c43a022de4f19c281', '2021-02-09');
 INSERT INTO Users
-VALUES ('sleepy', 'sleepingInClass@gmail.com', 'allnighter', '2023-01-01');
+VALUES ('sleepy', 'sleepingInClass@gmail.com', '1510a248a4c1b04080c784b146b67252c6fcfa790a28aa0cef1b86a67a884126', '2023-01-01');
 INSERT INTO Users
-VALUES ('celloist', 'cello-ing@yahoo.com', 'prez', '2021-04-06');
+VALUES ('celloist', 'cello-ing@yahoo.com', '0d303c1ac4b39b31576f09333e181e5e27b4167aeafd5e3bce3c871bb8629f56', '2021-04-06');
 INSERT INTO Users
-VALUES ('notstevejobs', 'jobs@gmail.com', 'googlebest', '2020-01-09');
+VALUES ('notstevejobs', 'jobs@gmail.com', '2d665312f36c582fd82a5fc80e82ea3cb5b77b2b250e7d8e54830374bbdcccf9', '2020-01-09');
 INSERT INTO Users
-VALUES ('jfk1975', 'jfk@yahoo.com', 'ishouldbedead', '2019-01-03');
+VALUES ('jfk1975', 'jfk@yahoo.com', 'aa98ae2f5bc668bd7e3795732a89ad3722cf3868eed7a3fc0e671447aa7c5a6c', '2019-01-03');
 INSERT INTO Users
 VALUES ('bryanh', 'bryan@gmail.com', 'bcb3f69829ca414398514d9ec8a4c2214023c77a79e49f6eb1e4869a90741309', '2022-01-01');
 INSERT INTO Users
-VALUES ('harperk', 'harper@gmail.com', 'CS310Sucks', '2022-02-02');
+VALUES ('harperk', 'harper@gmail.com', '9d7eb6416f0f999a65a35fdecbba884be223a41417d1d6ba6f60afb78a6056bb', '2022-02-02');
 INSERT INTO Users
-VALUES ('dhrubok', 'dhrubo@hotmail.com', 'CS210Sucks', '2021-09-01');
+VALUES ('dhrubok', 'dhrubo@hotmail.com', 'a087b25fa26d62555cfa02310c095b86e065cfcdc8fadeacbfcf4252e9c652e3', '2021-09-01');
 INSERT INTO Users
-VALUES ('kimdol', 'kimdol@yahoo.com', 'CS304Sucks', '2022-03-04');
+VALUES ('kimdol', 'kimdol@yahoo.com', '4cfd8250b504a3d141f853397a90bcfda8c7a291549d7ab37448fe59ee97c435', '2022-03-04');
 INSERT INTO Users
-VALUES ('A113', 'A113@outlook.com', 'CS304Sucks', '2022-09-10');
+VALUES ('A113', 'A113@outlook.com', '4cfd8250b504a3d141f853397a90bcfda8c7a291549d7ab37448fe59ee97c435', '2022-09-10');
 INSERT INTO Users
-VALUES ('admin', 'admin@admin.com', 'admin', '2023-04-01');
+VALUES ('admin', 'admin@admin.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', '2023-04-01');
 
 INSERT INTO FreeUser
 VALUES ('harperk', 13);
@@ -600,6 +600,28 @@ INSERT INTO AddsToLibrary
 VALUES (4, 4, 'sleepy', 1, 0);
 INSERT INTO AddsToLibrary
 VALUES (3, 1, 'A113', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'A113', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'admin', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'eenie meenie', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'bryanh', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'harperk', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'dhrubok', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'kimdol', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'celloist', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'notstevejobs', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'jfk1975', 1, 1);
+INSERT INTO AddsToLibrary
+VALUES (4, 1, 'sleepy', 1, 1);
 
 INSERT INTO FeaturedIn
 VALUES (1, 1, 1);
