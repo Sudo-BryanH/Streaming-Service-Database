@@ -51,7 +51,7 @@ public class SongEndpoints {
     }
 
     public static void editSong(Song song) {
-        String query = "UPDATE Releases SET " +
+        String query = "UPDATE Song SET " +
                 "Name = '%s', Duration = %d, Genre = '%s', Plays = %d " +
                 "WHERE ReleaseID = %d AND TrackNum = %d";
         query(String.format(query, song.name, song.duration, song.genre, song.plays, song.releaseID, song.trackNum));
