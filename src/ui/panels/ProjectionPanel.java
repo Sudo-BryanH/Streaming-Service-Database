@@ -54,6 +54,7 @@ public class ProjectionPanel extends ContentPanel{
         tableColumns.put("PlaylistIsIn", new ArrayList<>(Arrays.asList("Username", "Name", "ReleaseID", "TrackNum")));
         tableColumns.put("AddsToLibrary", new ArrayList<>(Arrays.asList("ReleaseID", "TrackNum", "Username", "Downloaded", "Liked")));
         tableColumns.put("FeaturedIn", new ArrayList<>(Arrays.asList("ArtistID", "ReleaseID", "TrackNum")));
+        tableColumns.put("Creates",new ArrayList<>(Arrays.asList("ArtistID", "ReleaseID")));
     }
 
     private void updateCheckBoxes(){
