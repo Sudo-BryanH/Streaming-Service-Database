@@ -421,7 +421,7 @@ VALUES (4, 4, 'Nirbashon', 234, 'Rock', 5359039);
 INSERT INTO Song
 VALUES (5, 1, 'Let Me Down', 313, 'Hard Rock', 508989);
 INSERT INTO Song
-VALUES (5, 2, 'My Wave', 283, 'Hard Rock', 623314);
+VALUES (5, 2, 'My Wave', 304, 'Hard Rock', 623314);
 INSERT INTO Song
 VALUES (5, 3, 'Fell On Black Days', 396, 'Hard Rock', 726962);
 INSERT INTO Song
@@ -429,7 +429,7 @@ VALUES (6, 1, 'Take On Me (2017 Acoustic)', 184, 'Pop', 6666852);
 INSERT INTO Song
 VALUES (7, 1, 'Start Hop, Jump', 294, 'Dance', 1412892);
 INSERT INTO Song
-VALUES (7, 2, 'Pounce Bounce House', 241, 'Dance', 3295024);
+VALUES (7, 2, 'Pounce Bounce House', 287, 'Dance', 3295024);
 INSERT INTO Song
 VALUES (7, 3, 'Pawsitivity', 124, 'Pop', 12895982);
 INSERT INTO Song
@@ -441,19 +441,21 @@ VALUES (7, 6, 'Just a Mere Kitten', 355, 'Ballad', 214214901);
 INSERT INTO Song
 VALUES (7, 7, 'Show Your Stripes', 294, 'Dance', 125292);
 INSERT INTO Song
-VALUES (7, 8, 'Not 4 You', 129, 'Dance', 25920);
+VALUES (7, 8, 'Not 4 You', 204, 'Dance', 25920);
 INSERT INTO Song
-VALUES (7, 9, 'Kickback, Relax', 182, 'Dance', 242425);
+VALUES (7, 9, 'Kickback, Relax', 292, 'Dance', 242425);
 INSERT INTO Song
 VALUES (7, 10, 'Meowrr Part 2', 189, 'Dance', 1412892);
 INSERT INTO Song
-VALUES (7, 11, 'High on Catnip St.', 142, 'Hip-hop', 12591250);
+VALUES (7, 11, 'High on Catnip St.', 193, 'Hip-hop', 12591250);
 INSERT INTO Song
 VALUES (7, 12, 'KitKat', 290, 'Dance', 215912590);
 INSERT INTO Song
 VALUES (7, 13, 'Unlucky', 182, 'Dance', 12590125);
 INSERT INTO Song
 VALUES (7, 14, 'Dogs Suck', 450, 'Pop', 12590125);
+INSERT INTO Song
+VALUES (7, 15, 'Paws Off My Ending', 900, 'Trance', 2592050);
 INSERT INTO Song
 VALUES (8, 1, 'Woof, Poof Roof', 241, 'Electronic', 1412892);
 INSERT INTO Song
