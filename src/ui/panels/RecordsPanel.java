@@ -2,13 +2,10 @@ package ui.panels;
 
 import backend.ArtistEndpoints;
 import backend.ReleaseEndpoints;
-import model.Artist;
 import ui.MainUI;
-import util.Misc;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 import static ui.panels.UserPaymentsPanel.createBoldedTitle;
 
@@ -30,18 +27,26 @@ public class RecordsPanel extends ContentPanel{
 
         innerPanel.add(generateGoatedSongs());
         innerPanel.add(generateMostSongs());
+        innerPanel.add(generateReleasesOverHour());
     }
 
     private JLabel generateGoatedSongs() {
         JLabel goatedSongs = createBoldedTitle("Goated Songs: " + ReleaseEndpoints.getGoatedSongs());
-        goatedSongs.setPreferredSize(new Dimension(500,40));
+        goatedSongs.setPreferredSize(new Dimension(800,40));
         return goatedSongs;
     }
 
     private JLabel generateMostSongs() {
-        List<Artist> artists = ArtistEndpoints.getArtistsMostSongs();
-        JLabel label = createBoldedTitle("Artist(s) with Most Songs: " + Misc.artistsToString(artists));
-        label.setPreferredSize(new Dimension(500,40));
+        String artists = ArtistEndpoints.getArtistsMostSongs();
+        JLabel label = createBoldedTitle("Artist(s) with Most Songs: " + artists);
+        label.setPreferredSize(new Dimension(800,40));
+        return label;
+    }
+
+    private JLabel generateReleasesOverHour() {
+        String releases = ReleaseEndpoints.getReleasesOverHour();
+        JLabel label = createBoldedTitle("Releases Over 1 Hr Long: " + releases);
+        label.setPreferredSize(new Dimension(800,40));
         return label;
     }
 }

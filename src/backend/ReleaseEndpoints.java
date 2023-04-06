@@ -123,6 +123,15 @@ public class ReleaseEndpoints {
         query(String.format(query, release.id, artist.id));
     }
 
+    public static String getReleasesOverHour() {
+        String query = "SELECT r.Name as Name " +
+                "FROM Releases r, Song s " +
+                "WHERE r.ID = s.ReleaseID " +
+                "GROUP BY r.Name " +
+                "HAVING SUM(s.Duration) > 3600";
+        return getReleasesNameList(query);
+    }
+
     // **************** HELPERS ****************
 
     private static List<Release> getReleasesHelper(String query){
@@ -145,6 +154,28 @@ public class ReleaseEndpoints {
 
             results.close();
             return releases;
+
+        } catch (SQLException exception) {
+            System.out.println(exception.getMessage());
+            return null;
+        }
+    }
+
+    private static String getReleasesNameList(String query){
+        ResultSet results = query(query);
+        try {
+            StringBuilder releases = new StringBuilder();
+
+            while (results.next()){
+                String name = results.getString("Name");
+                releases.append(name).append(", ");
+            }
+            if (releases.length() != 0) {
+                releases.delete(releases.length() - 2, releases.length());
+            }
+
+            results.close();
+            return releases.toString();
 
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());
