@@ -89,12 +89,14 @@ public class MainUI extends JFrame {
             adminButtons.add(new JButton("Artists"));
             adminButtons.add(new JButton("Distributors"));
             adminButtons.add(new JButton("Admin Payments"));
+            adminButtons.add(new JButton("Projection"));
 
             adminButtons.get(0).addActionListener(e -> swapPanel(new UsersPanel(this)));
             adminButtons.get(1).addActionListener(e -> swapPanel(new ReleasesAdminPanel(this)));
             adminButtons.get(2).addActionListener(e -> swapPanel(new ArtistsAdminPanel(this)));
             adminButtons.get(3).addActionListener(e -> swapPanel(new DistributorsAdminPanel(this)));
             adminButtons.get(4).addActionListener(e -> swapPanel(new AdminPaymentsPanel(this)));
+            adminButtons.get(5).addActionListener(e -> swapPanel(new ProjectionPanel(this)));
 
             sidebar.add(Box.createVerticalStrut(20));
             for (JButton button : adminButtons) {
