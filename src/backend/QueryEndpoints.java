@@ -9,17 +9,17 @@ import java.util.ArrayList;
 
 public class QueryEndpoints {
 
-    public static ArrayList<Pair<String, String>> getUser(boolean matter, boolean fp) {
+    public static ArrayList<Pair<String, String>> getUser(boolean matter, boolean fp, String[] att) {
         ArrayList<Pair<String, String>> res = new ArrayList<>();
         try {
 //            "SELECT p.Name FROM Users u, Playlist p WHERE u.Username = p.Username AND p.Username = '%s'"
             Connection connection = DatabaseManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
             String queryFree = String.format(
-                    "SELECT u.Username, u.Email FROM Users u, FreeUser f WHERE u.Username = f.Username");
+                    "SELECT u.Username, %s as second FROM Users u, FreeUser f WHERE u.Username = f.Username", att[0]);
             String queryPremium = String.format(
-                    "SELECT u.Username, u.Email FROM Users u, PremiumUser p WHERE u.Username = p.Username");
-            String queryAll = String.format("SELECT u.Username, u.Email FROM Users u");
+                    "SELECT u.Username, %s as second FROM Users u, PremiumUser p WHERE u.Username = p.Username", att[0]);
+            String queryAll = String.format("SELECT u.Username, %s  as second FROM Users u", att[0]);
             ResultSet rs = null;
             if (matter) {
                 if (fp) {   // fp = TRUE = premium
@@ -32,7 +32,11 @@ public class QueryEndpoints {
             }
 
             while (rs.next()) {
-                res.add(new Pair<>(rs.getString("Username"), rs.getString("Email")));
+                try {
+                    res.add(new Pair<>(rs.getString("Username"), rs.getString("second")));
+                } catch (SQLException s) {
+                    res.add(new Pair<>(rs.getString("Username"), Integer.toString(rs.getInt("second"))));
+                }
             }
         } catch (SQLException exception) {
             System.out.println(exception.getMessage());

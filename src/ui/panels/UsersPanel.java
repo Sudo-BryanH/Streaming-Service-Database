@@ -20,14 +20,15 @@ public class UsersPanel extends ContentPanel {
     private JScrollPane userScroll;
 
     private JScrollPane userAggScroll;
-    private JPanel PFButtons;
+    private JPanel genButtons;
     private JPanel userTable;
     private boolean matter = false;
     private boolean PorF = false;
 
     private boolean conditional = false; // f: list of users t: conditional queries
     private JButton condButton;
-    private String[] toInsert;
+    private String[] insertCond;
+    private String[] insertGen;
 
     private JPanel userAggTable;
 
@@ -38,14 +39,15 @@ public class UsersPanel extends ContentPanel {
     @Override
     protected void generate(){
 
-        queryUsers();
+
         JPanel nestedPanels = new JPanel();
         BoxLayout layout = new BoxLayout(nestedPanels, BoxLayout.Y_AXIS);
         nestedPanels.setLayout(layout);
-        PFButtons = makePFButtons();
+        genButtons = makeGenButtons();
 
-
-        userScroll = makeScroll(PFButtons);
+        userInfo = QueryEndpoints.getUser(false, false, new String[]{"u.Email"});
+        makeUserTable();
+        userScroll = makeScroll(genButtons);
         userScroll.setViewportView(userTable);
         nestedPanels.add(userScroll);
 
@@ -62,45 +64,92 @@ public class UsersPanel extends ContentPanel {
 
     }
 
-    private JPanel makePFButtons() {
+    private JPanel makeGenButtons() {
         JPanel temp = new JPanel();
-        temp.setLayout(new GridLayout(1, 3));
+        temp.setLayout(new GridLayout(1, 4));
         temp.setBackground(Color.gray);
         temp.setMaximumSize(new Dimension(800, 100));
 
         JLabel exp = new JLabel ("Generic User lookup: ");
         exp.setVisible(true);
 
-        JButton free = new JButton("Free Users");
-        free.setVisible(true);
-        free.addActionListener(new ActionListener() {
-               @Override
-               public void actionPerformed(ActionEvent e) {
-                    matter = !matter;
-                    PorF = false;
-                    queryUsers();
-               }
-           }
-
-        );
+        String[] fp = new String[]{"All", "Free", "Premium"};
+        String[] userAtt = new String[]{"Email", "Creation Date", "Account Age (Month)"};
 
 
-        JButton prem = new JButton("Premium Users");
-        prem.setVisible(true);
-        prem.addActionListener(new ActionListener() {
-               @Override
-               public void actionPerformed(ActionEvent e) {
-                   matter = !matter;
-                   PorF = true;
-                   queryUsers();
-               }
-           }
+        JComboBox<String> fpDrop = new JComboBox<>(fp);
+        fpDrop.setVisible(true);
+        fpDrop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox comboBox1 = (JComboBox) e.getSource();
+                Object selected = comboBox1.getSelectedItem();
+                switch((String) selected) {
+                    case "All":
+                        matter = false;
+                        break;
+                    case "Free":
+                        matter = true;
+                        PorF = false;
+                        break;
+                    case "Premium":
+                        matter = true;
+                        PorF = true;
+                        break;
+                    default:
+                        matter = false;
+                        break;
 
-        );
+                }
+            }
+        });
+
+        JComboBox<String> attDrop = new JComboBox<>(userAtt);
+        attDrop.setVisible(true);
+        attDrop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox comboBox1 = (JComboBox) e.getSource();
+                Object selected = comboBox1.getSelectedItem();
+                switch((String) selected) {
+                    case "Email":
+                        insertGen = new String[]{"u.Email"};
+                        break;
+                    case "Account Age":
+                        insertGen = new String[]{"(TO_DATE('2023-04-05', 'YYYY-MM-DD') -  u.CreationDate) / 30"};
+                        PorF = false;
+                        break;
+                    case "Creation Date":
+                        insertGen = new String[]{"u.CreationDate"};
+                        PorF = true;
+                        break;
+                    default:
+
+                        break;
+
+                }
+            }
+        });
+
+        JButton submit = new JButton("Submit");
+        submit.setVisible(true);
+        submit.setEnabled(true);
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                userInfo = QueryEndpoints.getUser(matter, PorF, (insertGen == null) ? new String[]{"u.Email"} : insertGen);
+                makeUserTable();
+            }
+        });
+
+
+
 
         temp.add(exp);
-        temp.add(free);
-        temp.add(prem);
+        temp.add(fpDrop);
+        temp.add(attDrop);
+        temp.add(submit);
         temp.setOpaque(true);
         return temp;
     }
@@ -120,7 +169,7 @@ public class UsersPanel extends ContentPanel {
         submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                userAggInfo = QueryEndpoints.countConditionGroupBy(toInsert);
+                userAggInfo = QueryEndpoints.countConditionGroupBy(insertCond);
                 makeUserAggTable();
             }
         });
@@ -136,19 +185,19 @@ public class UsersPanel extends ContentPanel {
                 switch ((String) selected) {
                     case "1. Creation Date":
 
-                        toInsert = new String[]{"EXTRACT(year FROM CreationDate) ", " Users u ", " WHERE u.CreationDate IS NOT NULL", " EXTRACT(year FROM CreationDate)"};
+                        insertCond = new String[]{"EXTRACT(year FROM CreationDate) ", " Users u ", " WHERE u.CreationDate IS NOT NULL", " EXTRACT(year FROM CreationDate)"};
                         break;
                     case "2. # of Playlists":
 
-                        toInsert = new String[]{"Username ", " Playlist p", "", " p.Username"};
+                        insertCond = new String[]{"Username ", " Playlist p", "", " p.Username"};
                         break;
                     case "3. # of Songs in Library":
 
                         break;
                     default:
 
-                        toInsert = new String[]{"Username ", " AddsToLibrary a", "", " a.Username"};
-                        String s = toInsert[0];
+                        insertCond = new String[]{"Username ", " AddsToLibrary a", "", " a.Username"};
+                        String s = insertCond[0];
                         break;
                 }
 
@@ -167,11 +216,6 @@ public class UsersPanel extends ContentPanel {
         return head;
     }
 
-    private void queryUsers() {
-        userInfo = QueryEndpoints.getUser(matter, PorF);
-
-        makeUserTable();
-    }
 
     private void makeUserTable() {
 //        queryUsers();
@@ -277,7 +321,7 @@ public class UsersPanel extends ContentPanel {
         result.setVisible(true);
         return result;
     }
-    private JPanel makeUserPanel(String username, String emailAd) {
+    private JPanel makeUserPanel(String username, String info) {
         JPanel result = new JPanel(new GridLayout(1, 3));
         result.setMaximumSize(new Dimension(800, 40));
         result.setPreferredSize(new Dimension(800, 40));
@@ -289,11 +333,11 @@ public class UsersPanel extends ContentPanel {
         user.setPreferredSize(new Dimension(180,30));
         user.setOpaque(true);
 
-        JLabel email = new JLabel(emailAd);
-        email.setMaximumSize(new Dimension(180,30));
-        email.setMinimumSize(new Dimension(180,30));
-        email.setPreferredSize(new Dimension(180,30));
-        email.setOpaque(true);
+        JLabel data = new JLabel(info);
+        data.setMaximumSize(new Dimension(180,30));
+        data.setMinimumSize(new Dimension(180,30));
+        data.setPreferredSize(new Dimension(180,30));
+        data.setOpaque(true);
 
 
         JButton select = new JButton("Select");
@@ -314,7 +358,7 @@ public class UsersPanel extends ContentPanel {
 
         });
         result.add(user);
-        result.add(email);
+        result.add(data);
         result.add(select);
         result.setOpaque(true);
         result.setVisible(true);
