@@ -295,7 +295,7 @@ INSERT INTO Releases
 VALUES (9, 'Dogs Don''t Suck', 'Single', '2003-10-10', 'https://cdn.spotube.com/img/friends.png',
         'Monstercat');
 INSERT INTO Releases
-VALUES (10, 'The Barker is in Town', 'EP', '2015-02-27', 'https://cdn.spotube.com/img/notuu.png',
+VALUES (10, 'Only Me', 'EP', '2015-02-27', 'https://cdn.spotube.com/img/notuu.png',
         'Warner Music Group');
 INSERT INTO Releases
 VALUES (11, 'Sonder', 'EP', '2015-08-12', 'https://cdn.spotube.com/img/sonder.png',
