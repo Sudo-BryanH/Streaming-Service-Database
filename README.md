@@ -1,5 +1,8 @@
 # CPSC 304 Project
 
+## Authorship:
+This was a joint group project by Bryan Hui, Dhrubo Karmaker, and Harper Kim.
+
 ## Summary
 Our project reflects and models streaming platforms in the music industry such as Spotify, Apple
 Music, or YouTube Music. Our database will allow companies to manage content interactions
