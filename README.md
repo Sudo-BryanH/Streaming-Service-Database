@@ -9,4 +9,4 @@ Music, or YouTube Music. Our database will allow companies to manage content int
 and payments between users, releases, artists, and distributors in their streaming services.
 (Note: Our database only manages payments and transactions that occur in Canada.)
 
-This project cannot be run and used as it connects to a priate MySQL server. To see how some aspects of the program works, view the Milestone 4 document in the milestones document.
+This project cannot be run and used as it connects to a private MySQL server. To see how some aspects of the program works, view the Milestone 4 document in the milestones document.
